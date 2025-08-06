@@ -1,0 +1,8 @@
+/venv
+/venv-ipynb
+/venv-jpty
+*.xlsx#
+*.zip
+*.odt
+__pycache__/
+*.py[cod]
