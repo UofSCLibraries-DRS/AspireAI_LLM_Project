@@ -3,6 +3,9 @@ ipykernel
 openpyxl
 nltk
 
+matplotlib
+seaborn
+
 torch
 git+https://github.com/huggingface/transformers.git
 accelerate
