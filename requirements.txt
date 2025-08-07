@@ -9,3 +9,5 @@ seaborn
 torch
 git+https://github.com/huggingface/transformers.git
 accelerate
+datasets
+peft

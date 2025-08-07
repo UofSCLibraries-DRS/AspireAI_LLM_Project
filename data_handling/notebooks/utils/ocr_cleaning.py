@@ -51,5 +51,21 @@ class OCR_Clean:
             text = pattern.sub(replacement, text)
         return text
 
-    def cheese():
-        print("cheese cheese")
+class OCR_Check:
+    def is_messy_score(text):
+        if not isinstance(text, str):
+            return float('nan')
+        # Count suspicious patterns
+        suspicious_chars = len(re.findall(r'[\^&<>]', text))
+        weird_spacing = len(re.findall(r'\s{2,}|\S{15,}', text))
+        mixed_case = len(re.findall(r'[a-z][A-Z]|[A-Z]{3,}[a-z]', text))
+        
+        total_chars = len(text)
+        if total_chars == 0:
+            return 0
+        
+        messy_score = (suspicious_chars + weird_spacing + mixed_case) / total_chars
+        return round(messy_score, 3)
+    
+    def is_messy_text(messy_score, threshold=0.3):
+        return messy_score > threshold

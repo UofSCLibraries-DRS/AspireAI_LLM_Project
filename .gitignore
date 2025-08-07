@@ -6,3 +6,7 @@
 *.odt
 __pycache__/
 *.py[cod]
+
+lora-finetuned-test-model/
+*.bin
+*.pt

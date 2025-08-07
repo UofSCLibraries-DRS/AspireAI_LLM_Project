@@ -47,3 +47,4 @@ AspireAI_LLM_Project/
   - `contants.py` 
   - `nb_metrics.py` - notebook metrics
   - `ocr_cleaning.py`
+- Readme's: located in each subdirectory that has any code
