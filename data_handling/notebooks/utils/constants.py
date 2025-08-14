@@ -12,5 +12,9 @@ class Paths:
     mccray_with_trscp = mccray_folder + r"changed_data/trscp_subsets/McCray (with transcripts).xlsx"
 
     mccray_1940s_subset = mccray_folder + r"changed_data/decade_subsets/McCray (1940s).xlsx"
-    mccray_1940s_cleaner = mccray_folder + r"changed_data/decade_subsets/McCray (1940s, messy_count=0).xlsx"
+    mccray_1940s_unclean = mccray_folder + r"changed_data/decade_subsets/McCray (1940s, any_messy = True).xlsx"
+    mccray_1940s_cleaner = mccray_folder + r"changed_data/decade_subsets/McCray (1940s, any_messy = False).xlsx"
+
+    mccray_1940s_100 = mccray_folder + r"changed_data/decade_subsets/McCray (1940s, 100 rows).xlsx"
+
 

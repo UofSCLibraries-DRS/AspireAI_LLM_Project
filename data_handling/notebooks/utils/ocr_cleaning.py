@@ -20,7 +20,19 @@ class OCR_Clean:
         r'_{2,}': ' ',     # two or more underscores = single white space
         r'—': '-',         # special long dash = standard dash
         r'\*{2,}': ' '     # two or more astricks (*) = single white space
+        
     }
+
+    special_pattern = r'[^a-zA-Z0-9\s.,!?;:\'"()\-_/]{2,}'  # anything that's not letter, number, white space, or standard punctuation, in a sequence for 2 or more
+    letter_pattern = r'\b\w*([a-zA-Z])\1{2,}\w*\b'          # sequences of 3+ of the same letter
+
+    # general_pattern = r'\b\S*[@#$%^&*+=<>\|\`~[\]{}]\S*\b'  # sequences with non-alpha numeric sandwiched between any other characters
+    general_exceptions = [
+            r'^[a-zA-Z]{1,2}&[a-zA-Z]{1,2}$',
+            r'^[a-zA-Z]+=+[a-zA-Z]+$',
+            r'^[0-9]+\*[0-9]+$'
+        ]
+    general_pattern = r'\b(?!(?:\w{1,2}&\w{1,2}|\w+=\w+|\d+\*\d+)$)\S*[@#$%^&*+=<>\|\`~[\]{}]\S*\b'
 
     def compile():
         """

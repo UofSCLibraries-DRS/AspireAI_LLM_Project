@@ -3,6 +3,9 @@ ipykernel
 openpyxl
 nltk
 
+pyspellchecker
+jamspell
+
 matplotlib
 seaborn
 

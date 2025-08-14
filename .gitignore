@@ -10,3 +10,4 @@ __pycache__/
 lora-finetuned-test-model/
 *.bin
 *.pt
+data/mccray/changed_data/backup/
