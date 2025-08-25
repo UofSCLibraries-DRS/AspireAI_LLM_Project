@@ -3,7 +3,7 @@ ipykernel
 openpyxl
 nltk
 tqdm
-
+python-dotenv
 
 pyspellchecker
 jamspell
