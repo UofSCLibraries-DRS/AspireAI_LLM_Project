@@ -6,8 +6,11 @@
 *.odt
 __pycache__/
 *.py[cod]
+.env
 
 lora-finetuned-test-model/
+400-completion-tasks-distilGPT2/
+
 *.bin
 *.pt
 data/mccray/changed_data/backup/
