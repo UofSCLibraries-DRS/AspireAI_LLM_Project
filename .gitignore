@@ -7,12 +7,14 @@
 __pycache__/
 *.py[cod]
 .env
+*.csv
 
 lora-finetuned-test-model/
 400-completion-tasks-distilGPT2/
 
 *.bin
 *.pt
+data/mccray/backup/
 data/mccray/changed_data/backup/
 data_handling/notebooks/data-flag.html
 
