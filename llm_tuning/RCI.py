@@ -1,3 +1,5 @@
+import argparse
+import json
 import pandas as pd
 from datasets import Dataset
 from transformers import (
@@ -11,76 +13,68 @@ import torch
 from peft import LoraConfig, get_peft_model
 
 
-# Load your transcripts
-df = pd.read_csv("/work/jaaydin/100_manually_cleaned.csv")
-df = df[["Cleaned Transcript"]].dropna()
-dataset = Dataset.from_pandas(df.rename(columns={"Cleaned Transcript": "text"}))
+def main():
+    # Handle args
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--cfg", type=str, required=True, help="Path to config JSON file"
+    )
+    args = parser.parse_args()
 
+    # Load cfg
+    with open(args.cfg, "r") as f:
+        cfg = json.load(f)
 
-# Load LLaMA 3.1 tokenizer
-local_model_path = "/work/jaaydin/downloaded_folder"
+    lora_cfg = cfg["lora_config"]
+    training_cfg = cfg["training_args"]
+    local_model_path = cfg["local_model_path"]
+    final_output_dir = cfg["final_output_dir"]
 
-tokenizer = AutoTokenizer.from_pretrained(local_model_path)
+    # Load data
+    df = pd.read_csv("/work/jaaydin/100_manually_cleaned.csv")
+    df = df[["Cleaned Transcript"]].dropna()
+    dataset = Dataset.from_pandas(df.rename(columns={"Cleaned Transcript": "text"}))
 
+    tokenizer = AutoTokenizer.from_pretrained(local_model_path)
 
-# Ensure padding token
-if tokenizer.pad_token is None:
-    tokenizer.pad_token = tokenizer.eos_token
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
 
+    def tokenize(batch):
+        return tokenizer(
+            batch["text"], truncation=True, padding="max_length", max_length=1024
+        )
 
-def tokenize(batch):
-    return tokenizer(
-        batch["text"], truncation=True, padding="max_length", max_length=1024
+    tokenized_dataset = dataset.map(tokenize, batched=True, remove_columns=["text"])
+
+    # Load local model
+    model = AutoModelForCausalLM.from_pretrained(
+        local_model_path, torch_dtype=torch.float16, device_map="auto"
     )
 
+    # Apply Lora cfg
+    lora_config = LoraConfig(**lora_cfg)
+    model = get_peft_model(model, lora_config)
 
-tokenized_dataset = dataset.map(tokenize, batched=True, remove_columns=["text"])
+    # Add training args
+    training_args = TrainingArguments(**training_cfg)
 
+    data_collator = DataCollatorForLanguageModeling(tokenizer, mlm=False)
 
-model = AutoModelForCausalLM.from_pretrained(
-    local_model_path, torch_dtype=torch.float16, device_map="auto"
-)
+    trainer = Trainer(
+        model=model,
+        args=training_args,
+        train_dataset=tokenized_dataset,
+        tokenizer=tokenizer,
+        data_collator=data_collator,
+    )
 
+    # Traing and save
+    trainer.train()
 
-lora_config = LoraConfig(
-    r=16,
-    lora_alpha=32,
-    target_modules=["q_proj", "v_proj"],
-    lora_dropout=0.05,
-    bias="none",
-    task_type="CAUSAL_LM",
-)
-
-
-model = get_peft_model(model, lora_config)
-
-
-training_args = TrainingArguments(
-    output_dir="./llama3_1-finetuned",
-    per_device_train_batch_size=2,
-    gradient_accumulation_steps=16,
-    learning_rate=2e-4,
-    num_train_epochs=3,
-    logging_dir="./logs",
-    save_strategy="epoch",
-    fp16=True,
-    evaluation_strategy="no",
-    push_to_hub=False,
-)
+    trainer.save_model(final_output_dir)
+    tokenizer.save_pretrained(final_output_dir)
 
 
-data_collator = DataCollatorForLanguageModeling(tokenizer, mlm=False)
-
-
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=tokenized_dataset,
-    tokenizer=tokenizer,
-    data_collator=data_collator,
-)
-
-
-trainer.train()
-trainer.save_model("./llama3_1-mccray-lora-100")
-tokenizer.save_pretrained("./llama3_1-mccray-lora-100")
+if __name__ == "__main__":
+    main()
