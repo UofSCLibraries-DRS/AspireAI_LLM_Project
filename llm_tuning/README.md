@@ -2,7 +2,7 @@
 
 >[!NOTE]
 > This file does not cover anything regarding connecting and setting up RCI.
-> For information on how to connect and set up RCI, refer the [manaul](https://docs.google.com/document/d/1S4kpOkPnQeoAcIlQKFjZHeql1IsC4dw_oFTRXOGuGLI/edit?usp=sharing)
+> For information on how to connect and set up RCI, refer to the [manaul](https://docs.google.com/document/d/1S4kpOkPnQeoAcIlQKFjZHeql1IsC4dw_oFTRXOGuGLI/edit?usp=sharing)
 
 ## Conda env setup
 
