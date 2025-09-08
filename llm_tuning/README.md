@@ -21,7 +21,7 @@ vim /home/<USERNAME>/.bashrc
 
 Once opened, add the line to the bottom of the file.
 
-Once added, press `Esc`, then type `:wq`, and press `Enter` to exit vim.
+Finally, press `Esc`, then type `:wq`, and press `Enter` to exit vim.
 
 ## Conda env setup
 
