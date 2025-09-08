@@ -4,6 +4,30 @@
 > This file does not cover anything regarding connecting and setting up RCI.
 > For information on how to connect and set up RCI, refer the [manaul](https://docs.google.com/document/d/1S4kpOkPnQeoAcIlQKFjZHeql1IsC4dw_oFTRXOGuGLI/edit?usp=sharing)
 
+## Conda env setup
+
+First load conda and create a fresh env
+
+```bash
+module load python3/anaconda/2021.07
+
+conda create --name ft_test
+
+conda activate ft_test
+```
+
+Next, load cuda
+
+```bash
+module load cuda/12.3
+```
+
+Finally, install dependencies
+
+```bash
+pip install -U pandas datasets transformers torch peft
+```
+
 ## Loading Models
 
 Each model that is trained should be manually loaded outside of the script that will run on HPC. Downloading models on compute nodes wastes resources and bogs down the queue.
