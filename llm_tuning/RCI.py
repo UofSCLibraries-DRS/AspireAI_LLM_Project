@@ -25,6 +25,8 @@ def main():
     with open(args.cfg, "r") as f:
         cfg = json.load(f)
 
+    output_dir = cfg["output_dir"]
+
     lora_cfg = cfg["lora_config"]
     training_cfg = cfg["training_args"]
     local_model_path = cfg["local_model_path"]
@@ -57,7 +59,11 @@ def main():
     model = get_peft_model(model, lora_config)
 
     # Add training args
-    training_args = TrainingArguments(**training_cfg)
+    training_args = TrainingArguments(
+        **training_cfg,
+        output_dir=f"{output_dir}/scratch",
+        logging_dir=f"{output_dir}/logs",
+    )
 
     data_collator = DataCollatorForLanguageModeling(tokenizer, mlm=False)
 
@@ -72,8 +78,11 @@ def main():
     # Traing and save
     trainer.train()
 
-    trainer.save_model(final_output_dir)
-    tokenizer.save_pretrained(final_output_dir)
+    trainer.save_model(f"{output_dir}/model")
+    tokenizer.save_pretrained(f"{output_dir}/model")
+
+    with open(f"{output_dir}/logs/log_history.json", "w") as f:
+        json.dump(trainer.state.log_history, f)
 
 
 if __name__ == "__main__":

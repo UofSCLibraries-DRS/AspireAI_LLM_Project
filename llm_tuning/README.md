@@ -66,7 +66,7 @@ hf auth login
 Finally, when downloading a model, be sure to download it into the `/work/<USERNAME>/...` directory. Installing a model into `/home/<USERNAME>/...` will fill up your alloted 25GB.
 
 ```bash
-hf download <MODEL_STRING> --local-dir /work/<USERNAME>/...
+hf download <MODEL_STRING> --local-dir /work/<USERNAME>/models/<MODEL_NAME>
 ```
 
 ## Running and Monitoring Scripts
@@ -97,3 +97,7 @@ scancel <JOB ID>
 ```
 
 For more information, on commands to manage jobs, refer to the [SLURM docs](https://slurm.schedmd.com/quickstart.html#commands).
+
+# Misc Info
+
+Model weights should be stored in `/work/<USERNAME>/models/`

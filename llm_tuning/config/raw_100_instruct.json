@@ -1,5 +1,4 @@
 {
-    "output_dir": "/work/jaaydin/outputs/100_mccray_clean",
     "lora_config": {
         "r": 16,
         "lora_alpha": 32,
@@ -12,14 +11,17 @@
         "task_type": "CAUSAL_LM"
     },
     "training_args": {
+        "output_dir": "/work/jaaydin/checkpoints/llama3_1-finetuned_raw_data",
         "per_device_train_batch_size": 2,
         "gradient_accumulation_steps": 16,
         "learning_rate": 2e-4,
         "num_train_epochs": 3,
+        "logging_dir": "./logs",
         "save_strategy": "epoch",
         "fp16": true,
         "evaluation_strategy": "no",
         "push_to_hub": false
     },
-    "local_model_path": "/work/jaaydin/models/Llama-3.1-8B-Instruct"
+    "local_model_path": "/work/jaaydin/models/Llama-3.1-8B-Instruct",
+    "final_output_dir": "/work/jaaydin/llama3_1-mccray-lora-100_raw_data"
 }
