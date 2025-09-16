@@ -5,7 +5,7 @@
 #SBATCH --gres=gpu:1   ## Run on 1 GPU
 #SBATCH --output lora_ft_%j.out
 #SBATCH --error lora_ft_%j.err
-#SBATCH -p AI_Center_L40S,dgx_aic,gpu-v100-32gb
+#SBATCH -p AI_Center_L40S,gpu-v100-32gb
 
 export CUDA_VISIBLE_DEVICES=0
 
