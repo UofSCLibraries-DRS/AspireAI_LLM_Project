@@ -4,6 +4,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 import os
 from pathlib import Path
+import csv
 
 
 # Format prompt for base Llama 3.1 (with system prompt)
@@ -59,7 +60,7 @@ def main():
         model=model,
         tokenizer=tokenizer,
         torch_dtype=torch.float16,
-	device="cuda"
+        device="cuda",
     )
 
     # Load CSV
@@ -95,7 +96,11 @@ def main():
 
     # Save results
     Path(args.output_csv).parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(args.output_csv, index=False)
+    df.to_csv(
+        args.output_csv,
+        index=False,
+        quoting=csv.QUOTE_ALL,
+    )
     print(
         f"✅ Results with {args.num_samples} responses per question saved to {args.output_csv}"
     )

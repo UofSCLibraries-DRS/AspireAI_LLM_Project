@@ -45,3 +45,19 @@ python inference_base.py \
     --temperature 0.7 \
     --num_samples 5 \
     --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"
+
+python inference_base.py \
+    --model_dir /work/jaaydin/models/Llama-3.1-8B \
+    --input_csv /work/jaaydin/data/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/base_model/results/factoid_qa_10.csv \
+    --temperature 1.0 \
+    --num_samples 5 \
+    --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"
+
+python inference_base.py \
+    --model_dir /work/jaaydin/models/Llama-3.1-8B \
+    --input_csv /work/jaaydin/data/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/base_model/results/factoid_qa_07.csv \
+    --temperature 0.7 \
+    --num_samples 5 \
+    --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"

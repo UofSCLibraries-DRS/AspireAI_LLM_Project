@@ -1,4 +1,5 @@
 import argparse
+import csv
 import pandas as pd
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
@@ -46,6 +47,7 @@ def main():
         model=model,
         tokenizer=tokenizer,
         torch_dtype=torch.float16,
+        device="cuda",
     )
 
     # Load CSV
@@ -76,7 +78,11 @@ def main():
     # Save results
     df["generated_answer"] = generated_answers
     Path(args.output_csv).parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(args.output_csv, index=False)
+    df.to_csv(
+        args.output_csv,
+        index=False,
+        quoting=csv.QUOTE_ALL,
+    )
 
     print(f"✅ Results saved to {args.output_csv}")
 
