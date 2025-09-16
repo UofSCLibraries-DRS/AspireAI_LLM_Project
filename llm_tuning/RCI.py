@@ -30,7 +30,6 @@ def main():
     lora_cfg = cfg["lora_config"]
     training_cfg = cfg["training_args"]
     local_model_path = cfg["local_model_path"]
-    final_output_dir = cfg["final_output_dir"]
 
     # Load data
     df = pd.read_csv("/work/jaaydin/100_manually_cleaned.csv")
