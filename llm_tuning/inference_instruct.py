@@ -46,7 +46,6 @@ def main():
         model=model,
         tokenizer=tokenizer,
         torch_dtype=torch.float16,
-        device_map="auto",
     )
 
     # Load CSV

@@ -19,3 +19,5 @@ data_handling/notebooks/data-flag.html
 transcript-reviewer-app/
 ocr_cleaner_app/
 my_files/
+
+llm_tuning/logs/

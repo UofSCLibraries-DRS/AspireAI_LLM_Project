@@ -15,9 +15,33 @@ module load python3/anaconda/2021.07 gcc/12.2.0 cuda/12.3
 source activate /home/jaaydin/.conda/envs/ft_test
 
 python inference_base.py \
+    --model_dir /work/jaaydin/outputs/100_mccray_clean_base_Llama_8b/model \
+    --input_csv /work/jaaydin/data/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/100_mccray_clean_base_Llama_8b/results/factoid_qa_10.csv \
+    --temperature 1.0 \
+    --num_samples 5 \
+    --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"
+
+python inference_base.py \
     --model_dir /work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/model \
     --input_csv /work/jaaydin/data/factoid_qa.csv \
-    --output_csv /work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/results/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/results/factoid_qa_10.csv \
     --temperature 1.0 \
-    --num_samples 5
-    
+    --num_samples 5 \
+    --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"
+
+python inference_base.py \
+    --model_dir /work/jaaydin/outputs/100_mccray_clean_base_Llama_8b/model \
+    --input_csv /work/jaaydin/data/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/100_mccray_clean_base_Llama_8b/results/factoid_qa_07.csv \
+    --temperature 0.7 \
+    --num_samples 5 \
+    --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"
+
+python inference_base.py \
+    --model_dir /work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/model \
+    --input_csv /work/jaaydin/data/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/results/factoid_qa_07.csv \
+    --temperature 0.7 \
+    --num_samples 5 \
+    --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"

@@ -47,11 +47,11 @@ def main():
         default="You are a helpful assistant. Answer clearly and concisely.",
     )
     args = parser.parse_args()
-
+    device = torch.device("cuda")
     # Load model & tokenizer
     tokenizer = AutoTokenizer.from_pretrained(args.model_dir)
     model = AutoModelForCausalLM.from_pretrained(
-        args.model_dir, torch_dtype=torch.float16, device_map="auto"
+        args.model_dir, torch_dtype=torch.float16
     )
 
     generator = pipeline(
@@ -59,7 +59,7 @@ def main():
         model=model,
         tokenizer=tokenizer,
         torch_dtype=torch.float16,
-        device_map="auto",
+	device="cuda"
     )
 
     # Load CSV
