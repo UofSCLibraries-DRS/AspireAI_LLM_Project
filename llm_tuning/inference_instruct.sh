@@ -3,8 +3,8 @@
 #SBATCH -N 1
 #SBATCH -n 16    ##24 cores(of 48) so you get 1/2 of machine RAM ( 192 GB total)
 #SBATCH --gres=gpu:1   ## Run on 1 GPU
-#SBATCH --output inference_instruct_%j.out
-#SBATCH --error inference_instruct_%j.err
+#SBATCH --output logs/inference_instruct_%j.out
+#SBATCH --error logs/inference_instruct_%j.err
 #SBATCH -p AI_Center_L40S,gpu-v100-32gb,gpu-v100-16gb
 
 export CUDA_VISIBLE_DEVICES=0
@@ -15,7 +15,7 @@ module load python3/anaconda/2021.07 gcc/12.2.0 cuda/12.3
 source activate /home/jaaydin/.conda/envs/ft_test
 
 python inference_base.py \
-    --model_dir /work/jaaydn/outputs/100_mccray_dirty_instruct_Llama_8b/model \
+    --model_dir /work/jaaydin/outputs/100_mccray_dirty_instruct_Llama_8b/model \
     --input_csv /work/jaaydin/data/factoid_qa.csv \
     --output_csv /work/jaaydin/outputs/100_mccray_dirty_instruct_Llama_8b/results/factoid_qa.csv \
     --temperature 1.0 \
