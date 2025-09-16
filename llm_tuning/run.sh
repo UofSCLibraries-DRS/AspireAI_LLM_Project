@@ -9,7 +9,7 @@
 
 export CUDA_VISIBLE_DEVICES=0
 
-cd /work/jaaydin/ft_test
+cd /work/jaaydin/AspireAI_LLM_Project/llm_tuning
 
 module load python3/anaconda/2021.07 gcc/12.2.0 cuda/12.3
 source activate /home/jaaydin/.conda/envs/ft_test
