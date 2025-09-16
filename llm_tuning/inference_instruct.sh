@@ -17,6 +17,41 @@ source activate /home/jaaydin/.conda/envs/ft_test
 python inference_base.py \
     --model_dir /work/jaaydin/outputs/100_mccray_clean_instruct_Llama_8b/model \
     --input_csv /work/jaaydin/data/factoid_qa.csv \
-    --output_csv /work/jaaydin/outputs/100_mccray_clean_instruct_Llama_8b/results/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/100_mccray_clean_instruct_Llama_8b/results/factoid_qa_10.csv \
     --temperature 1.0 \
+    --num_samples 5
+
+python inference_base.py \
+    --model_dir /work/jaaydin/outputs/100_mccray_clean_instruct_Llama_8b/model \
+    --input_csv /work/jaaydin/data/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/100_mccray_clean_instruct_Llama_8b/results/factoid_qa_07.csv \
+    --temperature 0.7 \
+    --num_samples 5
+
+python inference_base.py \
+    --model_dir /work/jaaydin/outputs/100_mccray_dirty_instruct_Llama_8b/model \
+    --input_csv /work/jaaydin/data/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/100_mccray_dirty_instruct_Llama_8b/results/factoid_qa_10.csv \
+    --temperature 1.0 \
+    --num_samples 5
+
+python inference_base.py \
+    --model_dir /work/jaaydin/outputs/100_mccray_dirty_instruct_Llama_8b/model \
+    --input_csv /work/jaaydin/data/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/100_mccray_dirty_instruct_Llama_8b/results/factoid_qa_07.csv \
+    --temperature 0.7 \
+    --num_samples 5
+
+python inference_base.py \
+    --model_dir /work/jaaydin/models/Llama-3.1-8B-Instruct \
+    --input_csv /work/jaaydin/data/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/instruct_model/results/factoid_qa_10.csv \
+    --temperature 1.0 \
+    --num_samples 5
+
+python inference_base.py \
+    --model_dir /work/jaaydin/models/Llama-3.1-8B-Instruct \
+    --input_csv /work/jaaydin/data/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/instruct_model/results/factoid_qa_07.csv \
+    --temperature 0.7 \
     --num_samples 5
