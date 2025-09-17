@@ -32,9 +32,9 @@ def main():
     local_model_path = cfg["local_model_path"]
 
     # Load data
-    df = pd.read_csv("/work/jaaydin/100_manually_cleaned.csv")
-    df = df[["Cleaned Transcript"]].dropna()
-    dataset = Dataset.from_pandas(df.rename(columns={"Cleaned Transcript": "text"}))
+    df = pd.read_csv("/work/jaaydin/data/1940s_mccray.csv")
+    df = df[["Original Transcript"]].dropna()
+    dataset = Dataset.from_pandas(df.rename(columns={"Original Transcript": "text"}))
 
     tokenizer = AutoTokenizer.from_pretrained(local_model_path)
 

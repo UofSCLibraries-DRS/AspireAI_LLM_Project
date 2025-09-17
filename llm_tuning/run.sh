@@ -15,10 +15,3 @@ module load python3/anaconda/2021.07 gcc/12.2.0 cuda/12.3
 source activate /home/jaaydin/.conda/envs/ft_test
 
 python main.py --cfg ./config/cfg_1.json
-
-
-/work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/model
-
-/work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/model
-
-/work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/model

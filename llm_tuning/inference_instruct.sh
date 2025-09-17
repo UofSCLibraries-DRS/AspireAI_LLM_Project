@@ -5,7 +5,7 @@
 #SBATCH --gres=gpu:1   ## Run on 1 GPU
 #SBATCH --output logs/inference_instruct_%j.out
 #SBATCH --error logs/inference_instruct_%j.err
-#SBATCH -p aic_L40S_short 
+#SBATCH -p aic_L40S_short,AI_Center_L40S,gpu-v100-32gb
 
 export CUDA_VISIBLE_DEVICES=0
 
