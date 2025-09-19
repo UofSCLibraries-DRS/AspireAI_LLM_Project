@@ -21,8 +21,6 @@
         "save_steps": 50,
         "fp16": true,
         "evaluation_strategy": "steps",
-        "eval_steps": 50,
-        "warmup_ratio": 0.1,
         "weight_decay": 0.01,
         "push_to_hub": false
     },
