@@ -19,19 +19,19 @@ def format_prompt_icl(question: str, system_prompt: str = None) -> str:
         system_prompt = "You are a helpful assistant. Answer clearly and concisely."
 
     # Hardcoded ICL examples
-    icl_examples = """Q: What is the capital of Spain?
-A: Madrid
+    icl_examples = """Question: What is the capital of Spain?
+Answer: Madrid
 
-Q: What year was the Declaration of Independence signed?
-A: 1776
+Question: What year was the Declaration of Independence signed?
+Answer: 1776
 """
 
     # Build the final prompt
     return f"""Here are some Q/A examples. Follow the same format:
 
 {icl_examples}
-Q: {question}
-A:"""
+Question: {question}
+Answer:"""
 
 
 def main():
