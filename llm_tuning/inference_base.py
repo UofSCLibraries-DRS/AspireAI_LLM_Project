@@ -14,6 +14,29 @@ def format_prompt(question: str, system_prompt: str = None) -> str:
     return f"{system_prompt}\n\nQuestion: {question}\nAnswer:"
 
 
+def format_prompt_icl(question: str, system_prompt: str = None) -> str:
+    if system_prompt is None:
+        system_prompt = "You are a helpful assistant. Answer clearly and concisely."
+
+    # Hardcoded ICL examples
+    icl_examples = """Q: What is the capital of Spain?
+A: Madrid
+
+Q: What is the capital of Italy?
+A: Rome
+"""
+
+    # Build the final prompt
+    return f"""
+
+Here are some examples:
+
+{icl_examples}Now answer this new question:
+
+Q: {question}
+A:"""
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -51,6 +74,12 @@ def main():
     device = torch.device("cuda")
     # Load model & tokenizer
     tokenizer = AutoTokenizer.from_pretrained(args.model_dir)
+
+    # Fixes rambling
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+        tokenizer.pad_token_id = tokenizer.eos_token_id
+
     model = AutoModelForCausalLM.from_pretrained(
         args.model_dir, torch_dtype=torch.float16
     )
@@ -73,7 +102,7 @@ def main():
 
     # Generate for each row
     for q in df["question"]:
-        prompt = format_prompt(q, system_prompt=args.system_prompt)
+        prompt = format_prompt_icl(q, system_prompt=args.system_prompt)
 
         for i in range(args.num_samples):
             output = generator(
