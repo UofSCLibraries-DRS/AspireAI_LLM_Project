@@ -22,17 +22,14 @@ def format_prompt_icl(question: str, system_prompt: str = None) -> str:
     icl_examples = """Q: What is the capital of Spain?
 A: Madrid
 
-Q: What is the capital of Italy?
-A: Rome
+Q: What year was the Declaration of Independence signed?
+A: 1776
 """
 
     # Build the final prompt
-    return f"""
+    return f"""Here are some Q/A examples. Follow the same format:
 
-Here are some examples:
-
-{icl_examples}Now answer this new question:
-
+{icl_examples}
 Q: {question}
 A:"""
 
