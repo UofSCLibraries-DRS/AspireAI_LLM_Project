@@ -18,3 +18,7 @@ data/mccray/changed_data/backup/
 my_files/
 
 llm_tuning/logs/
+
+ocr_rescan/documents/
+ocr_rescan/contentdm_harvester.ipynb
+ocr_rescan/contentdm_download_*.ipynb

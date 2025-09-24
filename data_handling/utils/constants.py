@@ -9,3 +9,5 @@ class Paths:
     mccray_original_metadata = mccray_folder + r"original_data/McCray metadata.csv"
     mccray_modified_metadata = mccray_folder + r"changed_data/McCray+.csv"
 
+    
+
