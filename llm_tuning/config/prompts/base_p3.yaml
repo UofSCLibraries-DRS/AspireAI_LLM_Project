@@ -1,0 +1,5 @@
+template: |
+  You are a very helpful assistant. Answer clearly and concisely.
+
+  Question: {user_prompt}
+  Answer:

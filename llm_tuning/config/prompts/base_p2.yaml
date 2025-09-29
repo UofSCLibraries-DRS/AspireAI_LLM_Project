@@ -1,0 +1,5 @@
+template: |
+  Answer clearly and concisely.
+
+  Question: {user_prompt}
+  Answer: 

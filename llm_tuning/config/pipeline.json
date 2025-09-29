@@ -1,0 +1,33 @@
+[
+    {
+        "model": {
+            "start": "llama_3-1_8b.json",
+            "steps": [
+                [
+                    "lora_ss.0.json",
+                    "99_manually_cleaned.0.json"
+                ]
+            ],
+            "output": "outputs/100_mccray_clean_base_Llama_8b"
+        },
+        "prompts": [
+            "base_p1.yaml",
+            "base_p2.yaml",
+            "base_p3.yaml",
+            "base_p4.yaml",
+            "base_p5.yaml"
+        ],
+        "eval": {
+            "consistency": [
+                "factoid.0.json",
+                "nathan.0.json",
+                "nathan.1.json"
+            ],
+            "accuracy": [
+                "factoid.0.json",
+                "nathan.0.json",
+                "nathan.1.json"
+            ]
+        }
+    }
+]

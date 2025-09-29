@@ -1,0 +1,9 @@
+template: |
+  Question: What is the capital of Spain?
+  Answer: Madrid
+
+  Question: What year was the Declaration of Independence signed?
+  Answer: 1776
+
+  Question: {user_prompt}
+  Answer:

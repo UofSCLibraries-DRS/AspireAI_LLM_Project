@@ -1,5 +1,6 @@
 import argparse
 import pandas as pd
+import yaml
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 import os
@@ -8,10 +9,12 @@ import csv
 
 
 # Format prompt for base Llama 3.1 (with system prompt)
-def format_prompt(question: str, system_prompt: str = None) -> str:
-    if system_prompt is None:
-        system_prompt = "You are a helpful assistant. Answer clearly and concisely."
-    return f"{system_prompt}\n\nQuestion: {question}\nAnswer:"
+def format_prompt(question: str, system_prompt_path: str) -> str:
+    with open(system_prompt_path, "r") as f:
+        prompt_def = yaml.safe_load(f)
+
+    template = prompt_def.get("template", "")
+    return template.format(user_prompt=question)
 
 
 def main():
@@ -73,7 +76,7 @@ def main():
 
     # Generate for each row
     for q in df["question"]:
-        prompt = format_prompt(q, system_prompt=args.system_prompt)
+        prompt = format_prompt(q, system_prompt_path=args.system_prompt)
 
         for i in range(args.num_samples):
             output = generator(

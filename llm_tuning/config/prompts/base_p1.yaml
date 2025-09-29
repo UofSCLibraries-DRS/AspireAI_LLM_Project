@@ -1,0 +1,3 @@
+template: |
+  Question: {user_prompt}
+  Answer:

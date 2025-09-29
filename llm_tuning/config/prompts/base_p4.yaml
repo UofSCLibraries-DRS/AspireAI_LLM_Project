@@ -1,0 +1,5 @@
+template: |
+  You are an expert on history during the civil rights era in South Carolina. Answer clearly and concisely.
+  
+  Question: {user_prompt}
+  Answer:
