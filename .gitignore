@@ -21,3 +21,4 @@ ocr_cleaner_app/
 my_files/
 
 llm_tuning/logs/
+llm_tuning/cache/

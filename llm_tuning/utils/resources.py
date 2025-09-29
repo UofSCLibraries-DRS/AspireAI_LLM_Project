@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import yaml
+
 
 def ensure_pipeline(pipeline_path, base_dir):
     """
@@ -18,6 +20,7 @@ def ensure_pipeline(pipeline_path, base_dir):
     ft_actions = []
     ft_data = []
     eval_data = []
+    prompts = []
 
     for pipeline in pipelines:
         model = pipeline.get("model", None)
@@ -38,7 +41,7 @@ def ensure_pipeline(pipeline_path, base_dir):
         for eval_section in eval:
             eval_data.extend(evals.get(eval_section, []))
 
-        # TODO: Add prompts
+        prompts.extend(pipeline.get("prompts"))
 
         # TODO: Ensure prompt - model validity
 
@@ -75,6 +78,21 @@ def ensure_pipeline(pipeline_path, base_dir):
 
         if not Path(ft_data_path).is_file():
             raise FileNotFoundError(f"Training data not found: {ft_data_path}")
+
+    # Ensure prompt files exist and are in the correct format
+    unique_prompts = list(set(prompts))
+    for prompt in unique_prompts:
+        prompt_path = Path(prompt)
+        if not prompt_path.is_file():
+            raise FileNotFoundError(f"❌ Prompt file not found: {prompt_path}")
+
+        with open(prompt_path, "r") as f:
+            prompt_cfg = yaml.safe_load(f)
+
+        template = prompt_cfg.get("template", None)
+        assert template, (
+            f"❌ Prompt file missing required field 'template': {prompt_path}"
+        )
 
     # Ensure eval data exists
     unique_eval_data = list(set(eval_data))
