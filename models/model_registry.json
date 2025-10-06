@@ -1,0 +1,16 @@
+{
+  "mccray_domain_spello_v1.0_2025-10-05_20-26": {
+    "created": "2025-10-05T20:40:43.871344",
+    "version": "v1.0",
+    "performance": {
+      "exact_match_rate": 0.6,
+      "word_accuracy": 0.7575757575757576
+    },
+    "files": {
+      "model_path": "../models\\mccray_domain_spello_v1.0_2025-10-05_20-26",
+      "metadata_path": "../models\\mccray_domain_spello_v1.0_2025-10-05_20-26_metadata.json",
+      "evaluation_path": "../models\\mccray_domain_spello_v1.0_2025-10-05_20-26_evaluation.csv",
+      "whitelist_path": "../models\\mccray_domain_spello_v1.0_2025-10-05_20-26_whitelist.txt"
+    }
+  }
+}
