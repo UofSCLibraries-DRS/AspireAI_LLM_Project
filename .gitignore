@@ -1,24 +1,35 @@
+# python files
 /venv
 /venv-ipynb
 /venv-jpty
+__pycache__/
+*.py[cod]
+
+# env files
+**/.env*
+!**/.env.example
+
+# data
 *.xlsx#
 *.zip
 *.odt
-__pycache__/
-*.py[cod]
-.env
-
 lora-finetuned-test-model/
 400-completion-tasks-distilGPT2/
+data/mccray/changed_data/backup/
 
 *.bin
 *.pt
-data/mccray/changed_data/backup/
+
 
 my_files/
 
+# logs
 llm_tuning/logs/
 
+# ocr data
 ocr_rescan/documents/
 ocr_rescan/contentdm_harvester.ipynb
 ocr_rescan/contentdm_download_*.ipynb
+
+# dev settings
+.vscode
