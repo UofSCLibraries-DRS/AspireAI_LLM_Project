@@ -25,6 +25,7 @@ const PROD_LINK =
   "https://rasa-chatbot-721902099793.us-east1.run.app/webhooks/rest/webhook";
 const KEYWORD_LINK = "https://api-721902099793.us-east1.run.app/extract_keyword"
 const CENSOR_LINK = "https://api-721902099793.us-east1.run.app/censor_text"
+const GENERATE_API = "http://localhost:8000/generate";
 
 let userScrolling = false;
 let scrollTimeout = null;
@@ -448,8 +449,37 @@ async function sendMessageToBot(message) {
     sampleQuestionsDiv.style.display = 'none';
   }
 
+  try {
+    const payload = {
+      prompt: message,
+      max_new_tokens: 128,
+    };
+
+    const resp = await fetch(GENERATE_API, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!resp.ok) {
+      
+      // try to get error text
+      const txt = await resp.text().catch(() => "");
+      throw new Error(`API error ${resp.status}: ${txt}`);
+    }
+
+    const data = await resp.json();
+    const botText = data?.text ?? "";
+    addMessageToChat(botText, "botMsg");
+  } catch {
+    console.log("Could not fetch result from backend")
+    addMessageToChat("Internal Error", "botMsg");
+  }
+
   // "Bot" reply
-  addMessageToChat("Forced test response", "botMsg");
+  
 
   return;
 }

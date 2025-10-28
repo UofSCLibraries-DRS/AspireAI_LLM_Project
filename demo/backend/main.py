@@ -1,9 +1,11 @@
 import os
 import yaml
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 load_dotenv()
 
@@ -27,6 +29,20 @@ model = AutoModelForCausalLM.from_pretrained(MODEL_PATH, torch_dtype="auto", dev
 
 app = FastAPI()
 
+allowed_origins = [
+    "http://localhost:5500",
+    "http://0.0.0.0:5500",   # include if you're using 0.0.0.0 in the browser address bar
+    "http://localhost:3000", # add other dev origins you might use
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,  # use ["*"] for quick local dev, but avoid in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Apply stop sequences
 def post_process(text: str, templated_prompt: str) -> str:
     # Remove prompt prefix
@@ -40,8 +56,15 @@ def post_process(text: str, templated_prompt: str) -> str:
     text = text[:min_idx].strip()
     return text
 
+class GenerateRequest(BaseModel):
+    prompt: str
+    max_new_tokens: int = 128
+
 @app.post("/generate")
-async def generate(prompt: str, max_new_tokens: int = 128):
+async def generate(req: GenerateRequest = Body(...)):
+    prompt = req.prompt
+    max_new_tokens = req.max_new_tokens
+
     # Apply prompt template
     templated_prompt = TEMPLATE.format(user_prompt=prompt)
 
