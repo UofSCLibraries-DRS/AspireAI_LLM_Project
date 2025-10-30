@@ -30,6 +30,8 @@ llm_tuning/logs/
 ocr_rescan/documents/
 ocr_rescan/contentdm_harvester.ipynb
 ocr_rescan/contentdm_download_*.ipynb
+*.~lock*
 
 # dev settings
 .vscode
+

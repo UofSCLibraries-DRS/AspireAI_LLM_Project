@@ -1,4 +1,3 @@
-A
 Aani
 Aaron
 Aaronic
@@ -2557,7 +2556,6 @@ Azteca
 Aztecan
 Azygobranchia
 Azygobranchiata
-B
 Baal
 Baalath
 Baalish
@@ -3952,7 +3950,6 @@ Byzantine
 Byzantinesque
 Byzantinism
 Byzantinize
-C
 Cabinda
 Cabirean
 Cabiri
@@ -6447,7 +6444,6 @@ Czechish
 Czechization
 Czechoslovak
 Czechoslovakian
-D
 Dabih
 Dabitis
 Dacelo
@@ -7397,7 +7393,6 @@ Dyssodia
 Dytiscidae
 Dytiscus
 Dzungar
-E
 Earl
 Earle
 Earnie
@@ -8315,7 +8310,6 @@ Extravagantes
 Eyeish
 Ezekiel
 Ezra
-F
 Faba
 Fabaceae
 Fabian
@@ -8793,7 +8787,6 @@ Fusicoccum
 Fusiformis
 Fusulina
 Fusus
-G
 Ga
 Gabe
 Gaboon
@@ -9811,7 +9804,6 @@ Gyrophoraceae
 Gyrophoraceous
 Gyrostachys
 Gyrotheca
-H
 Habab
 Habbe
 Habe
@@ -10949,7 +10941,6 @@ Hystricidae
 Hystricinae
 Hystricomorpha
 Hystrix
-I
 Iacchic
 Iacchos
 Iacchus
@@ -11445,7 +11436,6 @@ Izchak
 Izdubar
 Izumi
 Izzy
-J
 Jaalin
 Jabarite
 Jabberwock
@@ -11929,7 +11919,6 @@ Juza
 Jwahar
 Jynginae
 Jynx
-K
 Kababish
 Kabaka
 Kabard
@@ -12475,7 +12464,6 @@ Kyu
 Kyung
 Kyurin
 Kyurinish
-L
 Laban
 Labiatae
 Labidura
@@ -13548,7 +13536,6 @@ Lysimachus
 Lysistrata
 Lythraceae
 Lythrum
-M
 Ma
 Maarten
 Mab
@@ -15455,7 +15442,6 @@ Myzostoma
 Myzostomata
 Myzostomida
 Myzostomidae
-N
 Naaman
 Naassenes
 Nabal
@@ -16137,7 +16123,6 @@ Nyoro
 Nyroca
 Nyssa
 Nyssaceae
-O
 Oakboy
 Oakesia
 Oannes
@@ -16767,7 +16752,6 @@ Ozan
 Ozark
 Ozias
 Ozonium
-P
 Paba
 Pablo
 Pacaguara
@@ -19057,7 +19041,6 @@ Pythonissa
 Pythonomorpha
 Pyxidanthera
 Pyxis
-Q
 Qoheleth
 Quader
 Quadi
@@ -19134,7 +19117,6 @@ Quixote
 Qung
 Quoratean
 Qurti
-R
 Raanan
 Rab
 Rabbinic
@@ -19850,7 +19832,6 @@ Rymandra
 Rynchospora
 Rytina
 Ryukyu
-S
 Saad
 Saan
 Saarbrucken
@@ -22253,7 +22234,6 @@ Syrtis
 Syryenian
 Syun
 Szekler
-T
 Taal
 Taalbond
 Tab
@@ -23830,7 +23810,6 @@ Tzendal
 Tzental
 Tzotzil
 Tzutuhil
-U
 Uaraycu
 Uarekena
 Uaupe
@@ -24038,7 +24017,6 @@ Uvularia
 Uzbak
 Uzbeg
 Uzbek
-V
 Vaalpens
 Vaccaria
 Vacciniaceae
@@ -24399,7 +24377,6 @@ Vulpinae
 Vultur
 Vulturidae
 Vulturinae
-W
 Wa
 Waac
 Waasi
@@ -24736,7 +24713,6 @@ Wyethia
 Wykehamical
 Wykehamist
 Wyomingite
-X
 Xanthian
 Xanthidium
 Xanthisma
@@ -24828,7 +24804,6 @@ Xyrichthys
 Xyridaceae
 Xyridales
 Xyris
-Y
 Yadava
 Yagnob
 Yagua
@@ -24967,7 +24942,6 @@ Yuruna
 Yurupary
 Yustaga
 Yvonne
-Z
 Zabaean
 Zabaism
 Zaberma
@@ -40034,7 +40008,6 @@ azygous
 azyme
 azymite
 azymous
-b
 ba
 baa
 baahling
@@ -50051,7 +50024,6 @@ byway
 bywoner
 byword
 bywork
-c
 ca
 caam
 caama
@@ -67891,7 +67863,6 @@ czaritza
 czarowitch
 czarowitz
 czarship
-d
 da
 daalder
 dab
@@ -78107,7 +78078,6 @@ dysuric
 dysyntribite
 dytiscid
 dzeren
-e
 ea
 each
 eachwhere
@@ -86127,7 +86097,6 @@ eyre
 eyrie
 eyrir
 ezba
-f
 fa
 fabaceous
 fabella
@@ -92674,7 +92643,6 @@ fuzzy
 fyke
 fylfot
 fyrd
-g
 ga
 gab
 gabardine
@@ -98679,7 +98647,6 @@ gyrus
 gyte
 gytling
 gyve
-h
 ha
 haab
 haaf
@@ -115216,7 +115183,6 @@ izle
 izote
 iztle
 izzard
-j
 jab
 jabbed
 jabber
@@ -116474,7 +116440,6 @@ juxtaterrestrial
 juxtatropical
 jyngine
 jynx
-k
 ka
 kabaragoya
 kabaya
@@ -118286,7 +118251,6 @@ kyphotic
 kyrine
 kyschtymite
 kyte
-l
 la
 laager
 laang
@@ -123727,7 +123691,6 @@ lythraceous
 lytic
 lytta
 lyxose
-m
 ma
 maam
 maamselle
@@ -134788,7 +134751,6 @@ myzostome
 myzostomid
 myzostomidan
 myzostomous
-n
 na
 naa
 naacp
@@ -140988,7 +140950,6 @@ nystagmic
 nystagmus
 nyu
 nyxis
-o
 oadal
 oaf
 oafdom
@@ -148309,7 +148270,6 @@ ozophen
 ozophene
 ozostomia
 ozotype
-p
 pa
 paal
 paar
@@ -170799,7 +170759,6 @@ pyxides
 pyxidium
 pyxie
 pyxis
-q
 qasida
 qere
 qeri
@@ -171885,7 +171844,6 @@ quotity
 quotlibet
 quotum
 qurterback
-r
 ra
 raad
 raash
@@ -181154,7 +181112,6 @@ ryotwari
 rype
 rypeck
 rytidosis
-s
 sa
 saa
 sab
@@ -204301,7 +204258,6 @@ syzygy
 szaibelyite
 szlachta
 szopelka
-t
 ta
 taa
 taar
@@ -215855,7 +215811,6 @@ tyt
 tzaritza
 tzolkin
 tzontle
-u
 uang
 uayeb
 uberant
@@ -232062,7 +232017,6 @@ uzan
 uzara
 uzarin
 uzaron
-v
 va
 vaagmer
 vaalite
@@ -235193,7 +235147,6 @@ vulvovaginitis
 vum
 vying
 vyingly
-w
 wa
 waag
 waapa
@@ -238983,7 +238936,6 @@ wyson
 wyss
 wyve
 wyver
-x
 xanthaline
 xanthamic
 xanthamide
@@ -239280,7 +239232,6 @@ xysti
 xystos
 xystum
 xystus
-y
 ya
 yaba
 yabber
@@ -239831,7 +239782,6 @@ yuzluk
 yvonne
 yw
 ywca
-z
 za
 zabaglione
 zabeta

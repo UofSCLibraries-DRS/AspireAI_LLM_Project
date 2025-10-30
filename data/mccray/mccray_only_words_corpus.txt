@@ -582,7 +582,6 @@ awful
 ayer
 ayers
 azalia
-b
 babes
 babridge
 baby
@@ -1210,7 +1209,6 @@ bynoe
 byrd
 byrnes
 byron
-c
 ca
 cab
 cabell
@@ -2106,7 +2104,6 @@ cuts
 cutting
 cycle
 cyrus
-d
 dabbs
 dacostes
 dad
@@ -2604,7 +2601,6 @@ dwight
 dwyer
 dyett
 dyson
-e
 each
 eaddy
 eagle
@@ -2983,7 +2979,6 @@ eyeball
 eyeglasses
 eyepatch
 eyes
-f
 fabric
 face
 faces
@@ -3653,7 +3648,6 @@ guthine
 guy
 gym
 gypsy
-h
 ha
 habe
 habeas
@@ -4285,7 +4279,6 @@ ivey
 ivory
 ivy
 ix
-j
 jabberwock
 jack
 jacket
@@ -4533,7 +4526,6 @@ krueger
 krupps
 ku
 kurtz
-l
 la
 labeled
 laber
@@ -4933,7 +4925,6 @@ lyndon
 lynwood
 lyrics
 lytch
-m
 mabel
 mable
 mac
@@ -5490,7 +5481,6 @@ myrdal
 myrtle
 myself
 myths
-n
 naacp
 nabbed
 nabrit
@@ -5676,7 +5666,6 @@ nursury
 nuts
 ny
 nyu
-o
 oahu
 oak
 oaks
@@ -5869,7 +5858,6 @@ owners
 ownership
 oxendine
 oxford
-p
 pack
 packages
 packaging
@@ -6553,7 +6541,6 @@ put
 putting
 puzzle
 pvt
-q
 qualifications
 qualified
 quality
@@ -6582,7 +6569,6 @@ quote
 quoted
 quotes
 qurterback
-r
 rabbit
 rabies
 race
@@ -7158,7 +7144,6 @@ rutledge
 ryan
 rykard
 rykerd
-s
 sabb
 saboteurs
 sack
@@ -8018,7 +8003,6 @@ syphilis
 syrus
 system
 syvania
-t
 tabby
 tabernackle
 table
@@ -8413,7 +8397,6 @@ typing
 typist
 typographical
 tyree
-u
 ufwa
 ugly
 ulmer
@@ -8505,7 +8488,6 @@ utica
 utmost
 utopia
 utsey
-v
 va
 vacation
 vaccination
@@ -8614,7 +8596,6 @@ votes
 voting
 voucher
 vs
-w
 wac
 wade
 wadmalaw
@@ -8959,13 +8940,11 @@ wyers
 wyndham
 wynn
 wynne
-x
 xavier
 xi
 xmas
 xxiii
 xxxl
-y
 ya
 yaller
 yancey
@@ -9005,7 +8984,6 @@ yuma
 yvonne
 yw
 ywca
-z
 zeigler
 zenobis
 zeta
