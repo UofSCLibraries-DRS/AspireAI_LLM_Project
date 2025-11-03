@@ -11,7 +11,11 @@ from fine_tuning.utils.validation import (
     validate_training_step_json,
 )
 
+# FIXME: Should be loaded from env
 MODEL_DUMP = "/home/john/Research/library/dump"
+
+# TODO: Ensure model / data folders exist / correct format (Maybe implement on trainer class)
+#           Additionally, track model / data folders that will exist
 
 
 @dataclass
@@ -24,8 +28,6 @@ class MasterPipeline:
 def build_pipeline(pipeline_path: str) -> MasterPipeline:
     """
     `pipeline_path` - Relative path to pipeline json file (i.e. "config/pipeline.json")
-
-    `base_dir` - Absolute path to the directory where models, datasets, and outputs are saved
     """
 
     with open(pipeline_path, "r") as f:
@@ -56,11 +58,6 @@ def build_pipeline(pipeline_path: str) -> MasterPipeline:
         )
         os.makedirs(output, exist_ok=True)
 
-        # FIXME: This does not minimize training steps.
-        #        Will need to create a graph or smth to track dependencies.
-        prev_model = start
-        trace = []  # Store a trace of model directories # FIXME: This is a minimal solution, but can be expanded on
-
         # Create a hash of the model being trained
         model_hash = base62_encode(
             hashlib.sha256(
@@ -85,7 +82,7 @@ def build_pipeline(pipeline_path: str) -> MasterPipeline:
         prev_model = start
         trace = [start]  # Store a trace of initial model and training steps
 
-        for idx, training_step_path in enumerate(model.get("train_steps")):
+        for training_step_path in model.get("train_steps"):
             trace.append(training_step_path)
 
             state_hash = base62_encode(  # Get hash of model
