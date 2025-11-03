@@ -1,0 +1,5 @@
+{
+    "trainer": "FullUnsupervisedTrainer",
+    "data": "/home/john/Research/library/AspireAI_LLM_Project/scratch/mock_files/data.csv",
+    "config": "/home/john/Research/library/AspireAI_LLM_Project/scratch/mock_files/dummy_full_unsupervised.json"
+}

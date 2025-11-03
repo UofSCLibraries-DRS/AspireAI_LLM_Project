@@ -1,0 +1,25 @@
+[
+    {
+        "model": {
+            "start": "/home/john/Research/library/gemma_test/gemma-3-270m",
+            "train_steps": [
+                "/home/john/Research/library/AspireAI_LLM_Project/scratch/mock_files/dummy_training_step.json"
+            ],
+            "output": "/home/john/library/test_output"
+        },
+        "inference": {},
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "/home/john/Research/library/gemma_test/gemma-3-270m",
+            "train_steps": [
+                "/home/john/Research/library/AspireAI_LLM_Project/scratch/mock_files/dummy_training_step.json",
+                "/home/john/Research/library/AspireAI_LLM_Project/scratch/mock_files/dummy_training_step.json"
+            ],
+            "output": "/home/john/library/test_output_2"
+        },
+        "inference": {},
+        "evaluation": {}
+    }
+]

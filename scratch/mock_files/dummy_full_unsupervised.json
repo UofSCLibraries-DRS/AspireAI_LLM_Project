@@ -1,0 +1,16 @@
+{
+  "training_args": {
+    "per_device_train_batch_size": 1,
+    "gradient_accumulation_steps": 1,
+    "learning_rate": 5e-5,
+    "num_train_epochs": 1,
+    "max_steps": 10,
+    "warmup_steps": 0,
+    "logging_steps": 1,
+    "save_strategy": "no",
+    "fp16": false,
+    "weight_decay": 0.0,
+    "push_to_hub": false,
+    "report_to": "none"
+  }
+}

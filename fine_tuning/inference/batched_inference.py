@@ -33,7 +33,7 @@ class InferenceResult:
 
 
 # Format prompt for base Llama 3.1 (with system prompt)
-def format_prompt(user_prompt: str, system_prompt_path: str) -> str:
+def _format_prompt(user_prompt: str, system_prompt_path: str) -> str:
     with open(system_prompt_path, "r") as f:
         prompt_def = yaml.safe_load(f)
 
@@ -43,14 +43,14 @@ def format_prompt(user_prompt: str, system_prompt_path: str) -> str:
 
 
 # Helper collate
-def collate_fn(batch: List[Dict[str, Any]]) -> Dict[str, Any]:
+def _collate_fn(batch: List[Dict[str, Any]]) -> Dict[str, Any]:
     prompts = [x["prompt"] for x in batch]
     idxs = [x["idx"] for x in batch]
     jobs_batch = [x["job"] for x in batch]
     return {"prompts": prompts, "idxs": idxs, "jobs": jobs_batch}
 
 
-def inference(
+def batched_inference(
     model_dir: str,
     jobs: List[InferenceJob],
     device: str = "cuda",
@@ -85,7 +85,7 @@ def inference(
     # Prepare prompts for each job
     prepared = []
     for i, job in enumerate(jobs):
-        prompt_text = format_prompt(
+        prompt_text = _format_prompt(
             user_prompt=job.prompt, system_prompt_path=job.prompt_template
         )
         prepared.append({"idx": i, "prompt": prompt_text, "job": job})
@@ -110,7 +110,7 @@ def inference(
         max_new_tokens, temperature, top_p, top_k, stop_sequence = key
 
         dataloader = DataLoader(
-            items, batch_size=batch_size, collate_fn=collate_fn, shuffle=False
+            items, batch_size=batch_size, collate_fn=_collate_fn, shuffle=False
         )
 
         with torch.no_grad():
@@ -254,7 +254,7 @@ def main():
             jobs.append(job)
 
     for model_dir in model_dirs:
-        results = inference(model_dir=model_dir, jobs=jobs)
+        results = batched_inference(model_dir=model_dir, jobs=jobs)
 
         output_dir = os.path.join(model_dir, "results")
         os.makedirs(output_dir, exist_ok=True)
