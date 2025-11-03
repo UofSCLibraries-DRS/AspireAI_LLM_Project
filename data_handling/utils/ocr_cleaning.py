@@ -10,21 +10,49 @@ class OCR_Clean:
     """
     
     ocr_patterns = {
-        """
-        Dictonary of messy OCR patterns and their clean counter part.
-        Will serve simular to "STOP WORDS" in NLTK, with more flexiblity.
-
-        Key: Messy OCR pattern (raw string)
-        Value: Clean version of pattern (string)
-        """
-        r'_{2,}': ' ',     # two or more underscores = single white space
-        r'—': '-',         # special long dash = standard dash
-        r'\*{2,}': ' '     # two or more astricks (*) = single white space
-        
+    # Common OCR misreads
+    r'Fev\. ': 'Rev. ',
+    r'Pev\. ': 'Rev. ',
+    r'Bev\* ': 'Rev. ',
+    r'Bev\. ': 'Rev. ',
+    r'Pev\. ': 'Rev. ',
+    r'Pev\* ': 'Rev. ',
+    r'\^ev. ': 'Rev. ',
+    r'NE..BEBBY': 'NEWBERRY',
+    r'Beaufoit': 'Beaufort',
+    r'Dai lingt on': 'Darlington',
+    r'Mr\* ': 'Mr. ',
+    r'3\* C\* ': 'S. C. ',
+    r'3\* C\. ': 'S. C. ',
+    r'3\. C ': 'S. C. ',
+    r'3. 0. ': 'S. C. ',
+    r'3. G. ': 'S. C ',
+    r'Poute ': 'Route ',
+    r'Pock Hill': 'Rock Hill',
+    r'Bock Hill': 'Rock Hill',
+    r'jegroes ': 'negroes ',
+    r'febfuary ': 'febuary ',
+    r'rogjstrstion ': 'registration ',
+    r'travelling ': 'travelling ',
+    r'crrolina ': 'carolina ',
+    r'racisim ': 'racism ',
+    r'supplios ': 'supplies ',
+    r'mtcray ': 'mccray ',
+    r'elininating': 'eliminating',
+    r'mocray': 'mccray',
+    r'snartanburg': 'spartanburg',
+    r'tounded': 'founded',
+    r'limcfow': 'jimcrow',
+    r'hanvest': 'harvest',
+    r'charpeston': 'charleston'
     }
 
     special_pattern = r'[^a-zA-Z0-9\s.,!?;:\'"()\-_/]{2,}'  # anything that's not letter, number, white space, or standard punctuation, in a sequence for 2 or more
-    letter_pattern = r'\b\w*([a-zA-Z])\1{2,}\w*\b'          # sequences of 3+ of the same letter
+    special_pattern_expanded = r'[^a-zA-Z0-9\s.,!?;:\'"()\-_/$%]{2,}' # additional version
+    letter_pattern = r'\b\w*([a-zA-Z])\1{2,}\w*\b'          # sequences of 2+ of the same letter
+    letter_pattern_4 = r'\b\w*([a-zA-Z])\1{4,}\w*\b'          # sequences of 4+ of the same letter
+
+    non_ascii = r'[^\x00-\x7F]'
 
     general_exceptions = [
             r'^[a-zA-Z]{1,2}&[a-zA-Z]{1,2}$',           # e.g., a&b, AB&CD

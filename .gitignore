@@ -26,11 +26,13 @@ my_files/
 # logs
 llm_tuning/logs/
 
-# ocr data
+# ocr data + csvs
 ocr_rescan/documents/
 ocr_rescan/contentdm_harvester.ipynb
 ocr_rescan/contentdm_download_*.ipynb
 *.~lock*
+data_handling/*.csv
+data_handling/*.xlsx
 
 # dev settings
 .vscode
