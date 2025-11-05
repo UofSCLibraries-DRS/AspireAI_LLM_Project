@@ -20,6 +20,7 @@ data/mccray/changed_data/backup/
 *.bin
 *.pt
 
+data/mccray/bin
 
 my_files/
 
