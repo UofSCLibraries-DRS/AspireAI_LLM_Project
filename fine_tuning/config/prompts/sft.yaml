@@ -1,0 +1,4 @@
+template: |
+  <start_question>{user_prompt}<end_question>\n<start_answer>
+template_stop: <end_answer> # Step sequence for model training
+stop_sequences: ["<end_answer>", </end_answer>, </answer>, \n] # Used during inference

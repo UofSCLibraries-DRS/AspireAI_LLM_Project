@@ -1,7 +1,7 @@
 BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
-def base62_encode(num):
+def base62_encode(num) -> str:
     """Encode a positive number into Base X and return the string.
 
     Arguments:
@@ -10,7 +10,7 @@ def base62_encode(num):
     """
     if num == 0:
         return BASE62[0]
-    arr = []
+    arr: list[str] = []
     arr_append = arr.append  # Extract bound-method for faster access.
     _divmod = divmod  # Access to locals is faster.
     base = len(BASE62)

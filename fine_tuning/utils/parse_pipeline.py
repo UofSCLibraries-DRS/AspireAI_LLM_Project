@@ -3,8 +3,7 @@ import json
 import os
 from typing import List
 from fine_tuning.trainers import AbstractTrainer
-import hashlib
-from fine_tuning.utils.cache.encoder import base62_encode
+from fine_tuning.utils.cache.hash import list_hash
 
 from fine_tuning.utils.validation import (
     validate_pipeline_json,
@@ -31,7 +30,7 @@ def build_pipeline(pipeline_path: str) -> MasterPipeline:
     """
 
     with open(pipeline_path, "r") as f:
-        pipelines = json.load(f)
+        pipelines: list[dict] = json.load(f)
 
     validate_pipeline_json(pipelines)
 
@@ -48,7 +47,7 @@ def build_pipeline(pipeline_path: str) -> MasterPipeline:
     #   Prevents duplicate training steps.
     for pipeline in pipelines:
         # Parse model training
-        model = pipeline.get("model")
+        model: dict = pipeline.get("model")
 
         # Get start and output and ensure they exist
         start = model.get("start")
@@ -59,11 +58,7 @@ def build_pipeline(pipeline_path: str) -> MasterPipeline:
         os.makedirs(output, exist_ok=True)
 
         # Create a hash of the model being trained
-        model_hash = base62_encode(
-            hashlib.sha256(
-                [start].extend(model.get("train_steps")),
-            ).digest()
-        )
+        model_hash = list_hash([start] + model.get("train_steps"))
 
         if model_hash in hash_master:
             raise ValueError("duplicate training pipelines")
@@ -83,11 +78,9 @@ def build_pipeline(pipeline_path: str) -> MasterPipeline:
         trace = [start]  # Store a trace of initial model and training steps
 
         for training_step_path in model.get("train_steps"):
-            trace.append(training_step_path)
+            trace += [training_step_path]
 
-            state_hash = base62_encode(  # Get hash of model
-                hashlib.sha256(trace).digest(),
-            )
+            state_hash = list_hash(trace)  # Get hash of model
 
             named_output = hash_master.get(state_hash, None)
             if named_output:  # If there is a named output for this series of steps
@@ -103,7 +96,7 @@ def build_pipeline(pipeline_path: str) -> MasterPipeline:
             seen_models.add(state_hash)
 
             with open(training_step_path, "r") as f:
-                training_step = json.load(f)
+                training_step: dict = json.load(f)
 
             # Validate training step json
             validate_training_step_json(training_step)

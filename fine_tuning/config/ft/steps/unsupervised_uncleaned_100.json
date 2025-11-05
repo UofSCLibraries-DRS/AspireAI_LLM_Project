@@ -1,0 +1,5 @@
+{
+    "trainer": "FullUnsupervisedTrainer",
+    "data": "/home/john/Research/library/data/100_transcript.csv",
+    "config": "/home/john/Research/library/AspireAI_LLM_Project/fine_tuning/config/ft/training/unsupervised_gemma.json"
+}

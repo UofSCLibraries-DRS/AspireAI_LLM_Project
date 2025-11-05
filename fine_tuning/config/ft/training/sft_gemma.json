@@ -1,0 +1,11 @@
+{
+    "training_args": {
+        "num_train_epochs": 20,
+        "per_device_train_batch_size": 1,
+        "learning_rate": 2e-5,
+        "save_strategy": "no",
+        "logging_steps": 10,
+        "report_to": "none"
+    },
+    "prompt_format": "/home/john/Research/library/AspireAI_LLM_Project/fine_tuning/config/prompts/sft.yaml"
+}
