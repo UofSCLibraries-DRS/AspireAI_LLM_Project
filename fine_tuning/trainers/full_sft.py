@@ -29,7 +29,7 @@ def build_prompt(question: str, answer: str, prompt_cfg: dict) -> str:
 
 def prepare_example(example, tokenizer, max_length, prompt_cfg):
     """Tokenize and mask question part (labels = -100 for prompt tokens)."""
-    prompt = build_prompt(example["question"], example["question"], prompt_cfg)
+    prompt = build_prompt(example["question"], example["answer"], prompt_cfg)
     answer = example["answer"]
     full_text = prompt + answer
 
@@ -86,7 +86,7 @@ class FullSFTTrainer(AbstractTrainer):
         def tokenize_batch(examples):
             out = {"input_ids": [], "attention_mask": [], "labels": []}
             for q, a in zip(examples["question"], examples["answer"]):
-                ex = {"question": q, "answer": a + "<end_answer>"}
+                ex = {"question": q, "answer": a}
                 prepared = prepare_example(ex, tokenizer, MAX_LENGTH, prompt_cfg)
                 for k in out:
                     out[k].append(prepared[k])
@@ -97,9 +97,8 @@ class FullSFTTrainer(AbstractTrainer):
         )
 
         # Load local model
-        dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
         model = AutoModelForCausalLM.from_pretrained(
-            self.start_model, torch_dtype=dtype, device_map="auto"
+            self.start_model, torch_dtype="auto", device_map="auto"
         )
 
         for param in model.parameters():
@@ -149,6 +148,5 @@ class FullSFTTrainer(AbstractTrainer):
 
             plot_path = f"{self.output_dir}/logs/loss_plot.png"
             plt.savefig(plot_path)
-            print(f"Training loss plot saved to: {plot_path}")
         else:
             print("No loss data found in trainer.state.log_history — skipping plot.")

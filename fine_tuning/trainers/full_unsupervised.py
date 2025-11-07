@@ -43,7 +43,6 @@ class FullUnsupervisedTrainer(AbstractTrainer):
             return tokenizer(
                 batch["text"],
                 truncation=True,
-                padding="max_length",
                 max_length=1024,
             )
 
@@ -52,8 +51,9 @@ class FullUnsupervisedTrainer(AbstractTrainer):
         # Load local model
         model = AutoModelForCausalLM.from_pretrained(
             self.start_model,
-            torch_dtype=torch.float16,
+            torch_dtype="auto",
             device_map="auto",
+            attn_implementation="eager",
         )
 
         for param in model.parameters():
@@ -65,9 +65,13 @@ class FullUnsupervisedTrainer(AbstractTrainer):
             **training_cfg,
             output_dir=f"{self.output_dir}/scratch",
             logging_dir=f"{self.output_dir}/logs",
+            # group_by_length=True,
         )
 
-        data_collator = DataCollatorForLanguageModeling(tokenizer, mlm=False)
+        data_collator = DataCollatorForLanguageModeling(
+            tokenizer,
+            mlm=False,
+        )
 
         trainer = Trainer(
             model=model,
@@ -104,6 +108,7 @@ class FullUnsupervisedTrainer(AbstractTrainer):
 
             plot_path = f"{self.output_dir}/logs/loss_plot.png"
             plt.savefig(plot_path)
-            print(f"Training loss plot saved to: {plot_path}")
         else:
-            print("No loss data found in trainer.state.log_history — skipping plot.")
+            print(
+                "WARNING: No loss data found in trainer.state.log_history — skipping plot."
+            )

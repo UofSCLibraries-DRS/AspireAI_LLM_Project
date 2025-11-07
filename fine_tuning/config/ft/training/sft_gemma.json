@@ -7,5 +7,6 @@
         "logging_steps": 10,
         "report_to": "none"
     },
+    "dtype": "bfloat16",
     "prompt_format": "/home/john/Research/library/AspireAI_LLM_Project/fine_tuning/config/prompts/sft.yaml"
 }
