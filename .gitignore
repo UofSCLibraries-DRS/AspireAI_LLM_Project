@@ -6,7 +6,9 @@
 *.odt
 __pycache__/
 *.py[cod]
-.env
+
+.env*
+!.env.example
 
 lora-finetuned-test-model/
 400-completion-tasks-distilGPT2/

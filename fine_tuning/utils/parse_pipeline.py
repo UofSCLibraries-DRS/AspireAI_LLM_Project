@@ -2,16 +2,14 @@ from dataclasses import dataclass
 import json
 import os
 from typing import List
+
 from fine_tuning.trainers import AbstractTrainer
 from fine_tuning.utils.cache.hash import list_hash
-
 from fine_tuning.utils.validation import (
     validate_pipeline_json,
     validate_training_step_json,
 )
 
-# FIXME: Should be loaded from env
-MODEL_DUMP = "/home/john/Research/library/dump"
 
 # TODO: Ensure model / data folders exist / correct format (Maybe implement on trainer class)
 #           Additionally, track model / data folders that will exist
@@ -24,7 +22,11 @@ class MasterPipeline:
     evaluation_steps: List[str]
 
 
-def build_pipeline(pipeline_path: str) -> MasterPipeline:
+def build_pipeline(
+    pipeline_path: str,
+    model_folder: str,
+    model_dump: str,
+) -> MasterPipeline:
     """
     `pipeline_path` - Relative path to pipeline json file (i.e. "config/pipeline.json")
     """
@@ -50,8 +52,8 @@ def build_pipeline(pipeline_path: str) -> MasterPipeline:
         model: dict = pipeline.get("model")
 
         # Get start and output and ensure they exist
-        start = model.get("start")
-        output = model.get("output")
+        start = os.path.join(model_folder, model.get("start"))
+        output = os.path.join(model_folder, model.get("output"))
         assert os.path.exists(start), (
             "error initializing pipeline: starting model does not exist"
         )
@@ -70,9 +72,8 @@ def build_pipeline(pipeline_path: str) -> MasterPipeline:
         # Parse model training
         model = pipeline.get("model")
 
-        # Get start and output and ensure they exist
-        start = model.get("start")
-        output = model.get("output")
+        # Get only the start path (The output is already saved in the hash table)
+        start = os.path.join(model_folder, model.get("start"))
 
         prev_model = start
         trace = [start]  # Store a trace of initial model and training steps
@@ -86,7 +87,7 @@ def build_pipeline(pipeline_path: str) -> MasterPipeline:
             if named_output:  # If there is a named output for this series of steps
                 out_dir = named_output
             else:  # If there is not a named output for this series of steps
-                out_dir = os.path.join(MODEL_DUMP, state_hash)
+                out_dir = os.path.join(model_dump, state_hash)
 
             # Check if this model has been added to the training jobs
             if state_hash in seen_models:

@@ -1,11 +1,10 @@
-import json
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 import os
 import argparse
 from pathlib import Path
 
-from utils.resources import ensure_pipeline
-from utils.cache import TrainingCache, DummyCache
+from fine_tuning.utils.parse_pipeline import build_pipeline
+from fine_tuning.utils.exceptions import MissingEnvironmentVariable
 
 
 def main():
@@ -15,36 +14,39 @@ def main():
         "--pipeline-path",
         type=Path,
         required=True,
-        help="Relative or absolute path to the pipeline file or directory",
+        help="Absolute path to the pipeline file or directory",
     )
     parser.add_argument(
-        "--cache",
-        action="store_true",
-        help="Enable caching logic",
+        "--env",
+        type=str,
+        required=True,
+        help=".env file to use",
     )
     args = parser.parse_args()
 
+    # Ensure pipeline config path exists
     pipeline_path = args.pipeline_path.resolve()
     if not pipeline_path.exists():
         raise FileNotFoundError(f"Pipeline path not found: {pipeline_path}")
 
-    # Load .env
-    load_dotenv()
+    # Load env file
+    if os.path.isabs(args.env):
+        load_dotenv(args.env)
+    else:
+        load_dotenv(find_dotenv(args.env))
 
-    # Ensure everything is available
-    ensure_pipeline(
+    # Build the pipeline
+    MODEL_DUMP = os.getenv("MODEL_DUMP")
+    if MODEL_DUMP is None:
+        raise MissingEnvironmentVariable("MODEL_DUMP")
+    pipeline = build_pipeline(
         pipeline_path=pipeline_path,
-        base_dir=os.getenv("BASE_DIR"),
+        model_dump=MODEL_DUMP,
     )
 
-    # Create ordering of training steps
-    # Wont be needed until later
-
-    # Create cache object
-    if args.cache:
-        cache = TrainingCache("training_cache.json")
-    else:
-        cache = DummyCache()
+    # Run all training steps
+    for train_step in pipeline.train_steps:
+        train_step.train()
 
 
 if __name__ == "__main__":
