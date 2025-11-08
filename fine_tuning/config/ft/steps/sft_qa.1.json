@@ -1,5 +1,5 @@
 {
     "trainer": "FullSFTTrainer",
     "data": "sft/qa_125.csv",
-    "config": "/home/john/Research/library/AspireAI_LLM_Project/fine_tuning/config/ft/training/sft_gemma.json"
+    "config": "ft/training/sft_gemma.json"
 }

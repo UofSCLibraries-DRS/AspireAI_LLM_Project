@@ -12,6 +12,7 @@ from transformers import (
 )
 import torch
 import os
+import shutil
 
 from .training_base import AbstractTrainer
 
@@ -122,11 +123,17 @@ class FullSFTTrainer(AbstractTrainer):
             data_collator=data_collator,
         )
 
-        # Traing and save
+        # Train and save
         trainer.train()
 
         trainer.save_model(f"{self.output_dir}")
         tokenizer.save_pretrained(f"{self.output_dir}")
+
+        # Save prompt format
+        shutil.copy2(
+            prompt_cfg_path,
+            os.path.join(self.output_dir, "prompt.yaml"),
+        )
 
         os.makedirs(f"{self.output_dir}/logs", exist_ok=True)
 
