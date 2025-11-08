@@ -9,7 +9,6 @@ from transformers import (
     Trainer,
     DataCollatorForLanguageModeling,
 )
-import torch
 import os
 
 from .training_base import AbstractTrainer

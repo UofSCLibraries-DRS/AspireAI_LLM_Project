@@ -3,6 +3,7 @@ import json
 import os
 from typing import List
 
+from fine_tuning.utils.environment import get_env_or_raise
 from fine_tuning.trainers import AbstractTrainer
 from fine_tuning.utils.cache.hash import list_hash
 from fine_tuning.utils.validation import (
@@ -24,12 +25,14 @@ class MasterPipeline:
 
 def build_pipeline(
     pipeline_path: str,
-    model_folder: str,
-    model_dump: str,
 ) -> MasterPipeline:
     """
     `pipeline_path` - Relative path to pipeline json file (i.e. "config/pipeline.json")
     """
+    MODEL_DUMP = get_env_or_raise("MODEL_DUMP")
+    MODEL_FOLDER = get_env_or_raise("MODEL_FOLDER")
+    DATA_FOLDER = get_env_or_raise("DATA_FOLDER")
+    CONFIG_FOLDER = get_env_or_raise("CONFIG_FOLDER")
 
     with open(pipeline_path, "r") as f:
         pipelines: list[dict] = json.load(f)
@@ -52,8 +55,8 @@ def build_pipeline(
         model: dict = pipeline.get("model")
 
         # Get start and output and ensure they exist
-        start = os.path.join(model_folder, model.get("start"))
-        output = os.path.join(model_folder, model.get("output"))
+        start = os.path.join(MODEL_FOLDER, model.get("start"))
+        output = os.path.join(MODEL_FOLDER, model.get("output"))
         assert os.path.exists(start), (
             "error initializing pipeline: starting model does not exist"
         )
@@ -73,7 +76,7 @@ def build_pipeline(
         model = pipeline.get("model")
 
         # Get only the start path (The output is already saved in the hash table)
-        start = os.path.join(model_folder, model.get("start"))
+        start = os.path.join(MODEL_FOLDER, model.get("start"))
 
         prev_model = start
         trace = [start]  # Store a trace of initial model and training steps
@@ -87,7 +90,7 @@ def build_pipeline(
             if named_output:  # If there is a named output for this series of steps
                 out_dir = named_output
             else:  # If there is not a named output for this series of steps
-                out_dir = os.path.join(model_dump, state_hash)
+                out_dir = os.path.join(MODEL_DUMP, state_hash)
 
             # Check if this model has been added to the training jobs
             if state_hash in seen_models:
@@ -96,7 +99,7 @@ def build_pipeline(
                 continue
             seen_models.add(state_hash)
 
-            with open(training_step_path, "r") as f:
+            with open(os.path.join(CONFIG_FOLDER, training_step_path), "r") as f:
                 training_step: dict = json.load(f)
 
             # Validate training step json
@@ -106,8 +109,8 @@ def build_pipeline(
                 subclass_name=training_step.get("trainer"),
                 start_model=prev_model,
                 output_dir=out_dir,
-                data=training_step.get("data"),
-                config=training_step.get("config"),
+                data=os.path.join(DATA_FOLDER, training_step.get("data")),
+                config=os.path.join(CONFIG_FOLDER, training_step.get("config")),
                 model_trace=trace.copy(),
             )
 

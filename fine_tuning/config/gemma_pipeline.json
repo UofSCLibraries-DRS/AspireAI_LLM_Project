@@ -3,7 +3,7 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "/home/john/Research/library/AspireAI_LLM_Project/fine_tuning/config/ft/steps/unsupervised_uncleaned_100.json"
+                "ft/steps/unsupervised_uncleaned_100.json"
             ],
             "output": "M9"
         },
@@ -14,8 +14,8 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "/home/john/Research/library/AspireAI_LLM_Project/fine_tuning/config/ft/steps/unsupervised_uncleaned_100.json",
-                "/home/john/Research/library/AspireAI_LLM_Project/fine_tuning/config/ft/steps/sft_qa.1.json"
+                "ft/steps/unsupervised_uncleaned_100.json",
+                "ft/steps/sft_qa.1.json"
             ],
             "output": "M10"
         },

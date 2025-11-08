@@ -4,7 +4,6 @@ import argparse
 from pathlib import Path
 
 from fine_tuning.utils.parse_pipeline import build_pipeline
-from fine_tuning.utils.exceptions import MissingEnvironmentVariable
 
 
 def main():
@@ -36,13 +35,7 @@ def main():
         load_dotenv(find_dotenv(args.env))
 
     # Build the pipeline
-    MODEL_DUMP = os.getenv("MODEL_DUMP")
-    if MODEL_DUMP is None:
-        raise MissingEnvironmentVariable("MODEL_DUMP")
-    pipeline = build_pipeline(
-        pipeline_path=pipeline_path,
-        model_dump=MODEL_DUMP,
-    )
+    pipeline = build_pipeline(pipeline_path)
 
     # Run all training steps
     for train_step in pipeline.train_steps:
