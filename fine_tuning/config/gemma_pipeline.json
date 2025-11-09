@@ -19,7 +19,13 @@
             ],
             "output": "M10"
         },
-        "inference": {},
+        "inference": [
+            {
+                "data": "eval/binary_factoid.csv",
+                "config": "inference/default.json",
+                "prompt_format": "/home/john/Research/library/AspireAI_LLM_Project/fine_tuning/config/prompts/sft.yaml"
+            }
+        ],
         "evaluation": {}
     }
 ]

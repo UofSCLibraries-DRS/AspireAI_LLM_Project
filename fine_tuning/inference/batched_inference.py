@@ -2,7 +2,7 @@ import csv
 import gc
 import os
 import yaml
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, List, Tuple
 import torch
 from torch.utils.data import DataLoader
@@ -15,10 +15,13 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 @dataclass
 class InferenceJob:
     group_id: str
+    model: str
     prompt_template: str
     prompt: str
     ground_truth: str
-    stop_sequence: str | None = None
+    stop_sequences: List[str] = field(
+        default_factory=list
+    )  # Internal logic will fill this field from the prompt template
     repeat_param: int = 1
     max_tokens: int = 200
     temperature: float = 1.0
@@ -33,13 +36,16 @@ class InferenceResult:
 
 
 # Format prompt for base Llama 3.1 (with system prompt)
-def _format_prompt(user_prompt: str, system_prompt_path: str) -> str:
+def _handle_prompt_formatting(
+    user_prompt: str, system_prompt_path: str
+) -> Tuple[str, List[str]]:
     with open(system_prompt_path, "r") as f:
         prompt_def = yaml.safe_load(f)
 
     template = prompt_def.get("template", "")
+    stop_sequences = prompt_def.get("stop_sequences", [])
 
-    return template.format(user_prompt=user_prompt)
+    return template.format(user_prompt=user_prompt), stop_sequences
 
 
 # Helper collate
@@ -51,49 +57,25 @@ def _collate_fn(batch: List[Dict[str, Any]]) -> Dict[str, Any]:
 
 
 def batched_inference(
-    model_dir: str,
     jobs: List[InferenceJob],
     device: str = "cuda",
     batch_size: int = 16,
     dtype: torch.dtype = torch.float32,
-    use_fp16_if_available: bool = False,
     max_prompt_length=1024,
 ) -> List[InferenceResult]:
-    if use_fp16_if_available and torch.cuda.is_available():
-        model_dtype = (
-            torch.float16
-            if dtype == torch.float16 or use_fp16_if_available
-            else torch.float32
-        )
-    else:
-        model_dtype = torch.float32
-
-    # Load model & tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_dir,
-        use_fast=True,
-    )
-    tokenizer.model_max_length = max_prompt_length
-
-    model = AutoModelForCausalLM.from_pretrained(
-        model_dir,
-        torch_dtype=model_dtype,
-    )
-    if device == "cuda":
-        model.to("cuda")
-
     # Prepare prompts for each job
     prepared = []
     for i, job in enumerate(jobs):
-        prompt_text = _format_prompt(
+        prompt_text, stop_sequences = _handle_prompt_formatting(
             user_prompt=job.prompt, system_prompt_path=job.prompt_template
         )
+        job.stop_sequences = stop_sequences
         prepared.append({"idx": i, "prompt": prompt_text, "job": job})
 
     # Build groups: map key -> list[item]
     def group_key(item: Dict[str, Any]) -> Tuple:
         j: InferenceJob = item["job"]
-        return (j.max_tokens, j.temperature, j.top_p, j.top_k, j.stop_sequence)
+        return (j.model, j.max_tokens, j.temperature, j.top_p, j.top_k)
 
     groups: Dict[Tuple, List[Dict[str, Any]]] = {}
     for item in prepared:
@@ -107,7 +89,21 @@ def batched_inference(
 
     for key, items in groups.items():
         # Unwrap inference params from key
-        max_new_tokens, temperature, top_p, top_k, stop_sequence = key
+        model_path, max_new_tokens, temperature, top_p, top_k = key
+
+        # Load model & tokenizer
+        tokenizer = AutoTokenizer.from_pretrained(
+            model_path,
+            use_fast=True,
+        )
+        tokenizer.model_max_length = max_prompt_length
+
+        model = AutoModelForCausalLM.from_pretrained(
+            model_path,
+            torch_dtype="auto",
+        )
+        if device == "cuda":
+            model.to("cuda")
 
         dataloader = DataLoader(
             items, batch_size=batch_size, collate_fn=_collate_fn, shuffle=False
@@ -142,8 +138,8 @@ def batched_inference(
                 expanded_input_ids = []
                 expanded_attention_mask = []
                 expanded_input_lens = []
-                expanded_job_refs = []
-                expanded_original_idxs = []
+                expanded_job_refs: List[InferenceJob] = []
+                expanded_original_idxs: List[int] = []
                 for i_local, job in enumerate(jobs_batch):
                     rc = job.repeat_param
                     for _ in range(rc):
@@ -195,8 +191,9 @@ def batched_inference(
                     cont = cont.removeprefix(full_prompt)
 
                     # truncate at stop_sequence if present
-                    if job_ref.stop_sequence and job_ref.stop_sequence in cont:
-                        cont = cont.split(job_ref.stop_sequence, 1)[0].strip()
+                    for stop_sequence in job_ref.stop_sequences:
+                        if stop_sequence in cont:
+                            cont = cont.split(stop_sequence, 1)[0].strip()
 
                     all_results[orig_idx].responses.append(cont)
 
@@ -204,11 +201,12 @@ def batched_inference(
                 if device == "cuda":
                     torch.cuda.empty_cache()
                 gc.collect()
+
+        try:
+            del model, tokenizer
+        except Exception:
+            pass
     # final cleanup
-    try:
-        del model, tokenizer
-    except Exception:
-        pass
     if device == "cuda":
         torch.cuda.empty_cache()
     gc.collect()
@@ -223,33 +221,22 @@ def main():
     prompt_templates = [
         "prompts/sft.yaml",
     ]
-    stop_sequences = [
-        "\nQuestion:",
-        "\nQuestion:",
-        "\nQuestion:",
-        "\nQuestion:",
-        "\nQuestion:",
-        "\nQuestion:",
-        "\nQuestion:",
-        "</s>",
-    ]
 
     model_dirs = [
-        # "gemma-3-270m_sft/model",
-        "high_cpt_then_sft/model"
+        "/home/john/Research/library/models/M10",
+        "/home/john/Research/library/models/M9",
     ]
 
     jobs: List[InferenceJob] = []
 
-    for prompt_template, stop_sequence in zip(prompt_templates, stop_sequences):
+    for prompt_template in prompt_templates:
         for _, row in df.iterrows():
             job = InferenceJob(
-                group_id=0,
+                model_dir="",
                 prompt_template=prompt_template,
                 prompt=row["question"],
                 ground_truth=row["answer"],
                 repeat_param=5,
-                stop_sequence="<end_answer>",
             )
             jobs.append(job)
 

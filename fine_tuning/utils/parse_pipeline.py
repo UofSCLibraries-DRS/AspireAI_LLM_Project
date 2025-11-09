@@ -1,3 +1,5 @@
+from typing import Dict
+import csv
 from dataclasses import dataclass
 import json
 import os
@@ -5,6 +7,7 @@ from typing import List
 
 from fine_tuning.utils.environment import get_env_or_raise
 from fine_tuning.trainers import AbstractTrainer
+from fine_tuning.inference import InferenceJob
 from fine_tuning.utils.cache.hash import list_hash
 from fine_tuning.utils.validation import (
     validate_pipeline_json,
@@ -19,7 +22,7 @@ from fine_tuning.utils.validation import (
 @dataclass
 class MasterPipeline:
     train_steps: List[AbstractTrainer]
-    inference_steps: List[str]
+    inference_jobs: List[InferenceJob]
     evaluation_steps: List[str]
 
 
@@ -33,6 +36,7 @@ def build_pipeline(
     MODEL_FOLDER = get_env_or_raise("MODEL_FOLDER")
     DATA_FOLDER = get_env_or_raise("DATA_FOLDER")
     CONFIG_FOLDER = get_env_or_raise("CONFIG_FOLDER")
+    PROMPT_FOLDER = get_env_or_raise("PROMPT_FOLDER")
 
     with open(pipeline_path, "r") as f:
         pipelines: list[dict] = json.load(f)
@@ -41,7 +45,7 @@ def build_pipeline(
 
     master_pipeline = MasterPipeline(
         train_steps=[],
-        inference_steps=[],
+        inference_jobs=[],
         evaluation_steps=[],
     )
 
@@ -72,7 +76,9 @@ def build_pipeline(
     # Track seen models to avoid doubled training steps
     seen_models = set()
     for pipeline in pipelines:
-        # Parse model training
+        ##########################
+        ## Parse model training ##
+        ##########################
         model = pipeline.get("model")
 
         # Get only the start path (The output is already saved in the hash table)
@@ -118,6 +124,33 @@ def build_pipeline(
 
             prev_model = out_dir
 
+        #####################
+        ## Parse inference ##
+        #####################
+
+        # TODO: Rename
+        inference_list: dict[str, str] | None = pipeline.get("inference")
+
+        for inf in inference_list:
+            with open(os.path.join(CONFIG_FOLDER, inf["config"]), "r") as f:
+                inf_cfg: Dict = json.load(f)
+            # Create inference jobs from data
+            with open(os.path.join(DATA_FOLDER, inf["data"]), newline="") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    q: str = row["question"]
+                    a: str = row["answer"]
+
+                    inf_job = InferenceJob(
+                        **inf_cfg,
+                        group_id=inf["data"],
+                        model=os.path.join(MODEL_FOLDER, pipeline["model"]["output"]),
+                        prompt_template=inf["prompt_format"],
+                        prompt=q,
+                        ground_truth=a,
+                    )
+
+                    master_pipeline.inference_jobs.append(inf_job)
     return master_pipeline
 
     # for pipeline in pipelines:

@@ -18,12 +18,13 @@ PIPELINE_SCHEMA = {
                 },
             },
             "inference": {  # Inference object
-                "type": "object",
+                "type": "array",
             },
             "evaluation": {  # Evaluation object
                 "type": "object",
             },
         },
+        "required": ["model"],
     },
     "minItems": 1,
 }
