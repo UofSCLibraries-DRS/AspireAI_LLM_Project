@@ -145,7 +145,9 @@ def build_pipeline(
                         **inf_cfg,
                         group_id=inf["data"],
                         model=os.path.join(MODEL_FOLDER, pipeline["model"]["output"]),
-                        prompt_template=inf["prompt_format"],
+                        prompt_template=os.path.join(
+                            PROMPT_FOLDER, inf["prompt_format"]
+                        ),
                         prompt=q,
                         ground_truth=a,
                     )

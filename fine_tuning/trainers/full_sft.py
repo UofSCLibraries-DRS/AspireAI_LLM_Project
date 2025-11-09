@@ -15,6 +15,7 @@ import os
 import shutil
 
 from .training_base import AbstractTrainer
+from fine_tuning.utils.environment import get_env_or_raise
 
 MAX_LENGTH = 512
 
@@ -68,7 +69,9 @@ class FullSFTTrainer(AbstractTrainer):
             cfg = json.load(f)
 
         training_cfg = cfg["training_args"]
-        prompt_cfg_path = cfg["prompt_format"]
+        prompt_cfg_path = os.path.join(
+            get_env_or_raise("PROMPT_FOLDER"), cfg["prompt_format"]
+        )
 
         with open(prompt_cfg_path, "r") as f:
             prompt_cfg = yaml.safe_load(f)

@@ -5,7 +5,7 @@ from fine_tuning.utils.parse_pipeline import build_pipeline
 from fine_tuning.inference import batched_inference
 
 
-PIPELINE_PATH = "/home/john/Research/library/AspireAI_LLM_Project/fine_tuning/config/pipeline_2.json"
+PIPELINE_PATH = "/home/john/Research/library/AspireAI_LLM_Project/fine_tuning/config/gemma_pipeline.json"
 
 
 def main():
