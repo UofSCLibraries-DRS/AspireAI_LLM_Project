@@ -10,7 +10,7 @@ class OCR_Clean:
     """
     
     ocr_patterns = {
-    # Common OCR misreads
+    # Common OCR misreads 
     r'Fev\. ': 'Rev. ',
     r'Pev\. ': 'Rev. ',
     r'Bev\* ': 'Rev. ',
@@ -18,41 +18,60 @@ class OCR_Clean:
     r'Pev\. ': 'Rev. ',
     r'Pev\* ': 'Rev. ',
     r'\^ev. ': 'Rev. ',
+    r'Rev\* ': 'Rev. ',
     r'NE..BEBBY': 'NEWBERRY',
     r'Beaufoit': 'Beaufort',
     r'Dai lingt on': 'Darlington',
     r'Mr\* ': 'Mr. ',
-    r'3\* C\* ': 'S. C. ',
-    r'3\* C\. ': 'S. C. ',
-    r'3\. C ': 'S. C. ',
-    r'3. 0. ': 'S. C. ',
-    r'3. G. ': 'S. C ',
+    r', 3\* C\* ': ', S. C. ',
+    r', 3\* C\. ': ', S. C. ',
+    r', 3\. C ': ', S. C. ',
+    r', 3\. 0\. ': ', S. C. ',
+    r', 3\. G\. ': ', S. C. ',
+    r'Mrs\* ': 'Mrs. ',
+    r'CCUITY ': 'COUNTY ',
     r'Poute ': 'Route ',
     r'Pock Hill': 'Rock Hill',
     r'Bock Hill': 'Rock Hill',
     r'jegroes ': 'negroes ',
-    r'febfuary ': 'febuary ',
+    r'febfuary ': 'february ',
+    r'BROADW AY': 'BROADW AY',
+    r'DAPLINGTOM ': 'DARLINGTON ',
     r'rogjstrstion ': 'registration ',
-    r'travelling ': 'travelling ',
+    r'Cher lesion ': 'Charleston ',
+    r'travelling ': 'traveling ',
     r'crrolina ': 'carolina ',
     r'racisim ': 'racism ',
     r'supplios ': 'supplies ',
     r'mtcray ': 'mccray ',
     r'elininating': 'eliminating',
     r'mocray': 'mccray',
-    r'snartanburg': 'spartanburg',
-    r'tounded': 'founded',
-    r'limcfow': 'jimcrow',
-    r'hanvest': 'harvest',
-    r'charpeston': 'charleston'
+    r'John H\* ': 'John H. ',
+    r'snartanburg': 'Spartanburg',
+    r'tounded ': 'founded ',
+    r'limcfow ': 'jimcrow ',
+    r'hanvest ': 'harvest ',
+    r'charpeston ': 'charleston ',
+    r'Ifccray ': 'McCray ',
+    r"colonialismimperialism ": "colonialism imperialism ",
+    r"PRO GRESSIVE ": "PROGRESSIVE ",
+    r"DEEOCRA TIC ": "DEMOCRATIC ",
+    r"Preetent": "President",
+    r"Harry S,": "Harry S.",
+    r"Bespectfully": "Respectfully",
+    r'Washington,D.C.': 'Washington, D.C.',
+    r'S-TATE ': "STATE",
+    r"foilowing": "following",
     }
 
     special_pattern = r'[^a-zA-Z0-9\s.,!?;:\'"()\-_/]{2,}'  # anything that's not letter, number, white space, or standard punctuation, in a sequence for 2 or more
-    special_pattern_expanded = r'[^a-zA-Z0-9\s.,!?;:\'"()\-_/$%]{2,}' # additional version
     letter_pattern = r'\b\w*([a-zA-Z])\1{2,}\w*\b'          # sequences of 2+ of the same letter
     letter_pattern_4 = r'\b\w*([a-zA-Z])\1{4,}\w*\b'          # sequences of 4+ of the same letter
 
+    # non_ascii -- any non-ascii character (should be 
     non_ascii = r'[^\x00-\x7F]'
+    # non_ascii_between_ascii -- exclude whitespace around non-ascii (e.g. contentdm 72: securedΓÇönumber)
+    non_ascii_between_ascii = r'(?<=\S)[^\x00-\x7F\s]+(?=\S)'
 
     general_exceptions = [
             r'^[a-zA-Z]{1,2}&[a-zA-Z]{1,2}$',           # e.g., a&b, AB&CD
