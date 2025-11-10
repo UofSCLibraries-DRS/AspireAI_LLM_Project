@@ -3,7 +3,7 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/unsupervised_uncleaned_100.json"
+                "ft/steps/lora_unsupervised.json"
             ],
             "output": "M9"
         },

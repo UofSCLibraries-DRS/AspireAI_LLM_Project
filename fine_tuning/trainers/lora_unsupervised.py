@@ -1,5 +1,7 @@
 import json
 import os
+import gc
+from accelerate import Accelerator
 import pandas as pd
 from datasets import Dataset
 from transformers import (
@@ -41,7 +43,7 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
             tokenizer.pad_token = tokenizer.eos_token
 
         def tokenize(batch):
-            return tokenizer(
+            return tokenizer(  # noqa: F821
                 batch["text"], truncation=True, padding="max_length", max_length=1024
             )
 
@@ -49,7 +51,7 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
 
         # Load local model
         model = AutoModelForCausalLM.from_pretrained(
-            self.start_model, torch_dtype=torch.float16, device_map="auto"
+            self.start_model, torch_dtype="auto", device_map="auto"
         )
 
         # Apply Lora cfg
@@ -83,3 +85,9 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
 
         with open(f"{self.output_dir}/logs/log_history.json", "w") as f:
             json.dump(trainer.state.log_history, f)
+
+        del model, trainer, tokenizer, dataset, tokenized_dataset
+
+        gc.collect()
+        torch.cuda.empty_cache()
+        Accelerator().free_memory()
