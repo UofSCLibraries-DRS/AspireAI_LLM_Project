@@ -7,14 +7,15 @@ from typing import Any, Dict, List, Tuple
 import torch
 from torch.utils.data import DataLoader
 import pandas as pd
-from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from collections import defaultdict
 
 
 # TODOs:
 #   - Optimize KV by sub batching prompt formats
 @dataclass
 class InferenceJob:
-    group_id: str
+    output_file: str
     model: str
     prompt_template: str
     prompt: str
@@ -56,7 +57,7 @@ def _collate_fn(batch: List[Dict[str, Any]]) -> Dict[str, Any]:
     return {"prompts": prompts, "idxs": idxs, "jobs": jobs_batch}
 
 
-def batched_inference(
+def _batched_inference(
     jobs: List[InferenceJob],
     device: str = "cuda",
     batch_size: int = 16,
@@ -212,6 +213,54 @@ def batched_inference(
     gc.collect()
 
     return all_results
+
+
+def batched_inference(
+    jobs: List[InferenceJob],
+    device: str = "cuda",
+    batch_size: int = 16,
+    dtype: torch.dtype = torch.float32,
+    max_prompt_length=1024,
+):
+    inference_results = _batched_inference(
+        jobs,
+        device,
+        batch_size,
+        dtype,
+        max_prompt_length,
+    )
+
+    # Group by model and output file
+    grouped = defaultdict(list)
+    for result in inference_results:
+        key = (result.job.model, result.job.output_file)
+        grouped[key].append(result)
+
+    # Append each response to the corresponding csv
+    for (model, output_file), results in grouped.items():
+        csv_path = os.path.join(model, "results", output_file)
+
+        os.makedirs(os.path.dirname(csv_path), exist_ok=True)
+
+        fieldnames = ["question", "answer", "response"]
+
+        with open(csv_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(
+                f,
+                fieldnames=fieldnames,
+                quoting=csv.QUOTE_ALL,
+            )
+            writer.writeheader()
+
+            for result in results:
+                for response in result.responses:
+                    writer.writerow(
+                        {
+                            "question": result.job.prompt,
+                            "answer": result.job.ground_truth,
+                            "response": response,
+                        }
+                    )
 
 
 def main():

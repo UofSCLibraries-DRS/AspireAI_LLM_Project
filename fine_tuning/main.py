@@ -8,7 +8,7 @@ from fine_tuning.utils.parse_pipeline import build_pipeline
 
 def main():
     # Parse args
-    parser = argparse.ArgumentParser(description="My pipeline runner")
+    parser = argparse.ArgumentParser()
     parser.add_argument(
         "--pipeline-path",
         type=Path,

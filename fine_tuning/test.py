@@ -15,14 +15,10 @@ def main():
         pipeline_path=PIPELINE_PATH,
     )
 
-    print(pipeline.inference_jobs[0])
-
     for train_step in pipeline.train_steps:
         train_step.train()
 
-    res = batched_inference(pipeline.inference_jobs)
-
-    print(res[0])
+    batched_inference(pipeline.inference_jobs)
 
 
 if __name__ == "__main__":

@@ -11,7 +11,8 @@
             {
                 "data": "eval/binary_factoid.csv",
                 "config": "inference/default.json",
-                "prompt_format": "sft.yaml"
+                "prompt_format": "sft.yaml",
+                "output_file": "binary_factoid.0.csv"
             }
         ],
         "evaluation": {}
@@ -29,7 +30,8 @@
             {
                 "data": "eval/binary_factoid.csv",
                 "config": "inference/default.json",
-                "prompt_format": "sft.yaml"
+                "prompt_format": "sft.yaml",
+                "output_file": "binary_factoid.0.csv"
             }
         ],
         "evaluation": {}

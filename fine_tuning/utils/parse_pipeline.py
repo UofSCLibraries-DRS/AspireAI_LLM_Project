@@ -143,7 +143,7 @@ def build_pipeline(
 
                     inf_job = InferenceJob(
                         **inf_cfg,
-                        group_id=inf["data"],
+                        output_file=inf["output_file"],
                         model=os.path.join(MODEL_FOLDER, pipeline["model"]["output"]),
                         prompt_template=os.path.join(
                             PROMPT_FOLDER, inf["prompt_format"]
