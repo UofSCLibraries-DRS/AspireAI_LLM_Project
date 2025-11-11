@@ -9,9 +9,9 @@
 
 export CUDA_VISIBLE_DEVICES=0
 
-cd /work/jaaydin/AspireAI_LLM_Project/llm_tuning
+cd /work/jaaydin/AspireAI_LLM_Project
 
 module load python3/anaconda/2021.07 gcc/12.2.0 cuda/12.3
-source activate /home/jaaydin/.conda/envs/ft_test
+source activate /home/jaaydin/.conda/envs/test_env
 
-python main.py --cfg ./config/cfg_1.json
+python -m fine_tuning.main --pipeline-path ./fine_tuning/config/llama_pipeline.json --env .env.rci
