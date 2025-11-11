@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 
 from fine_tuning.utils.parse_pipeline import build_pipeline
+from fine_tuning.inference import batched_inference
 
 
 def main():
@@ -40,6 +41,8 @@ def main():
     # Run all training steps
     for train_step in pipeline.train_steps:
         train_step.train()
+
+    batched_inference(pipeline.inference_jobs)
 
 
 if __name__ == "__main__":
