@@ -1,0 +1,8 @@
+pandas
+datasets
+transformers
+torch
+peft
+python-dotenv
+jsonschema
+# accelerate # Shouldn't need to explicitly install this
