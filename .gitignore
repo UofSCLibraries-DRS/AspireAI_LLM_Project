@@ -38,3 +38,8 @@ data_handling/*.xlsx
 # dev settings
 .vscode
 
+# IGNORE CSV FILES IN split_data subfolder
+data/mccray/split_data/h1_split/*
+data/mccray/split_data/h2_split/*
+data/simkins/split_data/h1_split/*
+data/simkins/split_data/h2_split/*
