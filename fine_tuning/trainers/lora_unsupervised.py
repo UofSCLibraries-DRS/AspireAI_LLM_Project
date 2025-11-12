@@ -1,8 +1,8 @@
+import csv
 import json
 import os
 import gc
 from accelerate import Accelerator
-import pandas as pd
 from datasets import Dataset
 from transformers import (
     AutoTokenizer,
@@ -25,17 +25,25 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
         lora_cfg = cfg["lora_config"]
         training_cfg = cfg["training_args"]
 
-        df = pd.read_csv(self.data)
+        with open(self.data, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            columns = reader.fieldnames
 
-        if "text" not in df.columns:
-            raise ValueError(
-                f"CSV must contain a 'text' column. Columns found: {list(df.columns)}"
-            )
+            # Check for the "text" column
+            if "text" not in columns:
+                raise ValueError(
+                    f"CSV must contain a 'text' column. Columns found: {columns}"
+                )
 
-        df = df[["text"]].astype({"text": str}).reset_index(drop=True)
+            # Collect values
+            text_values = []
+            for row in reader:
+                val = row.get("text")
+                if val is not None:
+                    text_values.append(str(val))
 
-        # Convert to a HuggingFace Dataset
-        dataset = Dataset.from_pandas(df)
+        # Convert to a Hugging Face dataset
+        dataset = Dataset.from_dict({"text": text_values})
 
         tokenizer = AutoTokenizer.from_pretrained(self.start_model)
 

@@ -1,6 +1,6 @@
+import csv
 import yaml
 import json
-import pandas as pd
 import matplotlib.pyplot as plt
 from datasets import Dataset
 from transformers import (
@@ -10,7 +10,6 @@ from transformers import (
     Trainer,
     DataCollatorForLanguageModeling,
 )
-import torch
 import os
 import shutil
 from peft import LoraConfig, get_peft_model
@@ -78,11 +77,22 @@ class LoRASFTTrainer(AbstractTrainer):
         with open(prompt_cfg_path, "r") as f:
             prompt_cfg = yaml.safe_load(f)
 
-        df = pd.read_csv(self.data)
+        with open(self.data, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            rows = [
+                {"question": r["question"], "answer": r["answer"]}
+                for r in reader
+                if r.get("question")
+                and r.get("answer")  # Drop rows with missing values
+            ]
 
-        df = df[["question", "answer"]].dropna()
-
-        dataset = Dataset.from_pandas(df)
+        # Create Hugging Face dataset
+        dataset = Dataset.from_dict(
+            {
+                "question": [r["question"] for r in rows],
+                "answer": [r["answer"] for r in rows],
+            }
+        )
 
         tokenizer = AutoTokenizer.from_pretrained(self.start_model, use_fast=True)
 

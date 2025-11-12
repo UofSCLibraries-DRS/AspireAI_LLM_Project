@@ -3,18 +3,11 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/lora_unsupervised.json"
+                "ft/steps/unsupervised_uncleaned_100.json"
             ],
             "output": "M9"
         },
-        "inference": [
-            {
-                "data": "eval/binary_factoid.csv",
-                "config": "inference/default.json",
-                "prompt_format": "sft.yaml",
-                "output_file": "binary_factoid.0.csv"
-            }
-        ],
+        "inference": [],
         "evaluation": {}
     },
     {
@@ -26,14 +19,7 @@
             ],
             "output": "M10"
         },
-        "inference": [
-            {
-                "data": "eval/binary_factoid.csv",
-                "config": "inference/default.json",
-                "prompt_format": "sft.yaml",
-                "output_file": "binary_factoid.0.csv"
-            }
-        ],
+        "inference": [],
         "evaluation": {}
     }
 ]
