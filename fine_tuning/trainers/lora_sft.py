@@ -130,8 +130,20 @@ class LoRASFTTrainer(AbstractTrainer):
         # Train and save
         trainer.train()
 
-        trainer.save_model(f"{self.output_dir}")
-        tokenizer.save_pretrained(f"{self.output_dir}")
+        # Save LoRA adapters
+        adapter_dir = os.path.join(self.output_dir, "adapters")
+        os.makedirs(adapter_dir, exist_ok=True)
+        model.save_pretrained(adapter_dir)
+        tokenizer.save_pretrained(
+            self.output_dir
+        )  # Double saving the tokenizer for convenience
+
+        # Save the full model with adapters applied (Useful when applying multiple stages of LoRA)
+        model = model.merge_and_unload()
+        model.save_pretrained(self.output_dir)
+        tokenizer.save_pretrained(
+            self.output_dir
+        )  # Double saving the tokenizer for convenience
 
         # Save prompt format
         shutil.copy2(
