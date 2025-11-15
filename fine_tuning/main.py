@@ -24,6 +24,8 @@ def main():
     )
     args = parser.parse_args()
 
+    print("Testing std out")
+
     # Ensure pipeline config path exists
     pipeline_path = args.pipeline_path.resolve()
     if not pipeline_path.exists():
