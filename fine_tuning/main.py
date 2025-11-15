@@ -38,6 +38,8 @@ def main():
     # Build the pipeline
     pipeline = build_pipeline(pipeline_path)
 
+    print("Finished building pipeline")
+
     # Run all training steps
     for train_step in pipeline.train_steps:
         train_step.train()

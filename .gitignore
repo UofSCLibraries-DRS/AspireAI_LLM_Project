@@ -24,3 +24,4 @@ my_files/
 
 llm_tuning/logs/
 llm_tuning/cache/
+fine_tuning/logs/
