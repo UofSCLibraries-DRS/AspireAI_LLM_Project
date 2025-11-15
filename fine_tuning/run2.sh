@@ -16,7 +16,7 @@ module load cuda/12.3
 source ~/miniforge3/etc/profile.d/conda.sh
 
 conda run -p /home/jaaydin/miniforge3/envs/lib_ft python -m fine_tuning.main \
-    --pipeline-path ./fine_tuning/config/llama_pipeline.json \
+    --pipeline-path ./fine_tuning/config/lora_test.json \
     --env .env.rci
 
 # conda run -p /home/jaaydin/.conda/envs/test_env python -m fine_tuning.main --pipeline-path ./fine_tuning/config/llama_pipeline.json --env .env.rci

@@ -1,0 +1,13 @@
+[
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/lora_u_test.json"
+            ],
+            "output": "M9"
+        },
+        "inference": [],
+        "evaluation": {}
+    }
+]

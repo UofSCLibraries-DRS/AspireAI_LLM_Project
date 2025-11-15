@@ -4,6 +4,7 @@ import os
 import gc
 from accelerate import Accelerator
 from datasets import Dataset
+import matplotlib.pyplot as plt
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
@@ -19,6 +20,15 @@ from .training_base import AbstractTrainer
 
 class LoRAUnsupervisedTrainer(AbstractTrainer):
     def _train(self):
+        # Set up folders
+        LOG_DIR = os.path.join(self.output_dir, "logs")
+        SCRATCH = os.path.join(self.output_dir, "scratch")
+        ADAPTER_DIR = os.path.join(self.output_dir, "adapters")
+
+        os.makedirs(LOG_DIR, exist_ok=True)
+        os.makedirs(SCRATCH, exist_ok=True)
+        os.makedirs(ADAPTER_DIR, exist_ok=True)
+
         with open(self.config, "r") as f:
             cfg = json.load(f)
 
@@ -62,6 +72,8 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
             self.start_model, torch_dtype="auto", device_map="auto"
         )
 
+        print(next(model.parameters()).device)
+
         # Apply Lora cfg
         lora_config = LoraConfig(**lora_cfg)
         model = get_peft_model(model, lora_config)
@@ -69,8 +81,8 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
         # Add training args
         training_args = TrainingArguments(
             **training_cfg,
-            output_dir=f"{self.output_dir}/scratch",
-            logging_dir=f"{self.output_dir}/logs",
+            output_dir=SCRATCH,
+            logging_dir=LOG_DIR,
         )
 
         data_collator = DataCollatorForLanguageModeling(tokenizer, mlm=False)
@@ -87,9 +99,7 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
         trainer.train()
 
         # Save LoRA adapters
-        adapter_dir = os.path.join(self.output_dir, "adapters")
-        os.makedirs(adapter_dir, exist_ok=True)
-        model.save_pretrained(adapter_dir)
+        model.save_pretrained(ADAPTER_DIR)
         tokenizer.save_pretrained(
             self.output_dir
         )  # Double saving the tokenizer for convenience
@@ -101,11 +111,29 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
             self.output_dir
         )  # Double saving the tokenizer for convenience
 
-        os.makedirs(f"{self.output_dir}/logs", exist_ok=True)
-
-        with open(f"{self.output_dir}/logs/log_history.json", "w") as f:
+        with open(os.path.join(LOG_DIR, "log_history.json"), "w") as f:
             json.dump(trainer.state.log_history, f)
 
+        # Plot the loss
+        loss_values = [x["loss"] for x in trainer.state.log_history if "loss" in x]
+        steps = [x["step"] for x in trainer.state.log_history if "loss" in x]
+
+        if len(loss_values) > 1:
+            plt.figure(figsize=(8, 5))
+            plt.plot(steps, loss_values, label="Training Loss", linewidth=2)
+            plt.xlabel("Steps")
+            plt.ylabel("Loss")
+            plt.title("Training Loss Curve")
+            plt.legend()
+            plt.grid(True, linestyle="--", alpha=0.6)
+            plt.tight_layout()
+
+            plot_path = os.path.join(LOG_DIR, "loss_plot.png")
+            plt.savefig(plot_path)
+        else:
+            print("No loss data found in trainer.state.log_history — skipping plot.")
+
+        # Clean up
         del model, trainer, tokenizer, dataset, tokenized_dataset
 
         gc.collect()
