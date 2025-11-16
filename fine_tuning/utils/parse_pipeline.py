@@ -54,6 +54,7 @@ def build_pipeline(
     # Initial loop:
     #   Creates hashes of all final output models (models that are given a name by the user)
     #   Prevents duplicate training steps.
+    print("Gathering output models ...")
     for pipeline in pipelines:
         # Parse model training
         model: dict = pipeline.get("model")
@@ -74,6 +75,7 @@ def build_pipeline(
         hash_master[model_hash] = output
 
     # Track seen models to avoid doubled training steps
+    print("Building pipelines ...")
     seen_models = set()
     for pipeline in pipelines:
         ##########################
