@@ -33,8 +33,8 @@ class AbstractTrainer:
         pass
 
     def train(self):
-        self._train()
         os.makedirs(self.output_dir, exist_ok=True)
+        self._train()
 
         if not self.model_trace:
             return

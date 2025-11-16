@@ -8,6 +8,7 @@ from fine_tuning.inference import batched_inference
 
 
 def main():
+    print("here")
     # Parse args
     parser = argparse.ArgumentParser()
     parser.add_argument(
