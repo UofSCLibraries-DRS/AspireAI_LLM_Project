@@ -13,9 +13,11 @@ cd /work/jaaydin/AspireAI_LLM_Project
 
 module load cuda/12.3
 
-source ~/miniforge3/etc/profile.d/conda.sh
+source ~/miniforge3/etc/profile.d/conda.sh\
 
-conda run -p /home/jaaydin/miniforge3/envs/lib_ft python -m fine_tuning.main \
+conda activate lib_ft
+
+conda python -u -m fine_tuning.main \
     --pipeline-path ./fine_tuning/config/llama_pipeline.json \
     --env .env.rci
 
