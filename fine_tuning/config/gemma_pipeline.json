@@ -3,9 +3,9 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/unsupervised_uncleaned_100.json"
+                "ft/steps/gemma/full_gemm_mcc.json"
             ],
-            "output": "M9"
+            "output": "M.G.10"
         },
         "inference": [],
         "evaluation": {}
@@ -14,12 +14,72 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/unsupervised_uncleaned_100.json",
-                "ft/steps/sft_qa.1.json"
+                "ft/steps/gemma/full_gemm_mcc.json",
+                "ft/steps/gemma/NQ_sft_1k.json"
             ],
-            "output": "M10"
+            "output": "M.G.10.NQ1k"
         },
-        "inference": [],
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios/lighthouse_and_informer.csv",
+                    "eval/scenarios/mccray.csv",
+                    "eval/scenarios/naacp.csv",
+                    "eval/scenarios/pdp.csv",
+                    "eval/binary_factoid.csv"
+                ],
+                "prompt_format": "sft_xml.yaml"
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/gemma/full_gemm_mcc.json",
+                "ft/steps/gemma/NQ_sft_2k.json"
+            ],
+            "output": "M.G.10.NQ2k"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios/lighthouse_and_informer.csv",
+                    "eval/scenarios/mccray.csv",
+                    "eval/scenarios/naacp.csv",
+                    "eval/scenarios/pdp.csv",
+                    "eval/binary_factoid.csv"
+                ],
+                "prompt_format": "sft_xml.yaml"
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/gemma/full_gemm_mcc.json",
+                "ft/steps/gemma/NQ_sft_4k.json"
+            ],
+            "output": "M.G.10.NQ4k"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios/lighthouse_and_informer.csv",
+                    "eval/scenarios/mccray.csv",
+                    "eval/scenarios/naacp.csv",
+                    "eval/scenarios/pdp.csv",
+                    "eval/binary_factoid.csv"
+                ],
+                "prompt_format": "sft_xml.yaml"
+            }
+        ],
         "evaluation": {}
     }
 ]

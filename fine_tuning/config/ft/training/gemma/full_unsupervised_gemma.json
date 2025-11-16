@@ -1,16 +1,14 @@
 {
     "training_args": {
-        "num_train_epochs": 20,
+        "num_train_epochs": 15,
         "per_device_train_batch_size": 16,
-        "learning_rate": 5e-5,
-        "warmup_steps": 100,
-        "weight_decay": 0.01,
+        "learning_rate": 2e-5,
         "lr_scheduler_type": "cosine",
-        "max_grad_norm": 1.0,
+        "warmup_steps": 100,
         "save_strategy": "epoch",
         "logging_strategy": "epoch",
-        "eval_steps": 100,
         "optim": "adamw_torch",
-        "report_to": "none"
+        "weight_decay": 0.01,
+        "push_to_hub": false
     }
 }

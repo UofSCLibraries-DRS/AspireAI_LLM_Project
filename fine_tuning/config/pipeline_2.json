@@ -3,29 +3,23 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "/home/john/Research/library/AspireAI_LLM_Project/scratch/mock_files/dummy_training_step.json"
+                "ft/steps/sft_qa.1.json"
             ],
-            "output": "test_output"
+            "output": "M.G.10"
         },
         "inference": [
             {
-                "data": "eval/binary_factoid.csv",
                 "config": "inference/default.json",
-                "prompt_format": "/home/john/Research/library/AspireAI_LLM_Project/fine_tuning/config/prompts/sft.yaml"
+                "data": [
+                    "eval/scenarios/lighthouse_and_informer.csv",
+                    "eval/scenarios/mccray.csv",
+                    "eval/scenarios/naacp.csv",
+                    "eval/scenarios/pdp.csv",
+                    "eval/binary_factoid.csv"
+                ],
+                "prompt_format": "sft_xml.yaml"
             }
         ],
-        "evaluation": {}
-    },
-    {
-        "model": {
-            "start": "gemma-3-270m",
-            "train_steps": [
-                "/home/john/Research/library/AspireAI_LLM_Project/scratch/mock_files/dummy_training_step.json",
-                "/home/john/Research/library/AspireAI_LLM_Project/scratch/mock_files/dummy_training_step.json"
-            ],
-            "output": "test_output_2"
-        },
-        "inference": [],
         "evaluation": {}
     }
 ]

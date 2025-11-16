@@ -137,24 +137,27 @@ def build_pipeline(
             with open(os.path.join(CONFIG_FOLDER, inf["config"]), "r") as f:
                 inf_cfg: Dict = json.load(f)
             # Create inference jobs from data
-            with open(os.path.join(DATA_FOLDER, inf["data"]), newline="") as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    q: str = row["question"]
-                    a: str = row["answer"]
+            for _data in inf["data"]:
+                with open(os.path.join(DATA_FOLDER, _data), newline="") as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:
+                        q: str = row["question"]
+                        a: str = row["answer"]
 
-                    inf_job = InferenceJob(
-                        **inf_cfg,
-                        output_file=inf["output_file"],
-                        model=os.path.join(MODEL_FOLDER, pipeline["model"]["output"]),
-                        prompt_template=os.path.join(
-                            PROMPT_FOLDER, inf["prompt_format"]
-                        ),
-                        prompt=q,
-                        ground_truth=a,
-                    )
+                        inf_job = InferenceJob(
+                            **inf_cfg,
+                            output_file=_data,
+                            model=os.path.join(
+                                MODEL_FOLDER, pipeline["model"]["output"]
+                            ),
+                            prompt_template=os.path.join(
+                                PROMPT_FOLDER, inf["prompt_format"]
+                            ),
+                            prompt=q,
+                            ground_truth=a,
+                        )
 
-                    master_pipeline.inference_jobs.append(inf_job)
+                        master_pipeline.inference_jobs.append(inf_job)
     return master_pipeline
 
     # for pipeline in pipelines:
