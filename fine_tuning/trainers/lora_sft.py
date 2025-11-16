@@ -114,7 +114,9 @@ class LoRASFTTrainer(AbstractTrainer):
 
         # Load local model
         model = AutoModelForCausalLM.from_pretrained(
-            self.start_model, torch_dtype="auto", device_map="auto"
+            self.start_model,
+            torch_dtype="auto",
+            device_map="cuda",
         )
 
         # Apply Lora cfg

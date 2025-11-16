@@ -113,7 +113,10 @@ class FullSFTTrainer(AbstractTrainer):
 
         # Load local model
         model = AutoModelForCausalLM.from_pretrained(
-            self.start_model, torch_dtype="auto", device_map="auto"
+            self.start_model,
+            torch_dtype="auto",
+            device_map="cuda",
+            attn_implementation="eager",
         )
 
         for param in model.parameters():
