@@ -29,11 +29,15 @@ os.makedirs(LOG_DIR, exist_ok=True)
 os.makedirs(SCRATCH, exist_ok=True)
 os.makedirs(ADAPTER_DIR, exist_ok=True)
 
+print("1")
+
 with open(CONFIG, "r") as f:
     cfg = json.load(f)
 
 lora_cfg = cfg["lora_config"]
 training_cfg = cfg["training_args"]
+
+print("2")
 
 with open(DATA, newline="", encoding="utf-8") as f:
     reader = csv.DictReader(f)
@@ -50,8 +54,12 @@ with open(DATA, newline="", encoding="utf-8") as f:
         if val is not None:
             text_values.append(str(val))
 
+print("3")
+
 # Convert to a Hugging Face dataset
 dataset = Dataset.from_dict({"text": text_values})
+
+print("4")
 
 tokenizer = AutoTokenizer.from_pretrained(START_MODEL)
 
