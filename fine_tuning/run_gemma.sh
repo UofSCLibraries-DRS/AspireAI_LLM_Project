@@ -17,6 +17,6 @@ source ~/miniforge3/etc/profile.d/conda.sh\
 
 conda activate lib_ft
 
-conda python -u -m fine_tuning.main \
+python -u -m fine_tuning.main \
     --pipeline-path ./fine_tuning/config/gemma_pipeline.json \
     --env .env.rci
