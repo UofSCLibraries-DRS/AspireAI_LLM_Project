@@ -3,6 +3,8 @@ import os
 import torch
 import gc
 from accelerate import Accelerator
+import time
+from datetime import timedelta
 
 
 class AbstractTrainer:
@@ -34,7 +36,17 @@ class AbstractTrainer:
 
     def train(self):
         os.makedirs(self.output_dir, exist_ok=True)
+        start = time.time()
         self._train()
+        end = time.time()
+
+        duration = timedelta(seconds=end - start)
+
+        end_message = (
+            f"Training finished at: {time.ctime(end)}\n"
+            f"Total training duration: {duration}"
+        )
+        print(end_message)
 
         if not self.model_trace:
             return
