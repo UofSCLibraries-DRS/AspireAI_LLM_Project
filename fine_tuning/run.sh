@@ -13,7 +13,7 @@ cd /work/jaaydin/AspireAI_LLM_Project
 
 module load cuda/12.3
 
-source ~/miniforge3/etc/profile.d/conda.sh\
+source ~/miniforge3/etc/profile.d/conda.sh
 
 conda activate lib_ft
 
