@@ -1,7 +1,7 @@
 {
     "training_args": {
         "num_train_epochs": 15,
-        "per_device_train_batch_size": 16,
+        "per_device_train_batch_size": 32,
         "learning_rate": 2e-5,
         "lr_scheduler_type": "cosine",
         "warmup_steps": 100,
@@ -9,6 +9,7 @@
         "logging_strategy": "epoch",
         "optim": "adamw_torch",
         "weight_decay": 0.01,
-        "push_to_hub": false
+        "push_to_hub": false,
+        "bf16": true
     }
 }

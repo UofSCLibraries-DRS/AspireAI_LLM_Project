@@ -20,6 +20,6 @@
         "save_steps": 50,
         "weight_decay": 0.01,
         "push_to_hub": false,
-        "fp16": true
+        "bf16": true
     }
 }
