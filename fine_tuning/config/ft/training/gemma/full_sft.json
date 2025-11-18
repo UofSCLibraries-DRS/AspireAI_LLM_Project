@@ -9,8 +9,7 @@
         "logging_strategy": "epoch",
         "optim": "adamw_torch",
         "weight_decay": 0.01,
-        "push_to_hub": false,
-        "bf16": true
+        "push_to_hub": false
     },
     "prompt_format": "sft_xml.yaml"
 }
