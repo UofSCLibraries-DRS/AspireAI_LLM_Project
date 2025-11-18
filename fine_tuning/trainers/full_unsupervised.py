@@ -1,6 +1,7 @@
 import csv
 import json
 import matplotlib.pyplot as plt
+import torch
 from datasets import Dataset
 from transformers import (
     AutoTokenizer,
@@ -72,7 +73,8 @@ class FullUnsupervisedTrainer(AbstractTrainer):
             **training_cfg,
             output_dir=f"{self.output_dir}/scratch",
             logging_dir=f"{self.output_dir}/logs",
-            # group_by_length=True,
+            fp16=not torch.cuda.is_bf16_supported(),
+            bf16=torch.cuda.is_bf16_supported(),
         )
 
         data_collator = DataCollatorForLanguageModeling(
