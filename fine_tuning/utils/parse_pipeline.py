@@ -144,20 +144,21 @@ def build_pipeline(
                         q: str = row["question"]
                         a: str = row["answer"]
 
-                        inf_job = InferenceJob(
-                            **inf_cfg,
-                            output_file=_data,
-                            model=os.path.join(
-                                MODEL_FOLDER, pipeline["model"]["output"]
-                            ),
-                            prompt_template=os.path.join(
-                                PROMPT_FOLDER, inf["prompt_format"]
-                            ),
-                            prompt=q,
-                            ground_truth=a,
-                        )
+                        for prompt_format in inf["prompt_formats"]:
+                            inf_job = InferenceJob(
+                                **inf_cfg,
+                                output_file=_data,
+                                model=os.path.join(
+                                    MODEL_FOLDER, pipeline["model"]["output"]
+                                ),
+                                prompt_template=os.path.join(
+                                    PROMPT_FOLDER, prompt_format
+                                ),
+                                prompt=q,
+                                ground_truth=a,
+                            )
 
-                        master_pipeline.inference_jobs.append(inf_job)
+                            master_pipeline.inference_jobs.append(inf_job)
     return master_pipeline
 
     # for pipeline in pipelines:

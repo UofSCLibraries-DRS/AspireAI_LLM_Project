@@ -16,7 +16,7 @@ from collections import defaultdict
 class InferenceJob:
     output_file: str
     model: str
-    prompt_template: str
+    prompt_template: str  # Path to .yaml file containing the prompt template
     prompt: str
     ground_truth: str
     stop_sequences: List[str] = field(
@@ -218,9 +218,10 @@ def batched_inference(
     jobs: List[InferenceJob],
     device: str = "cuda",
     batch_size: int = 16,
-    dtype: torch.dtype = torch.float32,
     max_prompt_length=1024,
 ):
+    dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+
     inference_results = _batched_inference(
         jobs,
         device,
@@ -232,12 +233,13 @@ def batched_inference(
     # Group by model and output file
     grouped = defaultdict(list)
     for result in inference_results:
-        key = (result.job.model, result.job.output_file)
+        key = (result.job.model, result.job.output_file, result.job.prompt_template)
         grouped[key].append(result)
 
     # Append each response to the corresponding csv
-    for (model, output_file), results in grouped.items():
-        csv_path = os.path.join(model, "results", output_file)
+    for (model, output_file, prompt_template), results in grouped.items():
+        prompt_name = prompt_template.removesuffix(".yaml")
+        csv_path = os.path.join(model, "results", prompt_name, output_file)
 
         os.makedirs(os.path.dirname(csv_path), exist_ok=True)
 

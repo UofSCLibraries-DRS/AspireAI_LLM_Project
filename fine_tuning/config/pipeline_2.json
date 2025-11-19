@@ -17,7 +17,9 @@
                     "eval/scenarios/pdp.csv",
                     "eval/binary_factoid.csv"
                 ],
-                "prompt_format": "sft_xml.yaml"
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
             }
         ],
         "evaluation": {}
