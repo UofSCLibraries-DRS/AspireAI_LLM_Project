@@ -1,0 +1,71 @@
+[
+    {
+        "model": {
+            "start": "M.G.10",
+            "train_steps": [
+                "ft/steps/gemma/NQ_sft_1k.json"
+            ],
+            "output": "M.G.10.NQ1k"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios/lighthouse_and_informer.csv",
+                    "eval/scenarios/mccray.csv",
+                    "eval/scenarios/naacp.csv",
+                    "eval/scenarios/pdp.csv",
+                    "eval/binary_factoid.csv"
+                ],
+                "prompt_format": "sft_xml.yaml"
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "M.G.10",
+            "train_steps": [
+                "ft/steps/gemma/NQ_sft_2k.json"
+            ],
+            "output": "M.G.10.NQ2k"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios/lighthouse_and_informer.csv",
+                    "eval/scenarios/mccray.csv",
+                    "eval/scenarios/naacp.csv",
+                    "eval/scenarios/pdp.csv",
+                    "eval/binary_factoid.csv"
+                ],
+                "prompt_format": "sft_xml.yaml"
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "M.G.10",
+            "train_steps": [
+                "ft/steps/gemma/NQ_sft_4k.json"
+            ],
+            "output": "M.G.10.NQ4k"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios/lighthouse_and_informer.csv",
+                    "eval/scenarios/mccray.csv",
+                    "eval/scenarios/naacp.csv",
+                    "eval/scenarios/pdp.csv",
+                    "eval/binary_factoid.csv"
+                ],
+                "prompt_format": "sft_xml.yaml"
+            }
+        ],
+        "evaluation": {}
+    }
+]

@@ -85,6 +85,8 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
             **training_cfg,
             output_dir=SCRATCH,
             logging_dir=LOG_DIR,
+            fp16=not torch.cuda.is_bf16_supported(),
+            bf16=torch.cuda.is_bf16_supported(),
         )
 
         data_collator = DataCollatorForLanguageModeling(tokenizer, mlm=False)

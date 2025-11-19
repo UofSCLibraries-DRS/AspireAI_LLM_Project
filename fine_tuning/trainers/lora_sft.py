@@ -13,6 +13,7 @@ from transformers import (
 import os
 import shutil
 from peft import LoraConfig, get_peft_model
+import torch
 
 from .training_base import AbstractTrainer
 from fine_tuning.utils.environment import get_env_or_raise
@@ -127,6 +128,8 @@ class LoRASFTTrainer(AbstractTrainer):
             **training_cfg,
             output_dir=f"{self.output_dir}/scratch",
             logging_dir=f"{self.output_dir}/logs",
+            fp16=not torch.cuda.is_bf16_supported(),
+            bf16=torch.cuda.is_bf16_supported(),
         )
 
         data_collator = DataCollatorForLanguageModeling(tokenizer, mlm=False)
