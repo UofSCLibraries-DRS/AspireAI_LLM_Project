@@ -1,10 +1,8 @@
 from typing import List
 import os
-import torch
-import gc
-from accelerate import Accelerator
 import time
 from datetime import timedelta
+from transformers import AutoModel
 
 
 class AbstractTrainer:
@@ -15,12 +13,14 @@ class AbstractTrainer:
         data: str,
         config: str,
         model_trace: List[str] | None = None,
+        force_retrain: bool = False,
     ):
         self.start_model = start_model
         self.output_dir = output_dir
         self.data = data
         self.config = config
         self.model_trace = model_trace
+        self.force_retrain = force_retrain
 
     @classmethod
     def subclass_by_name(cls, subclass_name, *args, **kwargs):
@@ -34,8 +34,18 @@ class AbstractTrainer:
         # Does not handle trace logic
         pass
 
+    def _model_exists(self):
+        try:
+            AutoModel.from_pretrained(self.output_dir)
+            return True
+        except Exception:
+            return False
+
     def train(self):
+        if self._model_exists() and not self.force_retrain:
+            return
         os.makedirs(self.output_dir, exist_ok=True)
+
         start = time.time()
         self._train()
         end = time.time()
