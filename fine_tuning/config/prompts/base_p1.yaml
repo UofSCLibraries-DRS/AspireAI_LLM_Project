@@ -1,3 +1,4 @@
 template: |
   Question: {user_prompt}
-  Answer:
+  Answer: 
+stop_sequences: ["Question:", "Answer:", "Explanation:", "\n"] # Used during inference
