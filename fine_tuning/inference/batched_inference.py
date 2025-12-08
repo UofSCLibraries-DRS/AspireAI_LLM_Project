@@ -93,8 +93,7 @@ def _batched_inference(
 
         # Load model & tokenizer
         tokenizer = AutoTokenizer.from_pretrained(
-            model_path,
-            use_fast=True,
+            model_path, use_fast=True, padding_side="left"
         )
         tokenizer.model_max_length = max_prompt_length
 

@@ -1,27 +1,48 @@
+# python files
 /venv
 /venv-ipynb
 /venv-jpty
-*.xlsx#
-*.zip
-*.odt
 __pycache__/
 *.py[cod]
 
-.env*
-!.env.example
+# env files
+**/.env*
+!**/.env.example
 
+# data
+*.xlsx#
+*.zip
+*.odt
 lora-finetuned-test-model/
 400-completion-tasks-distilGPT2/
+data/mccray/changed_data/backup/
 
 *.bin
 *.pt
-data/mccray/changed_data/backup/
-data_handling/notebooks/data-flag.html
 
-transcript-reviewer-app/
-ocr_cleaner_app/
+data/mccray/bin
+
 my_files/
 
+# logs
 llm_tuning/logs/
 llm_tuning/cache/
 fine_tuning/logs/
+
+
+# ocr data + csvs
+ocr_rescan/documents/
+ocr_rescan/contentdm_harvester.ipynb
+ocr_rescan/contentdm_download_*.ipynb
+*.~lock*
+data_handling/*.csv
+data_handling/*.xlsx
+
+# dev settings
+.vscode
+
+# IGNORE CSV FILES IN split_data subfolder
+data/mccray/split_data/h1_split/*
+data/mccray/split_data/h2_split/*
+data/simkins/split_data/h1_split/*
+data/simkins/split_data/h2_split/*
