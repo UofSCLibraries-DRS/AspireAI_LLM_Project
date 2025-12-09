@@ -237,7 +237,7 @@ def batched_inference(
 
     # Append each response to the corresponding csv
     for (model, output_file, prompt_template), results in grouped.items():
-        prompt_name = prompt_template.removesuffix(".yaml")
+        prompt_name = os.path.basename(prompt_template).removesuffix(".yaml")
         csv_path = os.path.join(model, "results", prompt_name, output_file)
 
         os.makedirs(os.path.dirname(csv_path), exist_ok=True)
@@ -261,73 +261,3 @@ def batched_inference(
                             "response": response,
                         }
                     )
-
-
-# def main():
-#     question_csv = "combined.csv"
-#     df = pd.read_csv(question_csv)
-
-#     prompt_templates = [
-#         "prompts/sft.yaml",
-#     ]
-
-#     model_dirs = [
-#         "/home/john/Research/library/models/M10",
-#         "/home/john/Research/library/models/M9",
-#     ]
-
-#     jobs: List[InferenceJob] = []
-
-#     for prompt_template in prompt_templates:
-#         for _, row in df.iterrows():
-#             job = InferenceJob(
-#                 model_dir="",
-#                 prompt_template=prompt_template,
-#                 prompt=row["question"],
-#                 ground_truth=row["answer"],
-#                 repeat_param=5,
-#             )
-#             jobs.append(job)
-
-#     for model_dir in model_dirs:
-#         results = batched_inference(model_dir=model_dir, jobs=jobs)
-
-#         output_dir = os.path.join(model_dir, "results")
-#         os.makedirs(output_dir, exist_ok=True)
-
-#         grouped_results: dict[str, list] = {}
-#         for result in results:
-#             prompt_name = os.path.splitext(
-#                 os.path.basename(result.job.prompt_template)
-#             )[0]
-#             grouped_results.setdefault(prompt_name, []).append(result)
-
-#         for prompt_name, prompt_results in grouped_results.items():
-#             rows = []
-#             for result in prompt_results:
-#                 responses = result.responses + [""] * (5 - len(result.responses))
-#                 row = {
-#                     "question": result.job.prompt,
-#                     "answer": result.job.ground_truth,
-#                     "response_1": responses[0],
-#                     "response_2": responses[1],
-#                     "response_3": responses[2],
-#                     "response_4": responses[3],
-#                     "response_5": responses[4],
-#                 }
-#                 rows.append(row)
-
-#             result_df = pd.DataFrame(rows)
-
-#             # Save CSV with full quoting
-#             csv_path = os.path.join(output_dir, f"{prompt_name}_results.csv")
-#             result_df.to_csv(
-#                 csv_path,
-#                 index=False,
-#                 quoting=csv.QUOTE_ALL,
-#             )
-#             print(f"Saved {model_dir} --- {prompt_name} results")
-
-
-# if __name__ == "__main__":
-#     main()
