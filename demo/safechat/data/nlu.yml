@@ -1,0 +1,528 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+
+- intent: mood_great
+  examples: |
+    - perfect
+    - great
+    - amazing
+    - feeling like a king
+    - wonderful
+    - I am feeling very good
+    - I am great
+    - I am amazing
+    - I am going to save the world
+    - super stoked
+    - extremely good
+    - so so perfect
+    - so good
+    - so perfect
+
+- intent: mood_unhappy
+  examples: |
+    - my day was horrible
+    - I am sad
+    - I don't feel very well
+    - I am disappointed
+    - super sad
+    - I'm so sad
+    - sad
+    - very sad
+    - unhappy
+    - not good
+    - not very good
+    - extremly sad
+    - so saad
+    - so sad
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+
+
+- intent: full_answer
+  examples: |
+    - Tell me the full answer.
+    - Can you provide the full answer?
+    - I need the complete answer.
+    - Could you give me the full answer?
+    - What is the full answer?
+    - Give me the complete answer, please.
+    - Please provide the full answer.
+    - Can you show me the entire answer?
+    - I want the full answer.
+    - Could you provide the entire answer?
+    - Tell me the complete answer.
+    - Show me the full answer.
+    - I'd like to know the full answer.
+    - Can I get the full answer, please?
+    - What is the entire answer?
+    - Provide me with the full answer.
+    - Please give me the complete answer.
+    - I want to see the entire answer.
+    - Would you give me the full answer?
+    - Can you explain the full answer to me?
+    
+- intent: Do not answer
+  examples: |
+    - Whom should I vote for in the elections?
+    - Who will win the elections?
+    - Which party is going to win the elections?
+    - Are Republicans going to win the elections?
+    - Who do you think is going to win the elections?
+    - Are Democrats going to win the elections?
+- intent: naacp_publish_magazine
+  examples: |
+    - Did the NAACP publish a magazine?
+    - Does the NAACP publish a magazine?
+    - Did the NAACP ever publish a magazine?
+    - Does the NAACP have a magazine?
+    - Why didn't NAACP publish a magazine?
+    - Did NAACP publish a magazine?
+- intent: white_member_naacp
+  examples: |
+    - Were there white members of the NAACP?
+    - Were there any white members of the NAACP?
+    - Were there any white members of NAACP?
+    - Are there any white members of the NAACP?
+    - Are there white members of the NAACP?
+    - Were there white members of NAACP?
+- intent: benjamin_ben_hook_secretary
+  examples: |
+    - Was Benjamin (Ben) Hooks a secretary for the NAACP?
+    - Was Benjamin Hooks a secretary for the NAACP?
+    - Was Benjamin Hooks secretary of the NAACP?
+    - Was Benjamin Hooks a secretary of the NAACP?
+    - Was Benjamin Hooks Secretary of the NAACP?
+    - Was Ben Hooks a secretary for the NAACP?
+    - Was Benjamin Hooks secretary for the NAACP?
+- intent: relationship_like_sc_state
+  examples: |
+    - What was the relationship like between the SC State Conference of NAACP Branches and the National Office of the NAACP?
+    - What was the relationship between the NAACP National Office and the SC State Conference of NAACP Branches?
+    - What was the relationship between the SC State Conference of NAACP Branches and the NAACP National Office?
+    - What was the relationship between the NAACP National Office and the SC State Conference of NAACP branches?
+    - What was the relationship between the NAACP National Office and the SC State Conference of NAACP Branch?
+    - How was the relationship between the NAACP National Office and the SC State Conference of NAACP Branches?
+    - What was the relationship between the SC State Conference of NAACP Branches and the National Office of NAACP?
+- intent: sc_state_conference_naacp
+  examples: |
+    - Was the SC State Conference of the NAACP successful in the fight for civil rights in the 1940s and 50s?
+    - Was the SC State Conference of NAACP successful in the fight for civil rights in the 1940s and 50s?
+    - Was the NAACP SC State Conference successful in the fight for civil rights in the 1940s and 50s?
+    - How successful was the NAACP SC State Conference in the fight for civil rights in the 1940s and 50s?
+    - Was the NAACP State Conference of the SC successful in the fight for civil rights in the 1940s and 50s?
+    - Was the NAACP's SC State Conference successful in the fight for civil rights in the 1940s and 50s?
+- intent: sarah_mae_flemmings_city
+  examples: |
+    - Why was Sarah Mae Flemming's city bus lawsuit significant?
+    - Why is Sarah Mae Flemming's city bus lawsuit important?
+    - Why was Sarah Mae Flemming's city bus lawsuit important?
+    - Why was Sarah Mae Flemming's city bus lawsuit so significant?
+    - Why was Sarah Mae Flemming sued for a city bus?
+    - Why was Sarah Mae Flemming's city bus lawsuit so important?
+- intent: challenge_naacp_chapter_face
+  examples: |
+    - What challenges did NAACP chapters face in South Carolina?
+    - What challenges did the NAACP chapter face in South Carolina?
+    - What challenges do NAACP chapters face in South Carolina?
+    - What challenges did NAACP chapters in South Carolina face?
+    - What challenges have NAACP chapters faced in South Carolina?
+    - What challenges did the NAACP chapters face in South Carolina?
+- intent: naacp_established_religious_organization
+  examples: |
+    - Was the NAACP established as a religious organization?
+    - Was the NAACP founded as a religious organization?
+    - Was the NAACP a religious organization?
+    - Was NAACP established as a religious organization?
+    - Was NAACP a religious organization?
+    - Was NAACP founded as a religious organization?
+- intent: lighthouse_informer_established
+  examples: |
+    - When was The Lighthouse and Informer established?
+    - When was the lighthouse and informer founded?
+    - When was the Lighthouse and Informer established?
+    - When was the Lighthouse and Informer founded?
+    - When was the lighthouse and informer established?
+    - When was The Lighthouse and Informer founded?
+- intent: lighthouse_informer_published
+  examples: |
+    - Where was The Lighthouse and Informer published?
+    - Where was the lighthouse and informer published?
+    - Where was Lighthouse and Informer published?
+    - Where and when was The Lighthouse and Informer published?
+    - Where is The Lighthouse and Informer published?
+    - Where were The Lighthouse and Informer published?
+- intent: peter_kelly_editor_lighthouse
+  examples: |
+    - Was Peter Kelly the editor of The Lighthouse and Informer?
+    - Was Peter Kelly editor of The Lighthouse and Informer?
+    - Was Peter Kelly the editor of The Lighthouse and the Informer?
+    - Was Peter Kelly the editor of Lighthouse and Informer?
+    - Is Peter Kelly the editor of The Lighthouse and Informer?
+    - Was Peter Kelly editor of Lighthouse and Informer?
+- intent: jc_parler_write_john
+  examples: |
+    - Did J.C. Parler write to John McCray about articles in The Lighthouse and Informer?
+    - Did J.C. Parler write to John McCray about the articles in The Lighthouse and Informer?
+    - Did J. C. Parler write to John McCray about articles in The Lighthouse and Informer?
+    - Did J.C. Parler write to John McCray about articles in The Lighthouse and the Informer?
+    - Did J.C. Parler write to John McCray about his articles in The Lighthouse and Informer?
+    - Did J.C. Parler write to John McCray about articles in the Lighthouse and Informer?
+- intent: much_sixmonth_subscription_lighthouse
+  examples: |
+    - How much did a six-month subscription to The Lighthouse and Informer cost in 1946?
+    - How much did a subscription of six months to The Lighthouse and Informer cost in 1946?
+    - How much did a six-month subscription to the Lighthouse and Informer cost in 1946?
+    - How much did a subscription to The Lighthouse and Informer cost in 1946?
+    - How much did a six month subscription to The Lighthouse and Informer cost in 1946?
+    - How much does a six-month subscription to The Lighthouse and Informer cost in 1946?
+- intent: much_yearlong_subscription_lighthouse
+  examples: |
+    - How much did a year-long subscription to The Lighthouse and Informer cost in 1946?
+    - How much does a year-long subscription to The Lighthouse and Informer cost in 1946?
+    - How much did a year-long subscription to the Lighthouse and Informer cost in 1946?
+    - How much did a one-year subscription to The Lighthouse and Informer cost in 1946?
+    - How much did a subscription to The Lighthouse and Informer cost in 1946?
+    - How much did a year subscription to The Lighthouse and Informer cost in 1946?
+- intent: lighthouse_informer_created
+  examples: |
+    - Why was The Lighthouse and Informer created?
+    - Why is Lighthouse and Informer created?
+    - Why was the lighthouse and informer created?
+    - Why was Lighthouse and Informer created?
+    - Why is The Lighthouse and Informer created?
+    - Why was the Lighthouse and Informer created?
+- intent: lighthouse_informer_publication_connected
+  examples: |
+    - How was The Lighthouse and Informer publication connected to the work of the NAACP?
+    - How was the Lighthouse and Informer publication connected to the NAACP?
+    - How was the Lighthouse and Informer publication connected to the work of the NAACP?
+    - How was The Lighthouse and Informer publication connected to the NAACP?
+    - How was the Lighthouse and Informer publication related to the NAACP?
+    - How was The Lighthouse and Informer publication related to the NAACP?
+    - How was the publication Lighthouse and Informer connected to the NAACP?
+- intent: lighthouse_informer_impact_john
+  examples: |
+    - How did The Lighthouse and Informer impact John McCray's career?
+    - How did The Lighthouse and Informer impact John McCray?
+    - How did The Lighthouse and Informer influence John McCray's career?
+    - How did The Lighthouse and Informer affect John McCray's career?
+    - How does The Lighthouse and Informer impact John McCray's career?
+    - How did The Lighthouse and Informer affect John McCray?
+- intent: lighthouse_informer_cease_publication
+  examples: |
+    - Why did The Lighthouse and Informer cease publication?
+    - Why did The Lighthouse and Informer cease publishing?
+    - Why did Lighthouse and Informer cease publication?
+    - Why did The Lighthouse and Informer stop publishing?
+    - Why did The Lighthouse and Informer cease to exist?
+    - Why did the Lighthouse and Informer cease publication?
+- intent: lighthouse_informer_important
+  examples: |
+    - Why was The Lighthouse and Informer important?
+    - Why was the lighthouse and informer important?
+    - Why is the Lighthouse and Informer important?
+    - Why was Lighthouse and Informer important?
+    - Why was the Lighthouse and Informer important?
+    - Why is The Lighthouse and Informer important?
+- intent: acronym_pdp_stand_for
+  examples: |
+    - What does the acronym PDP stand for?
+    - What does PDP stands for?
+    - What does acronym PDP stand for?
+    - What does PDP stand for?
+    - What is acronym PDP?
+    - What does the acronym PDP stands for?
+- intent: progressive_democratic_party_established
+  examples: |
+    - When was the Progressive Democratic Party established?
+    - When was Progressive Democratic Party founded?
+    - When and how was the Progressive Democratic Party founded?
+    - When was the Progressive Democratic Party formed?
+    - When was the Progressive Democratic Party created?
+    - When was the Progressive Democratic Party founded?
+- intent: john_mccray_member_progressive
+  examples: |
+    - Was John McCray a member of the Progressive Democratic Party?
+    - Was John McCray part of the Progressive Democratic Party?
+    - Is John McCray a member of the Progressive Democratic Party?
+    - Was John McCray a member of the Progressive Democratic party?
+    - Why was John McCray a member of the Progressive Democratic Party?
+    - Was John McCray a part of the Progressive Democratic Party?
+- intent: progressive_democratic_party_biracial
+  examples: |
+    - Was the Progressive Democratic Party a bi-racial political group?
+    - Why was the Progressive Democratic Party a bi-racial political group?
+    - Is the Progressive Democratic Party a bi-racial political group?
+    - Is Progressive Democratic Party a bi-racial political group?
+    - Was the Progressive Democratic Party a bi-racial party?
+    - Was Progressive Democratic Party a bi-racial political group?
+- intent: john_mccray_republican
+  examples: |
+    - Was John McCray a Republican?
+    - Why was John McCray a Republican?
+    - Was John McCray a republican?
+    - Was John McCray a Democrat?
+    - Was John McCray really a Republican?
+    - Is John McCray a Republican?
+- intent: john_mccray_help_recruit
+  examples: |
+    - How did John McCray help recruit members for the Progressive Democratic Party?
+    - How did John McCray help recruit for the Progressive Democratic Party?
+    - How did John McCray recruit members for the Progressive Democratic Party?
+    - How did John McCray help the Progressive Democratic Party recruit new members?
+    - How did John McCray help the Progressive Democratic Party recruit members?
+    - How did John McCray help recruit members of the Progressive Democratic Party?
+- intent: john_mccray_think_progressive
+  examples: |
+    - What did John McCray think of the Progressive Democratic Party?
+    - What did John McCray think about the Progressive Democratic Party?
+    - What does John McCray think of the Progressive Democratic Party?
+    - What do you think of John McCray and the Progressive Democratic Party?
+    - What does John McCray think about the Progressive Democratic Party?
+    - What do you think about John McCray and the Progressive Democratic Party?
+- intent: term_progressive_stand_progressive
+  examples: |
+    - What does the term "Progressive" stand for in the Progressive Democratic Party?
+    - What does Progressive Democratic Party stand for?
+    - What does the term Progressive Democratic Party stand for?
+    - What does the term Progressive Democratic Party mean?
+    - What does the term progressive mean in the Progressive Democratic Party?
+    - What does the term Progressive mean in the Progressive Democratic Party?
+    - What does progressive mean in the Progressive Democratic Party?
+- intent: relationship_like_progressive_democratic
+  examples: |
+    - What was the relationship like between the Progressive Democratic Party and the State Democratic Party?
+    - What was the relationship between the Progressive Democratic Party and the State Democratic Party?
+    - What was the relationship between the State Democratic Party and the Progressive Democratic Party?
+    - How was the relationship between the Progressive Democratic Party and the State Democratic Party?
+    - What was the relationship between Progressive Democratic Party and State Democratic Party?
+    - Tell me the relationship between the Progressive Democratic Party and the State Democratic Party?
+    - What was the relationship between the state Democratic Party and the Progressive Democratic Party?
+- intent: progressive_democratic_party_improve
+  examples: |
+    - How did the Progressive Democratic Party improve the lives of Black people in South Carolina?
+    - How did the Progressive Democratic Party change the lives of Black people in South Carolina?
+    - How did Progressive Democratic Party improve the lives of Black people in South Carolina?
+    - How did the Progressive Democratic Party change the lives of black people in South Carolina?
+    - How does the Progressive Democratic Party improve the lives of Black people in South Carolina?
+    - How did the Progressive Democratic Party improve the lives of black people in South Carolina?
+- intent: john_mccray_write_report
+  examples: |
+    - Did John McCray write reports about Black voter registration?
+    - Did John McCray write about black voter registration?
+    - Did John McCray write a report about black voter registration?
+    - Did John McCray write reports about black voter registration?
+    - Did John McCray write a report about Black voter registration?
+    - Did John McCray write about Black voter registration?
+- intent: helped_organize_southern_democratic
+  examples: |
+    - Who helped organize the Southern Democratic Conference to support Black voter registration in 1962?
+    - Who helped organize the Southern Democratic Conference to support black voter registration in 1962?
+    - Who organized the Southern Democratic Conference in 1962 to support Black voter registration?
+    - Who organized the Southern Democratic Conference to support Black voter registration in 1962?
+    - Who organized the Southern Democratic Conference to support black voter registration in 1962?
+    - Who helped organize the Southern Democratic Conference in 1962 to support Black voter registration?
+- intent: united_recording_laboratory_provide
+  examples: |
+    - Did United Recording Laboratories provide tapes of Dr. Martin Luther King Jr.'s call for registration and voting?
+    - Did United Recording Laboratories provide tapes of Martin Luther King Jr.'s call for registration and voting?
+    - Did United Recording Laboratories provide the tapes of Dr. Martin Luther King Jr.'s call for registration and voting?
+    - Did United Recording Laboratories provide a tape of Dr. Martin Luther King Jr.'s call for registration and voting?
+    - Did United Recording Laboratories provide tapes of Dr. Martin Luther King Jr. calling for registration and voting?
+    - Did the United Recording Laboratories provide tapes of Dr. Martin Luther King Jr.'s call for registration and voting?
+- intent: john_mccray_write_jack
+  examples: |
+    - Did John McCray write to Jack Minnis about creating political cartoons?
+    - Did John McCray write to Jack Minnis about making political cartoons?
+    - Did John McCray write to Jack Minnis about cartoons?
+    - Did John McCray write to Jack Minnis about his political cartoons?
+    - Did John McCray write to Jack Minnis about political cartoons?
+    - Did John McCray write to Jack Minnis about the creation of political cartoons?
+- intent: black_voter_keep_record
+  examples: |
+    - Did Black voters keep record of reasons they were denied the right to vote in South Carolina?
+    - Did black voters keep records of reasons they were denied the right to vote in South Carolina?
+    - Did Black voters keep records of reasons they were denied the right to vote in South Carolina?
+    - Did black voters keep record of reasons they were denied the right to vote in South Carolina?
+    - Did black voters keep a record of reasons they were denied the right to vote in South Carolina?
+    - Did black voters keep records of reasons why they were denied the right to vote in South Carolina?
+    - Did black voters keep records of why they were denied the right to vote in South Carolina?
+- intent: mccray_use_political_cartoon
+  examples: |
+    - How did McCray use political cartoons to support Black voter registration?
+    - Why did McCray use political cartoons to support black voter registration?
+    - How did McCray use his political cartoons to support black voter registration?
+    - How did McCray use his political cartoons to support Black voter registration?
+    - How did McCray use political cartoons to support black voter registration?
+    - Why did McCray use political cartoons to support Black voter registration?
+- intent: john_mccray_report_black
+  examples: |
+    - Why did John McCray report on Black voter registration?
+    - Why didn't John McCray report on black voter registration?
+    - Why did John McCray report black voter registration?
+    - Why did John McCray report on voter registration?
+    - Why did John McCray report on black voter registration?
+    - Why did John McCray not report on black voter registration?
+- intent: factor_helped_increase_rate
+  examples: |
+    - What factors helped to increase the rate of Black voter registration in South Carolina?
+    - What factors helped to increase Black voter registration in South Carolina?
+    - What factors helped increase the rate of Black voter registration in South Carolina?
+    - What factors helped to increase the rate of black voter registration in South Carolina?
+    - What factors helped increase the rate of black voter registration in South Carolina?
+    - What factors helped to increase the Black voter registration rate in South Carolina?
+- intent: john_mccray_believe_march
+  examples: |
+    - Did John McCray believe that the March on Washington would help improve Black voter registration?
+    - Did John McCray think that the March on Washington would help improve black voter registration?
+    - Did John McCray believe the March on Washington would help improve Black voter registration?
+    - Did John McCray believe that the March on Washington would help improve black voter registration?
+    - Did John McCray believe that the March on Washington would improve Black voter registration?
+    - Did John McCray think that the March on Washington would help improve Black voter registration?
+- intent: southern_democratic_conference_support
+  examples: |
+    - How did the Southern Democratic Conference support Black, Southern voters?
+    - How did the Southern Democratic Conference support black Southern voters?
+    - How did the Southern Democratic Conference support Black and Southern voters?
+    - How did the Southern Democratic Conference support Black Southern voters?
+    - How does the Southern Democratic Conference support Black Southern voters?
+    - Why did the Southern Democratic Conference support Black Southern voters?
+- intent: allen_university_qualified_train
+  examples: |
+    - Was Allen University qualified to train teachers during the 1963 school year?
+    - Is Allen University qualified to train teachers during the 1963 school year?
+    - Is Allen University qualified to train teachers during the school year 1963?
+    - Was Allen University qualified to train teachers in the 1963 school year?
+    - Was Allen University qualified to train teachers during the school year 1963?
+    - Was Allen University qualified to train teachers in 1963?
+- intent: john_mccray_give_address
+  examples: |
+    - Did John McCray give an address titled, "Why Segregation of the Races Must Go"?
+    - Did John McCray give an address titled Why Segregation of the Races Must Go?
+    - Did John McCray give an address titled "Why Segregation of the Races Must Go"?
+    - Did John McCray give an address titled Why Segregation of Races Must Go?
+    - Did John McCray give an address titled, Why Segregation of the Races Must Go?
+    - Did John McCray give a speech titled Why Segregation of the Races Must Go?
+    - Did John McCray give an address titled "Why segregation of the races must go"?
+- intent: many_white_student_transported
+  examples: |
+    - How many white students were transported to school in South Carolina, according to the 1951 report released by the State Superintendent of Education?
+    - How many white students were transported to school in South Carolina according to the 1951 report released by the State Superintendent of Education?
+    - How many white students were transported to school in South Carolina according to the 1951 report by the State Superintendent of Education?
+    - How many white students were transported to school in South Carolina according to the 1951 report of the State Superintendent of Education?
+    - How many white students were transported to schools in South Carolina according to the 1951 report released by the State Superintendent of Education?
+    - How many white students were transported to school in South Carolina according to the report released by the State Superintendent of Education in 1951?
+    - How many white students were transported to school in South Carolina according to the 1951 report released by the state superintendent of education?
+- intent: many_black_student_transported
+  examples: |
+    - How many Black students were transported to school in South Carolina, according to the 1951 report released by the State Superintendent of Education?
+    - How many Black students were transported to school in South Carolina according to the 1951 report released by the State Superintendent of Education?
+    - How many black students were transported to school in South Carolina according to the 1951 report released by the State Superintendent of Education?
+    - How many Black students were transported to school in South Carolina according to the 1951 report by the State Superintendent of Education?
+    - How many black students were transported to school in South Carolina according to the 1951 report by the State Superintendent of Education?
+    - How many Black students were transported to schools in South Carolina according to the 1951 report released by the State Superintendent of Education?
+    - How many Black students were transported to school in South Carolina according to the report released by the State Superintendent of Education in 1951?
+- intent: 1950s_south_carolina_spend
+  examples: |
+    - In the 1950s, did South Carolina spend more money on Black education than white education?
+    - In the 1950s did South Carolina spend more money on Black education than white education?
+    - In the 1950s did South Carolina spend more money on black education than white education?
+    - Did South Carolina spend more money on black education than white education in the 1950s?
+    - Did South Carolina spend more money on Black education in the 1950s than on white education?
+    - Did South Carolina spend more money on black education in the 1950s than on white education?
+    - Did South Carolina spend more money on Black education than white education in the 1950s?
+- intent: allen_university_recieve_approval
+  examples: |
+    - How did Allen University recieve approval to provide teacher training in 1963?
+    - How did Allen University receive approval to provide teacher training in 1963?
+    - How did Allen University get approval to provide teacher training in 1963?
+    - How did Allen University get approval for teacher training in 1963?
+    - How did Allen University receive approval for teacher training in 1963?
+    - How did Allen University receive the approval to provide teacher training in 1963?
+    - How did Allen University get the approval to provide teacher training in 1963?
+- intent: segregation_impact_black_education
+  examples: |
+    - How did segregation impact Black education?
+    - How does segregation affect Black education?
+    - How did segregation impact black education?
+    - How does segregation affect black education?
+    - How did segregation affect Black education?
+    - How did segregation affect black education?
+- intent: john_mccray_give_address1
+  examples: |
+    - Why did John McCray give an address titled, "Why Segregation of the Races Must Go"?
+    - Why did John McCray give an address titled Why Segregation of the Races Must Go?
+    - Why did John McCray give an address entitled Why Segregation of the Races Must Go?
+    - Why did John McCray give the address Why Segregation of the Races Must Go?
+    - Why did John McCray give a speech titled Why Segregation of the Races Must Go?
+    - Why did John McCray give an address titled, Why Segregation of the Races Must Go?
+    - Why did John McCray give an address titled Why Segregation of Races Must Go?
+- intent: student_help_promote_desegregation
+  examples: |
+    - How did students help promote desegregation throughout the South?
+    - How did students help to promote desegregation in the South?
+    - How did students help promote desegregation in the South?
+    - How did students help to promote desegregation throughout the South?
+    - How did students help promote desegregation across the South?
+    - How do students help promote desegregation in the South?
+- intent: concern_people_placing_black
+  examples: |
+    - What concerns did people have about placing Black students in vocational schools?
+    - What concerns did people have about placing black students in vocational schools?
+    - What concerns do people have about placing Black students in vocational schools?
+    - What concerns do people have about placing black students in vocational schools?
+    - What concerns do people have about black students being placed in vocational schools?
+    - What concerns did people have about black students being placed in vocational schools?

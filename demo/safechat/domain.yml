@@ -1,0 +1,475 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+
+
+  - full_answer
+  - Do not answer
+  - naacp_publish_magazine
+  - white_member_naacp
+  - benjamin_ben_hook_secretary
+  - relationship_like_sc_state
+  - sc_state_conference_naacp
+  - sarah_mae_flemmings_city
+  - challenge_naacp_chapter_face
+  - naacp_established_religious_organization
+  - lighthouse_informer_established
+  - lighthouse_informer_published
+  - peter_kelly_editor_lighthouse
+  - jc_parler_write_john
+  - much_sixmonth_subscription_lighthouse
+  - much_yearlong_subscription_lighthouse
+  - lighthouse_informer_created
+  - lighthouse_informer_publication_connected
+  - lighthouse_informer_impact_john
+  - lighthouse_informer_cease_publication
+  - lighthouse_informer_important
+  - acronym_pdp_stand_for
+  - progressive_democratic_party_established
+  - john_mccray_member_progressive
+  - progressive_democratic_party_biracial
+  - john_mccray_republican
+  - john_mccray_help_recruit
+  - john_mccray_think_progressive
+  - term_progressive_stand_progressive
+  - relationship_like_progressive_democratic
+  - progressive_democratic_party_improve
+  - john_mccray_write_report
+  - helped_organize_southern_democratic
+  - united_recording_laboratory_provide
+  - john_mccray_write_jack
+  - black_voter_keep_record
+  - mccray_use_political_cartoon
+  - john_mccray_report_black
+  - factor_helped_increase_rate
+  - john_mccray_believe_march
+  - southern_democratic_conference_support
+  - allen_university_qualified_train
+  - john_mccray_give_address
+  - many_white_student_transported
+  - many_black_student_transported
+  - 1950s_south_carolina_spend
+  - allen_university_recieve_approval
+  - segregation_impact_black_education
+  - john_mccray_give_address1
+  - student_help_promote_desegregation
+  - concern_people_placing_black
+
+responses:
+  utter_greet:
+  - text: "Hey! How are you?"
+
+  utter_cheer_up:
+  - text: "Here is something to cheer you up:"
+    image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+  - text: "Did that help you?"
+
+  utter_happy:
+  - text: "Great, carry on!"
+
+  utter_goodbye:
+  - text: "Bye"
+
+  utter_iamabot:
+  - text: "I am a bot, powered by Rasa."
+
+  utter_out_of_scope:
+  - text: Sorry, I can't handle that request. Please rephrase the question
+ 
+
+  utter_Do not answer:
+  - text: |
+      Sorry, I am designed not to answer such a question.
+    
+  utter_naacp_publish_magazine:
+  - text: |
+      [Source: ; Date: ] Yes, the NAACP published The Crisis magazine.
+    
+  utter_white_member_naacp:
+  - text: |
+      [Source: ; Date: ] Yes, the NAACP had a number of white supporters with paid memberships for the organization.
+    
+  utter_benjamin_ben_hook_secretary:
+  - text: |
+      [Source: ; Date: ] No, Benjamin Hooks was the executive director of the NAACP.
+    
+  utter_relationship_like_sc_state:
+  - text: |
+      [Source: ; Date: ] The National Office supported SC NAACP chapters by providing resources to argue local civil rights cases.
+    
+  utter_summary_sc_state_conference_naacp:
+  - text: |
+      While not all SC NAACP cases led to desegration or equal rights, many of the oranization's efforts did improve living conditions for Black people in South Carolina.
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_sc_state_conference_naacp:
+  - text: |
+      [Source: ; Date: ] While not all SC NAACP cases led to desegration or equal rights, many of the oranization's efforts did improve living conditions for Black people in South Carolina.
+    
+  utter_summary_sarah_mae_flemmings_city:
+  - text: |
+      Flemming's case was the precedent and inspiration for Rosa Park's bus protest which led to the Mongomery Bus Boycott and eventual desegregation of public buses.
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_sarah_mae_flemmings_city:
+  - text: |
+      [Source: ; Date: ] Flemming's case was the precedent and inspiration for Rosa Park's bus protest which led to the Mongomery Bus Boycott and eventual desegregation of public buses.
+    
+  utter_summary_challenge_naacp_chapter_face:
+  - text: |
+      In addition to losing some early civil rights cases, members of the NAACP and their associates were often targets of retaliation for their political efforts.
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_challenge_naacp_chapter_face:
+  - text: |
+      [Source: ; Date: ] In addition to losing some early civil rights cases, members of the NAACP and their associates were often targets of retaliation for their political efforts.
+    
+  utter_naacp_established_religious_organization:
+  - text: |
+      [Source: ; Date: ] No, the NAACP was not a religious organization but many of its most notable members had strong religious affiliations.
+    
+  utter_summary_lighthouse_informer_established:
+  - text: |
+      Though established in 1938, The Charleston Lighthouse was first published in 1939.
+      This paper later joined with the People's Informer to become The Lighthouse and Informer in the early 1940s.
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_lighthouse_informer_established:
+  - text: |
+      [Source: ; Date: ] Though established in 1938, The Charleston Lighthouse was first published in 1939. This paper later joined with the People's Informer to become The Lighthouse and Informer in the early 1940s.
+    
+  utter_lighthouse_informer_published:
+  - text: |
+      [Source: ; Date: ] The paper was first published in Charleston, and later moved to Columbia, SC.
+    
+  utter_peter_kelly_editor_lighthouse:
+  - text: |
+      [Source: ; Date: ] No, John McCray was the editor of the newspaper from 1938 to 1954.
+    
+  utter_jc_parler_write_john:
+  - text: |
+      [Source: ; Date: ] J.C. Parler wrote to John McCray to praise the articles McCray was writing in the newspaper.
+    
+  utter_much_sixmonth_subscription_lighthouse:
+  - text: |
+      [Source: ; Date: ] A six-month subscription was $1.75.
+    
+  utter_much_yearlong_subscription_lighthouse:
+  - text: |
+      [Source: ; Date: ] A yearly subscription was $3.50.
+    
+  utter_summary_lighthouse_informer_created:
+  - text: |
+      The newspaper was created to: + Circulate injustices experienced by the Black population + Give Black residents of South Carolina a political voice + Establish further community among Black southerners
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_lighthouse_informer_created:
+  - text: |
+      [Source: ; Date: ] The newspaper was created to: 
+      + Circulate injustices experienced by the Black population
+      + Give Black residents of South Carolina a political voice
+      + Establish further community among Black southerners
+    
+  utter_summary_lighthouse_informer_publication_connected:
+  - text: |
+      The newspaper: + Documented the work of SC NAACP Chapters + Was credited with making South Carolina the model for other NAACP state chapters
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_lighthouse_informer_publication_connected:
+  - text: |
+      [Source: ; Date: ] The newspaper: 
+      + Documented the work of SC NAACP Chapters
+      + Was credited with making South Carolina the model for other NAACP state chapters
+    
+  utter_summary_lighthouse_informer_impact_john:
+  - text: |
+      Through the newspaper, McCray: + Established himself as a top journalist and editor + Solidified his political career + Helped establish the Progressive Democratic Party + Championed social justice, Black political participation, and racial equality
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_lighthouse_informer_impact_john:
+  - text: |
+      [Source: ; Date: ] Through the newspaper, McCray: 
+      + Established himself as a top journalist and editor
+      + Solidified his political career 
+      + Helped establish the Progressive Democratic Party
+      + Championed social justice, Black political participation, and racial equality
+    
+  utter_lighthouse_informer_cease_publication:
+  - text: |
+      [Source: ; Date: ] By the time the newspaper closed in 1954: 
+      + John McCray had left the paper
+      + The paper had gone bankrupt
+    
+  utter_summary_lighthouse_informer_important:
+  - text: |
+      The Lighthouse and Informer: + Highlighted racial disparities in the South + Promoted Black political engagement + Documented civil rights efforts + Showcased Black life through announcements of births, deaths, and marriages + Reflected Black breathroughs in sports and entertainment
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_lighthouse_informer_important:
+  - text: |
+      [Source: ; Date: ] The Lighthouse and Informer: 
+      + Highlighted racial disparities in the South 
+      + Promoted Black political engagement 
+      + Documented civil rights efforts 
+      + Showcased Black life through announcements of births, deaths, and marriages
+      + Reflected Black breathroughs in sports and entertainment
+    
+  utter_acronym_pdp_stand_for:
+  - text: |
+      [Source: ; Date: ] When referencing a political organization, the acronym 'PDP' stands for the Progressive Democratic Party.
+    
+  utter_progressive_democratic_party_established:
+  - text: |
+      [Source: ; Date: ] The Progressive Democratic Party was established at a state convention in Columbia, SC on May 24, 1944.
+    
+  utter_john_mccray_member_progressive:
+  - text: |
+      [Source: ; Date: ] Yes, John McCray was a co-founder and member of the Progressive Democratic Party.
+    
+  utter_progressive_democratic_party_biracial:
+  - text: |
+      [Source: ; Date: ] Yes, the Progressive Democratic Party had both Black and white members.
+    
+  utter_john_mccray_republican:
+  - text: |
+      [Source: ; Date: ] No, John McCray was a Democrat belonging to the Progressive Democratic Party.
+    
+  utter_summary_john_mccray_help_recruit:
+  - text: |
+      John McCray recruited members for the PDP by: + Helping create local political clubs + Hosting community events + Writing about the party in The Lighthouse and Informer + Fundraising
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_john_mccray_help_recruit:
+  - text: |
+      [Source: ; Date: ] John McCray recruited members for the PDP by:
+      + Helping create local political clubs 
+      + Hosting community events
+      + Writing about the party in The Lighthouse and Informer
+      + Fundraising
+    
+  utter_summary_john_mccray_think_progressive:
+  - text: |
+      John McCray is cited as saying about the PDP that: + it was the organization Black people had been waiting for + it was created to ensure that all citizens could participate in the Democratic Party of South Carolina + it was started in response to white Democrats urging that Black people in South Carolina should go found their own party
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_john_mccray_think_progressive:
+  - text: |
+      [Source: ; Date: ] John McCray is cited as saying about the PDP that: 
+      + it was the organization Black people had been waiting for 
+      + it was created to ensure that all citizens could participate in the Democratic Party of South Carolina 
+      + it was started in response to white Democrats urging that Black people in South Carolina should go found their own party
+    
+  utter_summary_term_progressive_stand_progressive:
+  - text: |
+      The term 'Progressive' was used to: + Help the party avoid discrimination by including the term 'Negro' directly in the party name + Encompass the wide range of efforts that the PDP was fighting for
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_term_progressive_stand_progressive:
+  - text: |
+      [Source: ; Date: ] The term 'Progressive' was used to: 
+      + Help the party avoid discrimination by including the term 'Negro' directly in the party name
+      + Encompass the wide range of efforts that the PDP was fighting for
+    
+  utter_summary_relationship_like_progressive_democratic:
+  - text: |
+      The relationship between the two parties was complicated because: + The PDP was denied representation in the official branches of both the state and national Democratic Party for several years + The PDP remained loyal to FDR despite being denied admission into the official party
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_relationship_like_progressive_democratic:
+  - text: |
+      [Source: ; Date: ] The relationship between the two parties was complicated because: 
+      + The PDP was denied representation in the official branches of both the state and national Democratic Party for several years
+      + The PDP remained loyal to FDR despite being denied admission into the official party
+    
+  utter_summary_progressive_democratic_party_improve:
+  - text: |
+      The PDP improved Black life in South Carolina by: + Promoting Black political activity + Fighting for equal rights + Protecting voting rights
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_progressive_democratic_party_improve:
+  - text: |
+      [Source: ; Date: ] The PDP improved Black life in South Carolina by: 
+      + Promoting Black political activity 
+      + Fighting for equal rights 
+      + Protecting voting rights
+    
+  utter_john_mccray_write_report:
+  - text: |
+      [Source: ; Date: ] Yes, John McCray wrote public reports discussing Black voter registration.
+    
+  utter_helped_organize_southern_democratic:
+  - text: |
+      [Source: ; Date: ] A.T. Walden organized the Southern Democratic Conference to support Black voting rights in the South.
+    
+  utter_united_recording_laboratory_provide:
+  - text: |
+      [Source: ; Date: ] Yes, United Recording Laboratories provided free recordings of Dr. MLK Jr.'s call to voting and registration.
+    
+  utter_john_mccray_write_jack:
+  - text: |
+      [Source: ; Date: ] Yes, McCray asked Minnis to create political cartoons encouraging Black people to vote.
+    
+  utter_black_voter_keep_record:
+  - text: |
+      [Source: ; Date: ] Yes, several Black voters wrote about the reasons they had their voting writes denied.
+    
+  utter_summary_mccray_use_political_cartoon:
+  - text: |
+      John McCray suggested the use of political cartoons: + To encourage Black people to vote by appealing to all classes + To distribute to political and community organizations + To promote voting registration drives
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_mccray_use_political_cartoon:
+  - text: |
+      [Source: ; Date: ] John McCray suggested the use of political cartoons: 
+      + To encourage Black people to vote by appealing to all classes 
+      + To distribute to political and community organizations
+      + To promote voting registration drives
+    
+  utter_summary_john_mccray_report_black:
+  - text: |
+      John McCray wrote reports about Black voter registration to: + Provide accurate statistics on the number of Black citizens registered to vote + Showcase the success of Black voting rights efforts
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_john_mccray_report_black:
+  - text: |
+      [Source: ; Date: ] John McCray wrote reports about Black voter registration to: 
+      + Provide accurate statistics on the number of Black citizens registered to vote
+      + Showcase the success of Black voting rights efforts
+    
+  utter_summary_factor_helped_increase_rate:
+  - text: |
+      According to McCray, Black voter registration in South Carolina improved because of: + Increased accesss to information + Economic progress + Black local leadership + Partnership with white citizens + A decrease in economic retaliation
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_factor_helped_increase_rate:
+  - text: |
+      [Source: ; Date: ] According to McCray, Black voter registration in South Carolina improved because of: 
+      + Increased accesss to information
+      + Economic progress
+      + Black local leadership
+      + Partnership with white citizens 
+      + A decrease in economic retaliation
+    
+  utter_summary_john_mccray_believe_march:
+  - text: |
+      McCray stated in a letter that he believed the March on Washington to be a waste of time and money.
+      He believed that the only way for Black people to enact real political change was to go vote.
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_john_mccray_believe_march:
+  - text: |
+      [Source: ; Date: ] McCray stated in a letter that he believed the March on Washington to be a waste of time and money. He believed that the only way for Black people to enact real political change was to go vote.
+    
+  utter_summary_southern_democratic_conference_support:
+  - text: |
+      The Southern Democratic Conference sought to improve Black voting conditions through: + Increasing Black representation in party activities + Eliminating signs of white supremacy at the ballot + Running voter registration drives
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_southern_democratic_conference_support:
+  - text: |
+      [Source: ; Date: ] The Southern Democratic Conference sought to improve Black voting conditions through:
+      + Increasing Black representation in party activities
+      + Eliminating signs of white supremacy at the ballot
+      + Running voter registration drives
+    
+  utter_allen_university_qualified_train:
+  - text: |
+      [Source: ; Date: ] Yes, Allen University was qualified to train teachers for the 1963-1964 school year.
+    
+  utter_john_mccray_give_address:
+  - text: |
+      [Source: ; Date: ] Yes, John McCray gave the address that questioned segregation in education in 1951.
+    
+  utter_many_white_student_transported:
+  - text: |
+      [Source: ; Date: ] According to the report available in 1951, 
+      111, 238 white children were transported to and from school.
+    
+  utter_many_black_student_transported:
+  - text: |
+      [Source: ; Date: ] According to the report available in 1951, 
+      19,735 Black children were transported to and from school.
+    
+  utter_1950s_south_carolina_spend:
+  - text: |
+      [Source: ; Date: ] No, in the 1950s, South Carolina spent more money on white education.
+    
+  utter_summary_allen_university_recieve_approval:
+  - text: |
+      Allen University was allowed to provide teacher training as a result of: + Possessing a strong curriculum + Improving financial standing + Improving the physical campus
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_allen_university_recieve_approval:
+  - text: |
+      [Source: ; Date: ] Allen University was allowed to provide teacher training as a result of: 
+      + Possessing a strong curriculum 
+      + Improving financial standing 
+      + Improving the physical campus
+    
+  utter_summary_segregation_impact_black_education:
+  - text: |
+      Segregation created Black schools that were frequently: + Overcrowded + Underfunded + Unable to provide students with a full range of academic opportunities
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_segregation_impact_black_education:
+  - text: |
+      [Source: ; Date: ] Segregation created Black schools that were frequently:
+      + Overcrowded 
+      + Underfunded 
+      + Unable to provide students with a full range of academic opportunities
+    
+  utter_summary_john_mccray_give_address1:
+  - text: |
+      In his speech, McCray addressed: + The history of segregation + The harm of segregated education + Statistics showing how Black education rates compared to white education in South Carolina
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_john_mccray_give_address1:
+  - text: |
+      [Source: ; Date: ] In his speech, McCray addressed: 
+      + The history of segregation
+      + The harm of segregated education
+      + Statistics showing how Black education rates compared to white education in South Carolina
+    
+  utter_summary_student_help_promote_desegregation:
+  - text: |
+      In order to end segregation, students: + Organized protests + Conducted sit-ins + Led boycotts + Joined youth conventions and political groups
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_student_help_promote_desegregation:
+  - text: |
+      [Source: ; Date: ] In order to end segregation, students:
+      + Organized protests 
+      + Conducted sit-ins
+      + Led boycotts
+      + Joined youth conventions and political groups
+    
+  utter_summary_concern_people_placing_black:
+  - text: |
+      Many people believed that vocational schools: + Did not prepare students for college + Locked Black students into a career path before they even finished school + Pushed Black students on the path of working rather than attaining higher education
+      This is a brief summary. For more details, please ask for the full answer.
+    
+  utter_concern_people_placing_black:
+  - text: |
+      [Source: ; Date: ] Many people believed that vocational schools: 
+      + Did not prepare students for college 
+      + Locked Black students into a career path before they even finished school
+      + Pushed Black students on the path of working rather than attaining higher education
+    
+
+actions:
+  - action_save_conversation
+  - action_session_id
+  - action_emotion
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
