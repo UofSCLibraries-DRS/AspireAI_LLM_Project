@@ -30,8 +30,7 @@ class InferenceJob:
 
 
 @dataclass
-class InferenceResult:
-    job: InferenceJob
+class InferenceResult(InferenceJob):
     responses: List[str]
 
 
@@ -84,7 +83,7 @@ def _batched_inference(
 
     # Prepare empty results
     all_results: List[InferenceResult] = [
-        InferenceResult(job=j, responses=[]) for j in jobs
+        InferenceResult(**vars(j), responses=[]) for j in jobs
     ]
 
     for key, items in groups.items():
@@ -221,7 +220,7 @@ def batched_inference(
 ):
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
 
-    inference_results = _batched_inference(
+    return _batched_inference(
         jobs,
         device,
         batch_size,
@@ -229,10 +228,12 @@ def batched_inference(
         max_prompt_length,
     )
 
+
+def save_inference_results(inference_results: List[InferenceResult]):
     # Group by model and output file
     grouped = defaultdict(list)
     for result in inference_results:
-        key = (result.job.model, result.job.output_file, result.job.prompt_template)
+        key = (result.model, result.output_file, result.prompt_template)
         grouped[key].append(result)
 
     # Append each response to the corresponding csv
@@ -256,8 +257,8 @@ def batched_inference(
                 for response in result.responses:
                     writer.writerow(
                         {
-                            "question": result.job.prompt,
-                            "answer": result.job.ground_truth,
+                            "question": result.prompt,
+                            "answer": result.ground_truth,
                             "response": response,
                         }
                     )

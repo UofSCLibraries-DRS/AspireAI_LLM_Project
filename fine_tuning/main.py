@@ -5,6 +5,10 @@ from pathlib import Path
 
 from fine_tuning.utils.parse_pipeline import build_pipeline
 from fine_tuning.inference import batched_inference
+from fine_tuning.evaluation import (
+    calculate_bertscore_batched,
+    save_inference_results_with_metrics,
+)
 
 
 def main():
@@ -47,7 +51,9 @@ def main():
     for train_step in pipeline.train_steps:
         train_step.train()
 
-    batched_inference(pipeline.inference_jobs)
+    inf_results = batched_inference(pipeline.inference_jobs)
+    results_with_metrics = calculate_bertscore_batched(inf_results)
+    save_inference_results_with_metrics(results_with_metrics)
 
 
 if __name__ == "__main__":

@@ -1,131 +1,137 @@
-import pandas as pd
-import json
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Tuple
+from fine_tuning.inference import InferenceResult
+from bert_score import score
+
 import os
 import csv
-import concurrent
-from tqdm import tqdm
-from gaico.metrics import (
-    BLEU,
-    ROUGE,
-    JSDivergence,
-    JaccardSimilarity,
-    LevenshteinDistance,
-    BERTScore,
-)
+from collections import defaultdict
 
 
-def calculate_accuracy_from_results(results_path: str):
-    df = pd.read_csv(results_path)
+# TODOs:
+#   - Optimize KV by sub batching prompt formats
+@dataclass
+class InferenceResultWithMetrics(InferenceResult):
+    metrics: Dict[str, float]
 
-    metric_classes = {
-        "bleu": BLEU(),
-        "rouge": ROUGE(),
-        "js_div": JSDivergence(),
-        "jaccard": JaccardSimilarity(),
-        "levenshtein": LevenshteinDistance(),
-        "bert_score": BERTScore(),
-    }
 
-    response_names = df.columns[2:]
+def calculate_bertscore_batched(
+    results: List[InferenceResult],
+    model_type: str = "microsoft/deberta-xlarge-mnli",
+    device: str = "cuda",
+    batch_size: int = 64,
+) -> List[InferenceResultWithMetrics]:
+    """ """
+    # Collect all candidates and references with tracking info
+    all_candidates = []
+    all_references = []
+    result_mapping = []  # Maps back to (result_idx, response_idx)
 
-    print(response_names)
+    for result_idx, result in enumerate(results):
+        for response_idx, response in enumerate(result.responses):
+            all_candidates.append(response)
+            all_references.append(result.ground_truth)
+            result_mapping.append((result_idx, response_idx))
 
-    # Initialize metric classes
-    metric_classes = {
-        "bleu": BLEU(),
-        "rouge": ROUGE(),
-        "js_div": JSDivergence(),
-        "jaccard": JaccardSimilarity(),
-        "levenshtein": LevenshteinDistance(),
-        "bert_score": BERTScore(),
-    }
+    if not all_candidates:
+        # No responses to evaluate
+        return [
+            InferenceResultWithMetrics(**vars(result), metrics={}) for result in results
+        ]
 
-    def calculate_metrics(ground_truth, prediction):
-        return {
-            "BLEU": metric_classes["bleu"].calculate(ground_truth, prediction),
-            "ROUGE-L": metric_classes["rouge"]
-            .calculate(ground_truth, prediction)
-            .get("rougeL", 0),
-            "JSD": metric_classes["js_div"].calculate(ground_truth, prediction),
-            "Jaccard": metric_classes["jaccard"].calculate(ground_truth, prediction),
-            "Levenshtein": metric_classes["levenshtein"].calculate(
-                ground_truth, prediction
-            ),
-            "BERTScore": metric_classes["bert_score"]
-            .calculate(ground_truth, prediction)
-            .get("f1", 0),
+    # Calculate BERTScore for all at once
+    P, R, F1 = score(
+        cands=all_candidates,
+        refs=all_references,
+        model_type=model_type,
+        device=device,
+        batch_size=batch_size,
+        lang="en",
+        verbose=False,
+    )
+
+    # Convert to lists
+    precision_scores = P.tolist()
+    recall_scores = R.tolist()
+    f1_scores = F1.tolist()
+
+    # Organize scores back by result
+    result_scores = {}
+    for idx, (result_idx, response_idx) in enumerate(result_mapping):
+        if result_idx not in result_scores:
+            result_scores[result_idx] = {"precision": [], "recall": [], "f1": []}
+        result_scores[result_idx]["precision"].append(precision_scores[idx])
+        result_scores[result_idx]["recall"].append(recall_scores[idx])
+        result_scores[result_idx]["f1"].append(f1_scores[idx])
+
+    # Create results with metrics
+    results_with_metrics = []
+    for result_idx, result in enumerate(results):
+        if result_idx not in result_scores:
+            # No responses for this result
+            results_with_metrics.append(
+                InferenceResultWithMetrics(**vars(result), metrics={})
+            )
+            continue
+
+        scores = result_scores[result_idx]
+        f_scores = scores["f1"]
+
+        metrics = {
+            "bertscore": sum(f_scores) / len(f_scores),
         }
 
-    def process_row(row):
-        ground_truth = row["answer"]
-        return {
-            response_name: calculate_metrics(ground_truth, row[response_name])
-            for response_name in response_names
-        }
+        results_with_metrics.append(
+            InferenceResultWithMetrics(**vars(result), metrics=metrics)
+        )
 
-    # Convert DataFrame to list of dictionaries
-    data = df.to_dict("records")
+    return results_with_metrics
 
-    # Use concurrent.futures for parallelization
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        # Submit all tasks
-        future_to_row = {executor.submit(process_row, row): row for row in data}
 
-        # Process as they complete with a progress bar
-        results = []
-        for future in tqdm(
-            concurrent.futures.as_completed(future_to_row),
-            total=len(data),
-            desc="Processing",
-        ):
-            results.append(future.result())
+def save_inference_results_with_metrics(
+    inference_results: List[InferenceResultWithMetrics],
+):
+    # Group by model and output file
+    grouped = defaultdict(list)
+    for result in inference_results:
+        key = (result.model, result.output_file, result.prompt_template)
+        grouped[key].append(result)
 
-    # Restructure the results
-    results = {
-        response_name: [row[response_name] for row in results]
-        for response_name in response_names
-    }
+    # Write each group to the corresponding csv
+    for (model, output_file, prompt_template), results in grouped.items():
+        prompt_name = os.path.basename(prompt_template).removesuffix(".yaml")
+        csv_path = os.path.join(model, "results", prompt_name, output_file)
 
-    metric_names = results[next(iter(results))][0].keys()
+        os.makedirs(os.path.dirname(csv_path), exist_ok=True)
 
-    # Compute average for each metric
-    all_metrics = {m: [] for m in metric_names}
-    for resp_list in results.values():
-        for row_metrics in resp_list:
-            for m in metric_names:
-                v = row_metrics.get(m)
-                if v is not None:
-                    all_metrics[m].append(float(v))
+        # Collect all unique metric keys from all results in this group
+        metric_keys = set()
+        for result in results:
+            metric_keys.update(result.metrics.keys())
 
-    averages = {
-        m: (sum(vals) / len(vals) if vals else None) for m, vals in all_metrics.items()
-    }
+        # Sort metric keys for consistent column ordering
+        metric_keys = sorted(metric_keys)
 
-    json_path = f"{dir}/accuracy/json/{prompt_name}.json"
+        # Build fieldnames: base fields + metric fields
+        fieldnames = ["question", "answer", "response"] + metric_keys
 
-    with open(json_path, "w") as f:
-        json.dump(averages, f, indent=4)
-
-    print(averages)
-
-    csv_path = "./summary_v2.csv"
-    os.makedirs(os.path.dirname(csv_path), exist_ok=True)
-
-    csv_fieldnames = ["model_name", "prompt_name"] + list(metric_names)
-
-    csv_exists = os.path.exists(csv_path)
-
-    with open(csv_path, "a", newline="") as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=csv_fieldnames)
-        if not csv_exists:
+        with open(csv_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(
+                f,
+                fieldnames=fieldnames,
+                quoting=csv.QUOTE_ALL,
+            )
             writer.writeheader()
 
-        # Build the row dict
-        row = {"model_name": model_name, "prompt_name": prompt_name}
-        # insert metric values; convert to native types (float) so csv writes them nicely
-        for m in metric_names:
-            row[m] = averages.get(m)
+            for result in results:
+                for response in result.responses:
+                    row = {
+                        "question": result.prompt,
+                        "answer": result.ground_truth,
+                        "response": response,
+                    }
+                    # Add all metrics to the row
+                    for metric_key in metric_keys:
+                        row[metric_key] = result.metrics.get(metric_key, "")
 
-        writer.writerow(row)
-
-    print("Appended row to CSV:", csv_path)
+                    writer.writerow(row)
