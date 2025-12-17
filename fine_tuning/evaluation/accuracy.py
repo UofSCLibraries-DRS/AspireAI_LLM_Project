@@ -97,8 +97,8 @@ def save_inference_results_with_metrics(
         key = (result.model, result.output_file, result.prompt_template)
         grouped[key].append(result)
 
-    # Track metrics by model for averaging
-    model_metrics = defaultdict(lambda: defaultdict(list))
+    # Track metrics by model-prompt combo for averaging
+    model_prompt_metrics = defaultdict(lambda: defaultdict(list))
 
     # Write each group to the corresponding csv
     for (model, output_file, prompt_template), results in grouped.items():
@@ -111,9 +111,10 @@ def save_inference_results_with_metrics(
         metric_keys = set()
         for result in results:
             metric_keys.update(result.metrics.keys())
-            # Accumulate metrics for this model
+            # Accumulate metrics for this model-prompt combo
+            combo_key = (model, prompt_name)
             for metric_key, metric_value in result.metrics.items():
-                model_metrics[model][metric_key].append(metric_value)
+                model_prompt_metrics[combo_key][metric_key].append(metric_value)
 
         # Sort metric keys for consistent column ordering
         metric_keys = sorted(metric_keys)
@@ -142,9 +143,11 @@ def save_inference_results_with_metrics(
 
                     writer.writerow(row)
 
-    # Save average metrics for each model
-    for model, metrics_dict in model_metrics.items():
-        summary_path = os.path.join(model, "results", "metrics_summary.csv")
+    # Save average metrics for each model-prompt combo
+    for (model, prompt_name), metrics_dict in model_prompt_metrics.items():
+        summary_path = os.path.join(
+            model, "results", prompt_name, "metrics_summary.csv"
+        )
         os.makedirs(os.path.dirname(summary_path), exist_ok=True)
 
         # Calculate averages
