@@ -97,6 +97,9 @@ def save_inference_results_with_metrics(
         key = (result.model, result.output_file, result.prompt_template)
         grouped[key].append(result)
 
+    # Track metrics by model for averaging
+    model_metrics = defaultdict(lambda: defaultdict(list))
+
     # Write each group to the corresponding csv
     for (model, output_file, prompt_template), results in grouped.items():
         prompt_name = os.path.basename(prompt_template).removesuffix(".yaml")
@@ -108,6 +111,9 @@ def save_inference_results_with_metrics(
         metric_keys = set()
         for result in results:
             metric_keys.update(result.metrics.keys())
+            # Accumulate metrics for this model
+            for metric_key, metric_value in result.metrics.items():
+                model_metrics[model][metric_key].append(metric_value)
 
         # Sort metric keys for consistent column ordering
         metric_keys = sorted(metric_keys)
@@ -135,3 +141,21 @@ def save_inference_results_with_metrics(
                         row[metric_key] = result.metrics.get(metric_key, "")
 
                     writer.writerow(row)
+
+    # Save average metrics for each model
+    for model, metrics_dict in model_metrics.items():
+        summary_path = os.path.join(model, "results", "metrics_summary.csv")
+        os.makedirs(os.path.dirname(summary_path), exist_ok=True)
+
+        # Calculate averages
+        metric_averages = {}
+        for metric_key, values in metrics_dict.items():
+            if values:
+                metric_averages[metric_key] = sum(values) / len(values)
+
+        # Write summary file
+        with open(summary_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f, quoting=csv.QUOTE_ALL)
+            writer.writerow(["metric", "average"])
+            for metric_key in sorted(metric_averages.keys()):
+                writer.writerow([metric_key, metric_averages[metric_key]])

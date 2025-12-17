@@ -14,8 +14,7 @@
                     "eval/scenarios/lighthouse_and_informer.csv",
                     "eval/scenarios/mccray.csv",
                     "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios/pdp.csv"
                 ],
                 "prompt_formats": [
                     "base_p1.yaml",
@@ -47,8 +46,7 @@
                     "eval/scenarios/lighthouse_and_informer.csv",
                     "eval/scenarios/mccray.csv",
                     "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios/pdp.csv"
                 ],
                 "prompt_formats": [
                     "sft_xml.yaml"
@@ -73,8 +71,7 @@
                     "eval/scenarios/lighthouse_and_informer.csv",
                     "eval/scenarios/mccray.csv",
                     "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios/pdp.csv"
                 ],
                 "prompt_formats": [
                     "sft_xml.yaml"
@@ -99,8 +96,7 @@
                     "eval/scenarios/lighthouse_and_informer.csv",
                     "eval/scenarios/mccray.csv",
                     "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios/pdp.csv"
                 ],
                 "prompt_formats": [
                     "sft_xml.yaml"
@@ -125,8 +121,7 @@
                     "eval/scenarios/lighthouse_and_informer.csv",
                     "eval/scenarios/mccray.csv",
                     "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios/pdp.csv"
                 ],
                 "prompt_formats": [
                     "sft_xml.yaml"
@@ -151,8 +146,7 @@
                     "eval/scenarios/lighthouse_and_informer.csv",
                     "eval/scenarios/mccray.csv",
                     "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios/pdp.csv"
                 ],
                 "prompt_formats": [
                     "sft_xml.yaml"
@@ -177,8 +171,7 @@
                     "eval/scenarios/lighthouse_and_informer.csv",
                     "eval/scenarios/mccray.csv",
                     "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios/pdp.csv"
                 ],
                 "prompt_formats": [
                     "sft_xml.yaml"
