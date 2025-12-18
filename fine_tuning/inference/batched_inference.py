@@ -31,7 +31,7 @@ class InferenceJob:
 
 @dataclass
 class InferenceResult(InferenceJob):
-    responses: List[str]
+    responses: List[str] = field(default_factory=list)
 
 
 # Format prompt for base Llama 3.1 (with system prompt)
