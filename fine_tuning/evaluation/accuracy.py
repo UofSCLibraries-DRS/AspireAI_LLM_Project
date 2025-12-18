@@ -12,7 +12,7 @@ from collections import defaultdict
 #   - Optimize KV by sub batching prompt formats
 @dataclass
 class InferenceResultWithMetrics(InferenceResult):
-    metrics: Dict[str, float]
+    metrics: Dict[str, float] = field(default_factory=dict)
 
 
 def calculate_bertscore_batched(
