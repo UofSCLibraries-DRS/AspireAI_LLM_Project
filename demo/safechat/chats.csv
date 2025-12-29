@@ -52,3 +52,15 @@ input_time|conversation_id|count|intent|user_input| entity_name|entity_value|act
 2022-10-27 16:25:02.312776|a3652bcf738c4b72bfec5c9b8578cd23|B4|||||utter_happy|Great, carry on!
 2022-10-27 16:25:02.312776|a3652bcf738c4b72bfec5c9b8578cd23|U5|goodbye|bye|
 2022-10-27 16:25:02.312776|a3652bcf738c4b72bfec5c9b8578cd23|B5|||||utter_goodbye|Bye
+2025-12-28 01:24:15.199862|6f10ef1903274aaeaa1c0e4966c2028d|U0|nlu_fallback|What was John H. McCray's position in the Progressive Democratic Party?|
+2025-12-28 01:24:15.199886|6f10ef1903274aaeaa1c0e4966c2028d|B0|||||utter_out_of_scope|Sorry, I can't handle that request. Please rephrase the question
+2025-12-28 01:24:29.605705|6f10ef1903274aaeaa1c0e4966c2028d|U0|nlu_fallback|What was John H. McCray's position in the Progressive Democratic Party?|
+2025-12-28 01:24:29.605727|6f10ef1903274aaeaa1c0e4966c2028d|B0|||||utter_out_of_scope|Sorry, I can't handle that request. Please rephrase the question
+2025-12-28 01:24:29.605768|6f10ef1903274aaeaa1c0e4966c2028d|U1|nlu_fallback|What year did John McCray resign as the editor of The Lighthouse and Informer?|
+2025-12-28 01:24:29.605779|6f10ef1903274aaeaa1c0e4966c2028d|B1|||||utter_out_of_scope|Sorry, I can't handle that request. Please rephrase the question
+2025-12-28 01:24:51.221862|6f10ef1903274aaeaa1c0e4966c2028d|U0|nlu_fallback|What was John H. McCray's position in the Progressive Democratic Party?|
+2025-12-28 01:24:51.221885|6f10ef1903274aaeaa1c0e4966c2028d|B0|||||utter_out_of_scope|Sorry, I can't handle that request. Please rephrase the question
+2025-12-28 01:24:51.221925|6f10ef1903274aaeaa1c0e4966c2028d|U1|nlu_fallback|What year did John McCray resign as the editor of The Lighthouse and Informer?|
+2025-12-28 01:24:51.221935|6f10ef1903274aaeaa1c0e4966c2028d|B1|||||utter_out_of_scope|Sorry, I can't handle that request. Please rephrase the question
+2025-12-28 01:24:51.221969|6f10ef1903274aaeaa1c0e4966c2028d|U2|nlu_fallback|Did John McCray write to John Oscar Floyd on September 23, 1943?|
+2025-12-28 01:24:51.221980|6f10ef1903274aaeaa1c0e4966c2028d|B2|||||utter_out_of_scope|Sorry, I can't handle that request. Please rephrase the question
