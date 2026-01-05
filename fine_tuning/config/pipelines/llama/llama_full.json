@@ -335,9 +335,9 @@
             "start": "Llama-3.1-8B",
             "train_steps": [
                 "ft/steps/lora_unsupervised_D_mcc_h2.json",
-                "ft/steps/llama/lora/NQ_sft_3k.01.r8.json"
+                "ft/steps/llama/lora/NQ_sft_4k.01.r8.json"
             ],
-            "output": "M9.NQ3k.01.r8"
+            "output": "M9.NQ4k.01.r8"
         },
         "inference": [
             {
@@ -360,9 +360,9 @@
             "start": "Llama-3.1-8B",
             "train_steps": [
                 "ft/steps/lora_unsupervised_D_mcc_h2.json",
-                "ft/steps/llama/lora/NQ_sft_3k.01.r16.json"
+                "ft/steps/llama/lora/NQ_sft_4k.01.r16.json"
             ],
-            "output": "M9.NQ3k.01.r16"
+            "output": "M9.NQ4k.01.r16"
         },
         "inference": [
             {
@@ -385,9 +385,9 @@
             "start": "Llama-3.1-8B",
             "train_steps": [
                 "ft/steps/lora_unsupervised_D_mcc_h2.json",
-                "ft/steps/llama/lora/NQ_sft_3k.02.r8.json"
+                "ft/steps/llama/lora/NQ_sft_4k.02.r8.json"
             ],
-            "output": "M9.NQ3k.02.r8"
+            "output": "M9.NQ4k.02.r8"
         },
         "inference": [
             {
@@ -410,9 +410,9 @@
             "start": "Llama-3.1-8B",
             "train_steps": [
                 "ft/steps/lora_unsupervised_D_mcc_h2.json",
-                "ft/steps/llama/lora/NQ_sft_3k.02.r16.json"
+                "ft/steps/llama/lora/NQ_sft_4k.02.r16.json"
             ],
-            "output": "M9.NQ3k.02.r16"
+            "output": "M9.NQ4k.02.r16"
         },
         "inference": [
             {
@@ -435,9 +435,9 @@
             "start": "Llama-3.1-8B",
             "train_steps": [
                 "ft/steps/lora_unsupervised_D_mcc_h2.json",
-                "ft/steps/llama/lora/NQ_sft_3k.03.r8.json"
+                "ft/steps/llama/lora/NQ_sft_4k.03.r8.json"
             ],
-            "output": "M9.NQ3k.03.r8"
+            "output": "M9.NQ4k.03.r8"
         },
         "inference": [
             {
@@ -460,9 +460,9 @@
             "start": "Llama-3.1-8B",
             "train_steps": [
                 "ft/steps/lora_unsupervised_D_mcc_h2.json",
-                "ft/steps/llama/lora/NQ_sft_3k.03.r16.json"
+                "ft/steps/llama/lora/NQ_sft_4k.03.r16.json"
             ],
-            "output": "M9.NQ3k.03.r16"
+            "output": "M9.NQ4k.03.r16"
         },
         "inference": [
             {
