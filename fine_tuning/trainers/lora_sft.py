@@ -14,6 +14,7 @@ import os
 import shutil
 from peft import LoraConfig, get_peft_model
 import torch
+import gc
 
 from .training_base import AbstractTrainer
 from fine_tuning.utils.environment import get_env_or_raise
@@ -179,7 +180,7 @@ class LoRASFTTrainer(AbstractTrainer):
             plt.plot(steps, loss_values, label="Training Loss", linewidth=2)
             plt.xlabel("Steps")
             plt.ylabel("Loss")
-            plt.title("Training Loss Curve (Gemma 270M Full Fine-tuning)")
+            plt.title("Training Loss Curve")
             plt.legend()
             plt.grid(True, linestyle="--", alpha=0.6)
             plt.tight_layout()
@@ -188,3 +189,6 @@ class LoRASFTTrainer(AbstractTrainer):
             plt.savefig(plot_path)
         else:
             print("No loss data found in trainer.state.log_history — skipping plot.")
+
+        torch.cuda.empty_cache()
+        gc.collect()
