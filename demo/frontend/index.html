@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AspireAI LLM Project</title>
+  <link rel="icon" href="./rooster-icon.png" />
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-red: #73000a;
+      --primary-red-dark: #a30010;
+      --bg-primary: #f5f5f5;
+      --bg-secondary: #ffffff;
+      --bg-sidebar: #f0f0f0;
+      --text-primary: #333333;
+      --text-secondary: #666666;
+      --border-color: #dddddd;
+      --user-msg-bg: #ffd966;
+      --bot-msg-bg: #b4d7ff;
+    }
+
+    body.dark-mode {
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-sidebar: #2c2c2c;
+      --text-primary: #e0e0e0;
+      --text-secondary: #b0b0b0;
+      --border-color: #444444;
+      --user-msg-bg: #cc9933;
+      --bot-msg-bg: #4a7ba7;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Header */
+    #header {
+      background: var(--primary-red);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    #header h1 {
+      font-size: 1.5em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-icon {
+      width: 32px;
+      height: 32px;
+      background: white;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
+    }
+
+    .menu-toggle {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5em;
+      cursor: pointer;
+      padding: 5px 10px;
+      display: none;
+    }
+
+    /* Main Container */
+    #mainContainer {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    #sidebar {
+      width: 280px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      overflow-y: auto;
+      padding: 20px;
+      transition: transform 0.3s ease, background 0.3s;
+    }
+
+    #sidebar h2 {
+      color: var(--primary-red);
+      font-size: 1.2em;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary-red);
+    }
+
+    #sidebar h3 {
+      color: var(--primary-red);
+      font-size: 1em;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    #sidebar p {
+      font-size: 0.9em;
+      line-height: 1.5;
+      margin-bottom: 15px;
+      color: var(--text-secondary);
+    }
+
+    #sidebar ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    #sidebar li {
+      padding: 8px 0;
+      padding-left: 20px;
+      position: relative;
+      font-size: 0.9em;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    #sidebar li:before {
+      content: "•";
+      position: absolute;
+      left: 5px;
+      color: var(--primary-red);
+    }
+
+    .sidebar-button {
+      width: 100%;
+      padding: 10px 15px;
+      margin-top: 10px;
+      background: var(--primary-red);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: background 0.3s;
+    }
+
+    .sidebar-button:hover {
+      background: var(--primary-red-dark);
+    }
+
+    /* Chat Container */
+    #chatContainer {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-secondary);
+      transition: background 0.3s;
+    }
+
+    #chatLog {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* Messages */
+    .message-wrapper {
+      display: flex;
+      flex-direction: column;
+      max-width: 80%;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message-wrapper.user {
+      align-self: flex-end;
+    }
+
+    .message-wrapper.bot {
+      align-self: flex-start;
+    }
+
+    .message {
+      padding: 12px 16px;
+      border-radius: 10px;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+
+    .message.user {
+      background: var(--user-msg-bg);
+      color: #000;
+      border-bottom-right-radius: 2px;
+    }
+
+    .message.bot {
+      background: var(--bot-msg-bg);
+      color: #000;
+      border-bottom-left-radius: 2px;
+    }
+
+    .message-info {
+      font-size: 0.75em;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      padding: 0 5px;
+    }
+
+    .message-wrapper.user .message-info {
+      text-align: right;
+    }
+
+    /* System Messages */
+    .system-message {
+      align-self: center;
+      background: #ffebee;
+      color: #c62828;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      text-align: center;
+      max-width: 90%;
+    }
+
+    body.dark-mode .system-message {
+      background: #4a1f1f;
+      color: #ff6b6b;
+    }
+
+    /* Input Area */
+    #inputArea {
+      padding: 15px 20px;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .input-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    #modelSelector {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.9em;
+      cursor: pointer;
+      width: 200px;
+      transition: background 0.3s, border-color 0.3s, color 0.3s;
+    }
+
+    #userInput {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.95em;
+      resize: none;
+      max-height: 120px;
+      transition: background 0.3s, border-color 0.3s, color 0.3s;
+    }
+
+    #userInput:focus {
+      outline: none;
+      border-color: var(--primary-red);
+    }
+
+    #sendBtn {
+      padding: 12px 30px;
+      background: #ffa500;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      align-self: flex-end;
+    }
+
+    #sendBtn:hover {
+      background: #ff8c00;
+    }
+
+    #sendBtn:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* Survey Button */
+    #surveyBtn {
+      padding: 8px 15px;
+      background: white;
+      color: var(--primary-red);
+      border: 1px solid var(--primary-red);
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: background 0.3s;
+      white-space: nowrap;
+    }
+
+    #surveyBtn:hover {
+      background: var(--bg-primary);
+    }
+
+    /* Theme Toggle */
+    #themeToggle {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.3em;
+      cursor: pointer;
+      padding: 5px;
+      transition: transform 0.3s;
+    }
+
+    #themeToggle:hover {
+      transform: scale(1.1);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: var(--bg-secondary);
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-content h3 {
+      color: var(--primary-red);
+      margin-bottom: 20px;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    .close-modal:hover {
+      color: var(--text-primary);
+    }
+
+    .modal-content label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      color: var(--text-primary);
+    }
+
+    .modal-content input,
+    .modal-content textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Arial, sans-serif;
+    }
+
+    .modal-content textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .modal-content button[type="submit"] {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: var(--primary-red);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    .modal-content button[type="submit"]:hover {
+      background: var(--primary-red-dark);
+    }
+
+    /* Welcome Screen */
+    #welcomeScreen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+      height: 100%;
+    }
+
+    #welcomeScreen h2 {
+      color: var(--primary-red);
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+
+    #welcomeScreen p {
+      color: var(--text-secondary);
+      font-size: 1.1em;
+      margin-bottom: 30px;
+      max-width: 600px;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      #sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 999;
+        transform: translateX(-100%);
+        width: 80%;
+        max-width: 300px;
+      }
+
+      #sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+      }
+
+      .sidebar-overlay.show {
+        display: block;
+      }
+
+      #header h1 {
+        font-size: 1.2em;
+      }
+
+      .message-wrapper {
+        max-width: 90%;
+      }
+
+      #modelSelector {
+        width: 100%;
+      }
+
+      .button-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      #sendBtn {
+        align-self: stretch;
+      }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-red);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <div id="header">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <h1>
+        AspireAI LLM Project
+      </h1>
+    </div>
+    <button id="themeToggle" onclick="toggleTheme()">☀️</button>
+  </div>
+
+  <!-- Main Container -->
+  <div id="mainContainer">
+    <!-- Sidebar -->
+    <div id="sidebar">
+      <h2>About the Chatbot</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur.</p>
+
+      <h3>Sample Questions</h3>
+      <p>The system can answer various types of questions. Here are some suggestions to get started:</p>
+      <ul>
+        <li>Who was John H. McCray?</li>
+        <li>What was John H. McCray's position in the Progressive Democratic Party?</li>
+      </ul>
+      <h3>Limitations</h3>
+      <p>The models currently available lack:</p>
+      <ul>
+        <li>Use of context from previous questions and responses for follow-up questions</li>
+        <li>Access to information outside of the John H. McCray digital collection</li>
+        <li>Citation of sources</li>
+      </ul>
+
+      <!-- <h3>In-Scope Questions:</h3>
+      <ul>
+        <li>General knowledge inquiries</li>
+        <li>Technical explanations</li>
+        <li>Creative writing requests</li>
+      </ul>
+
+      <h3>Do-Not-Answer Questions:</h3>
+      <ul>
+        <li>Requests for harmful content</li>
+        <li>Personal data about individuals</li>
+        <li>Medical or legal advice</li>
+      </ul> -->
+
+      <button class="sidebar-button" onclick="openModal('policyModal')">View Privacy Policy</button>
+      <button class="sidebar-button" onclick="window.location.href='learn.html'">Learn More About This Project</button>
+    </div>
+
+    <!-- Chat Container -->
+    <div id="chatContainer">
+      <div id="chatLog">
+        <div id="welcomeScreen">
+          <h2>Welcome to AspireAI LLM Project</h2>
+          <p>Start a conversation by typing your question below. Select a model from the dropdown to begin.</p>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div id="inputArea">
+        <div class="input-controls">
+          <select id="modelSelector">
+            <!-- Options will be populated by JavaScript -->
+          </select>
+          <div class="button-row">
+            <textarea id="userInput" placeholder="Type your message here..." rows="1"></textarea>
+            <button id="sendBtn" onclick="sendMessage()">Send</button>
+          </div>
+        </div>
+        <button id="surveyBtn" onclick="openModal('surveyModal')">View Survey</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar Overlay (Mobile) -->
+  <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <!-- Survey Modal -->
+  <div id="surveyModal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal('surveyModal')">×</button>
+      <h3>Feedback Survey</h3>
+      <form onsubmit="submitSurvey(event)">
+        <label for="rating">Rating (1-5):</label>
+        <input type="number" id="rating" min="1" max="5" required>
+
+        <label for="comments">Comments:</label>
+        <textarea id="comments" placeholder="Share your feedback..."></textarea>
+
+        <button type="submit">Submit Feedback</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Privacy Policy Modal -->
+  <div id="policyModal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal('policyModal')">×</button>
+      <h3>Privacy Policy</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat.</p>
+
+      <h4>Data Collection and Usage:</h4>
+      <p>We collect:</p>
+      <ul>
+        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+          dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+          commodo consequat.</li>
+      </ul>
+      <p>We do <strong>NOT</strong> collect:</p>
+      <ul>
+        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+          dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+          commodo consequat.
+        </li>
+      </ul>
+
+      <p>By using this chatbot, you agree Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+        nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+  </div>
+
+  <script>
+    // Model Configuration - Easy to add/remove models
+    const AVAILABLE_MODELS = [
+      { name: 'Gemma-3-270m, Fine-tuned', apiValue: 'M8' },
+      { name: 'SafeChat', apiValue: 'SC' },
+    ];
+
+    const chatLog = document.getElementById('chatLog');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const modelSelector = document.getElementById('modelSelector');
+
+    const GENERATE_API = "https://54.162.34.113/api/generate";
+
+    // Initialize model selector
+    function initializeModelSelector() {
+      AVAILABLE_MODELS.forEach(model => {
+        const option = document.createElement('option');
+        option.value = model.apiValue;
+        option.textContent = model.name;
+        modelSelector.appendChild(option);
+      });
+    }
+
+    // Auto-resize textarea
+    userInput.addEventListener('input', function () {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+
+    // Send on Enter (Shift+Enter for new line)
+    userInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.sidebar-overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const themeBtn = document.getElementById('themeToggle');
+      themeBtn.textContent = document.body.classList.contains('dark-mode') ? '🌙' : '☀️';
+      localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    }
+
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    function addMessage(text, type, info = '') {
+      if (welcomeScreen && welcomeScreen.parentNode) {
+        welcomeScreen.remove();
+      }
+
+      const wrapper = document.createElement('div');
+      wrapper.className = `message-wrapper ${type}`;
+
+      const message = document.createElement('div');
+      message.className = `message ${type}`;
+      message.textContent = text;
+
+      wrapper.appendChild(message);
+
+      if (info) {
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'message-info';
+        infoDiv.textContent = info;
+        wrapper.appendChild(infoDiv);
+      }
+
+      chatLog.appendChild(wrapper);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function addSystemMessage(text) {
+      if (welcomeScreen && welcomeScreen.parentNode) {
+        welcomeScreen.remove();
+      }
+
+      const message = document.createElement('div');
+      message.className = 'system-message';
+      message.textContent = text;
+      chatLog.appendChild(message);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const message = userInput.value.trim();
+      if (!message) return;
+
+      const selectedModelValue = modelSelector.value;
+      const selectedModel = AVAILABLE_MODELS.find(m => m.apiValue === selectedModelValue);
+      const modelDisplayName = selectedModel ? selectedModel.name : selectedModelValue;
+
+      addMessage(message, 'user');
+      userInput.value = '';
+      userInput.style.height = 'auto';
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'Sending...';
+
+      try {
+        const response = await fetch(GENERATE_API, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            prompt: message,
+            model: selectedModelValue,
+            max_new_tokens: 128
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`API error ${response.status}`);
+        }
+
+        const data = await response.json();
+        const botText = data?.text || "No response received";
+
+        addMessage(botText, 'bot', modelDisplayName);
+
+      } catch (error) {
+        console.error('Error:', error);
+        addSystemMessage('The response engine encountered an error. Please try again.');
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Send';
+      }
+    }
+
+    function submitSurvey(event) {
+      event.preventDefault();
+      const rating = document.getElementById('rating').value;
+      const comments = document.getElementById('comments').value;
+
+      console.log('Survey submitted:', { rating, comments });
+      alert('Thank you for your feedback!');
+      closeModal('surveyModal');
+
+      document.getElementById('rating').value = '';
+      document.getElementById('comments').value = '';
+    }
+
+    // Load theme preference
+    window.addEventListener('DOMContentLoaded', () => {
+      initializeModelSelector();
+
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('themeToggle').textContent = '🌙';
+      }
+    });
+
+    // Close modals on outside click
+    window.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal')) {
+        e.target.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+
+</html>

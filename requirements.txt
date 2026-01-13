@@ -1,12 +1,11 @@
 pandas<=2.3.1
 ipykernel
 openpyxl
-nltk
 tqdm
 python-dotenv
-
-pyspellchecker
 jamspell
+
+
 
 matplotlib
 seaborn

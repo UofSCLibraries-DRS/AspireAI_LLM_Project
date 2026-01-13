@@ -1,0 +1,10 @@
+{
+  "name": "my-frontend",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npx serve -s . -l $PORT"
+  },
+  "dependencies": {
+    "serve": "^14.0.0"
+  }
+}

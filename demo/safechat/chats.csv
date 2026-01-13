@@ -1,0 +1,66 @@
+input_time|conversation_id|count|intent|user_input| entity_name|entity_value|action|bot_reply|
+2022-10-27 16:16:16.404150|7c7d4bba78834d01937df49e85703aef|U0|greet|hi|
+2022-10-27 16:16:16.412114|7c7d4bba78834d01937df49e85703aef|B0|||||utter_greet|Hey! How are you?
+2022-10-27 16:16:16.412640|7c7d4bba78834d01937df49e85703aef|U1|mood_unhappy|whats upp|
+2022-10-27 16:16:16.412640|7c7d4bba78834d01937df49e85703aef|B1|||||utter_cheer_up|Here is something to cheer you up:
+2022-10-27 16:16:16.412640|7c7d4bba78834d01937df49e85703aef|B2|||||utter_did_that_help|Did that help you?
+2022-10-27 16:16:16.412640|7c7d4bba78834d01937df49e85703aef|U2|goodbye|bye|
+2022-10-27 16:16:16.412640|7c7d4bba78834d01937df49e85703aef|B3|||||utter_goodbye|Bye
+2022-10-27 16:22:22.257649|7c7d4bba78834d01937df49e85703aef|U0|greet|hi|
+2022-10-27 16:22:22.257649|7c7d4bba78834d01937df49e85703aef|B0|||||utter_greet|Hey! How are you?
+2022-10-27 16:22:22.257649|7c7d4bba78834d01937df49e85703aef|U1|mood_unhappy|whats upp|
+2022-10-27 16:22:22.257649|7c7d4bba78834d01937df49e85703aef|B1|||||utter_cheer_up|Here is something to cheer you up:
+2022-10-27 16:22:22.257649|7c7d4bba78834d01937df49e85703aef|B2|||||utter_did_that_help|Did that help you?
+2022-10-27 16:22:22.257649|7c7d4bba78834d01937df49e85703aef|U2|goodbye|bye|
+2022-10-27 16:22:22.266678|7c7d4bba78834d01937df49e85703aef|B3|||||utter_goodbye|Bye
+2022-10-27 16:22:22.266678|7c7d4bba78834d01937df49e85703aef|U3|greet|hi|
+2022-10-27 16:22:22.266678|7c7d4bba78834d01937df49e85703aef|B4|||||utter_greet|Hey! How are you?
+2022-10-27 16:22:22.269051|7c7d4bba78834d01937df49e85703aef|U4|bot_challenge|how are youuuu|
+2022-10-27 16:22:22.269051|7c7d4bba78834d01937df49e85703aef|B5|||||utter_iamabot|I am a bot, powered by Rasa.
+2022-10-27 16:22:34.192255|7c7d4bba78834d01937df49e85703aef|U0|greet|hi|
+2022-10-27 16:22:34.192255|7c7d4bba78834d01937df49e85703aef|B0|||||utter_greet|Hey! How are you?
+2022-10-27 16:22:34.192255|7c7d4bba78834d01937df49e85703aef|U1|mood_unhappy|whats upp|
+2022-10-27 16:22:34.192255|7c7d4bba78834d01937df49e85703aef|B1|||||utter_cheer_up|Here is something to cheer you up:
+2022-10-27 16:22:34.192255|7c7d4bba78834d01937df49e85703aef|B2|||||utter_did_that_help|Did that help you?
+2022-10-27 16:22:34.207906|7c7d4bba78834d01937df49e85703aef|U2|goodbye|bye|
+2022-10-27 16:22:34.207906|7c7d4bba78834d01937df49e85703aef|B3|||||utter_goodbye|Bye
+2022-10-27 16:22:34.207906|7c7d4bba78834d01937df49e85703aef|U3|greet|hi|
+2022-10-27 16:22:34.207906|7c7d4bba78834d01937df49e85703aef|B4|||||utter_greet|Hey! How are you?
+2022-10-27 16:22:34.207906|7c7d4bba78834d01937df49e85703aef|U4|bot_challenge|how are youuuu|
+2022-10-27 16:22:34.207906|7c7d4bba78834d01937df49e85703aef|B5|||||utter_iamabot|I am a bot, powered by Rasa.
+2022-10-27 16:22:34.207906|7c7d4bba78834d01937df49e85703aef|U5|goodbye|bye|
+2022-10-27 16:22:34.207906|7c7d4bba78834d01937df49e85703aef|B6|||||utter_goodbye|Bye
+2022-10-27 16:24:54.513998|a3652bcf738c4b72bfec5c9b8578cd23|U0|greet|hello|
+2022-10-27 16:24:54.513998|a3652bcf738c4b72bfec5c9b8578cd23|B0|||||utter_greet|Hey! How are you?
+2022-10-27 16:24:54.513998|a3652bcf738c4b72bfec5c9b8578cd23|U1|bot_challenge|what do you know|
+2022-10-27 16:24:54.513998|a3652bcf738c4b72bfec5c9b8578cd23|B1|||||utter_iamabot|I am a bot, powered by Rasa.
+2022-10-27 16:24:54.519523|a3652bcf738c4b72bfec5c9b8578cd23|U2|goodbye|bye|
+2022-10-27 16:24:54.519523|a3652bcf738c4b72bfec5c9b8578cd23|B2|||||utter_goodbye|Bye
+2022-10-27 16:24:54.519523|a3652bcf738c4b72bfec5c9b8578cd23|U3|greet|hi|
+2022-10-27 16:24:54.519523|a3652bcf738c4b72bfec5c9b8578cd23|B3|||||utter_greet|Hey! How are you?
+2022-10-27 16:24:54.519523|a3652bcf738c4b72bfec5c9b8578cd23|U4|affirm|sorry|
+2022-10-27 16:24:54.519523|a3652bcf738c4b72bfec5c9b8578cd23|B4|||||utter_happy|Great, carry on!
+2022-10-27 16:25:02.297127|a3652bcf738c4b72bfec5c9b8578cd23|U0|greet|hello|
+2022-10-27 16:25:02.297127|a3652bcf738c4b72bfec5c9b8578cd23|B0|||||utter_greet|Hey! How are you?
+2022-10-27 16:25:02.312776|a3652bcf738c4b72bfec5c9b8578cd23|U1|bot_challenge|what do you know|
+2022-10-27 16:25:02.312776|a3652bcf738c4b72bfec5c9b8578cd23|B1|||||utter_iamabot|I am a bot, powered by Rasa.
+2022-10-27 16:25:02.312776|a3652bcf738c4b72bfec5c9b8578cd23|U2|goodbye|bye|
+2022-10-27 16:25:02.312776|a3652bcf738c4b72bfec5c9b8578cd23|B2|||||utter_goodbye|Bye
+2022-10-27 16:25:02.312776|a3652bcf738c4b72bfec5c9b8578cd23|U3|greet|hi|
+2022-10-27 16:25:02.312776|a3652bcf738c4b72bfec5c9b8578cd23|B3|||||utter_greet|Hey! How are you?
+2022-10-27 16:25:02.312776|a3652bcf738c4b72bfec5c9b8578cd23|U4|affirm|sorry|
+2022-10-27 16:25:02.312776|a3652bcf738c4b72bfec5c9b8578cd23|B4|||||utter_happy|Great, carry on!
+2022-10-27 16:25:02.312776|a3652bcf738c4b72bfec5c9b8578cd23|U5|goodbye|bye|
+2022-10-27 16:25:02.312776|a3652bcf738c4b72bfec5c9b8578cd23|B5|||||utter_goodbye|Bye
+2025-12-28 01:24:15.199862|6f10ef1903274aaeaa1c0e4966c2028d|U0|nlu_fallback|What was John H. McCray's position in the Progressive Democratic Party?|
+2025-12-28 01:24:15.199886|6f10ef1903274aaeaa1c0e4966c2028d|B0|||||utter_out_of_scope|Sorry, I can't handle that request. Please rephrase the question
+2025-12-28 01:24:29.605705|6f10ef1903274aaeaa1c0e4966c2028d|U0|nlu_fallback|What was John H. McCray's position in the Progressive Democratic Party?|
+2025-12-28 01:24:29.605727|6f10ef1903274aaeaa1c0e4966c2028d|B0|||||utter_out_of_scope|Sorry, I can't handle that request. Please rephrase the question
+2025-12-28 01:24:29.605768|6f10ef1903274aaeaa1c0e4966c2028d|U1|nlu_fallback|What year did John McCray resign as the editor of The Lighthouse and Informer?|
+2025-12-28 01:24:29.605779|6f10ef1903274aaeaa1c0e4966c2028d|B1|||||utter_out_of_scope|Sorry, I can't handle that request. Please rephrase the question
+2025-12-28 01:24:51.221862|6f10ef1903274aaeaa1c0e4966c2028d|U0|nlu_fallback|What was John H. McCray's position in the Progressive Democratic Party?|
+2025-12-28 01:24:51.221885|6f10ef1903274aaeaa1c0e4966c2028d|B0|||||utter_out_of_scope|Sorry, I can't handle that request. Please rephrase the question
+2025-12-28 01:24:51.221925|6f10ef1903274aaeaa1c0e4966c2028d|U1|nlu_fallback|What year did John McCray resign as the editor of The Lighthouse and Informer?|
+2025-12-28 01:24:51.221935|6f10ef1903274aaeaa1c0e4966c2028d|B1|||||utter_out_of_scope|Sorry, I can't handle that request. Please rephrase the question
+2025-12-28 01:24:51.221969|6f10ef1903274aaeaa1c0e4966c2028d|U2|nlu_fallback|Did John McCray write to John Oscar Floyd on September 23, 1943?|
+2025-12-28 01:24:51.221980|6f10ef1903274aaeaa1c0e4966c2028d|B2|||||utter_out_of_scope|Sorry, I can't handle that request. Please rephrase the question

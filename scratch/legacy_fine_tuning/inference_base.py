@@ -54,6 +54,12 @@ def main():
     device = torch.device("cuda")
     # Load model & tokenizer
     tokenizer = AutoTokenizer.from_pretrained(args.model_dir)
+
+    # Fixes rambling
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+        tokenizer.pad_token_id = tokenizer.eos_token_id
+
     model = AutoModelForCausalLM.from_pretrained(
         args.model_dir, torch_dtype=torch.float16
     )

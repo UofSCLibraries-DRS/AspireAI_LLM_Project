@@ -17,7 +17,7 @@ source activate /home/jaaydin/.conda/envs/ft_test
 python inference_base.py \
     --model_dir /work/jaaydin/outputs/100_mccray_clean_base_Llama_8b/model \
     --input_csv /work/jaaydin/data/factoid_qa.csv \
-    --output_csv /work/jaaydin/outputs/100_mccray_clean_base_Llama_8b/results/factoid_qa_10.csv \
+    --output_csv /work/jaaydin/outputs/100_mccray_clean_base_Llama_8b/results/factoid_qa_10_icl.csv \
     --temperature 1.0 \
     --num_samples 5 \
     --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"
@@ -25,39 +25,55 @@ python inference_base.py \
 python inference_base.py \
     --model_dir /work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/model \
     --input_csv /work/jaaydin/data/factoid_qa.csv \
-    --output_csv /work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/results/factoid_qa_10.csv \
+    --output_csv /work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/results/factoid_qa_10_icl.csv \
+    --temperature 1.0 \
+    --num_samples 5 \
+    --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"
+
+python inference_base.py \
+    --model_dir /work/jaaydin/models/Llama-3.1-8B \
+    --input_csv /work/jaaydin/data/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/base_model/results/factoid_qa_10_icl.csv \
+    --temperature 1.0 \
+    --num_samples 5 \
+    --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"
+
+python inference_base.py \
+    --model_dir /work/jaaydin/outputs/1000_mccray_dirty_base_Llama_8b/model \
+    --input_csv /work/jaaydin/data/factoid_qa.csv \
+    --output_csv /work/jaaydin/outputs/1000_mccray_dirty_base_Llama_8b/results/factoid_qa_10_icl.csv \
     --temperature 1.0 \
     --num_samples 5 \
     --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"
 
 python inference_base.py \
     --model_dir /work/jaaydin/outputs/100_mccray_clean_base_Llama_8b/model \
-    --input_csv /work/jaaydin/data/factoid_qa.csv \
-    --output_csv /work/jaaydin/outputs/100_mccray_clean_base_Llama_8b/results/factoid_qa_07.csv \
-    --temperature 0.7 \
+    --input_csv /work/jaaydin/data/nathan_qa.csv \
+    --output_csv /work/jaaydin/outputs/100_mccray_clean_base_Llama_8b/results/nathan_qa_10_icl.csv \
+    --temperature 1.0 \
     --num_samples 5 \
     --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"
 
 python inference_base.py \
     --model_dir /work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/model \
-    --input_csv /work/jaaydin/data/factoid_qa.csv \
-    --output_csv /work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/results/factoid_qa_07.csv \
-    --temperature 0.7 \
-    --num_samples 5 \
-    --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"
-
-python inference_base.py \
-    --model_dir /work/jaaydin/models/Llama-3.1-8B \
-    --input_csv /work/jaaydin/data/factoid_qa.csv \
-    --output_csv /work/jaaydin/outputs/base_model/results/factoid_qa_10.csv \
+    --input_csv /work/jaaydin/data/nathan_qa.csv \
+    --output_csv /work/jaaydin/outputs/100_mccray_dirty_base_Llama_8b/results/nathan_qa_10_icl.csv \
     --temperature 1.0 \
     --num_samples 5 \
     --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"
 
 python inference_base.py \
     --model_dir /work/jaaydin/models/Llama-3.1-8B \
-    --input_csv /work/jaaydin/data/factoid_qa.csv \
-    --output_csv /work/jaaydin/outputs/base_model/results/factoid_qa_07.csv \
-    --temperature 0.7 \
+    --input_csv /work/jaaydin/data/nathan_qa.csv \
+    --output_csv /work/jaaydin/outputs/base_model/results/nathan_qa_10_icl.csv \
+    --temperature 1.0 \
+    --num_samples 5 \
+    --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"
+
+python inference_base.py \
+    --model_dir /work/jaaydin/outputs/1000_mccray_dirty_base_Llama_8b/model \
+    --input_csv /work/jaaydin/data/nathan_qa.csv \
+    --output_csv /work/jaaydin/outputs/1000_mccray_dirty_base_Llama_8b/results/nathan_qa_10_icl.csv \
+    --temperature 1.0 \
     --num_samples 5 \
     --system_prompt "You are a helpful assistant. Answer clearly and concisely. Do not ramble"

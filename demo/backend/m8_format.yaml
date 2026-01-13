@@ -1,0 +1,4 @@
+template: |
+  <start_question>{user_prompt}<end_question>\n<start_answer>
+template_stop: <end_answer>
+stop_sequences: ["<end_answer>", </end_answer>, </answer>, \n]

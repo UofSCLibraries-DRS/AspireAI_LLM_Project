@@ -10,28 +10,79 @@ class OCR_Clean:
     """
     
     ocr_patterns = {
-        """
-        Dictonary of messy OCR patterns and their clean counter part.
-        Will serve simular to "STOP WORDS" in NLTK, with more flexiblity.
-
-        Key: Messy OCR pattern (raw string)
-        Value: Clean version of pattern (string)
-        """
-        r'_{2,}': ' ',     # two or more underscores = single white space
-        r'—': '-',         # special long dash = standard dash
-        r'\*{2,}': ' '     # two or more astricks (*) = single white space
-        
+    # Common OCR misreads 
+    r'Fev\. ': 'Rev. ',
+    r'Pev\. ': 'Rev. ',
+    r'Bev\* ': 'Rev. ',
+    r'Bev\. ': 'Rev. ',
+    r'Pev\. ': 'Rev. ',
+    r'Pev\* ': 'Rev. ',
+    r'\^ev. ': 'Rev. ',
+    r'Rev\* ': 'Rev. ',
+    r'NE..BEBBY': 'NEWBERRY',
+    r'Beaufoit': 'Beaufort',
+    r'Dai lingt on': 'Darlington',
+    r'Mr\* ': 'Mr. ',
+    r', 3\* C\* ': ', S. C. ',
+    r', 3\* C\. ': ', S. C. ',
+    r', 3\. C ': ', S. C. ',
+    r', 3\. 0\. ': ', S. C. ',
+    r', 3\. G\. ': ', S. C. ',
+    r'Mrs\* ': 'Mrs. ',
+    r'CCUITY ': 'COUNTY ',
+    r'Poute ': 'Route ',
+    r'Pock Hill': 'Rock Hill',
+    r'Bock Hill': 'Rock Hill',
+    r'jegroes ': 'negroes ',
+    r'febfuary ': 'february ',
+    r'BROADW AY': 'BROADW AY',
+    r'DAPLINGTOM ': 'DARLINGTON ',
+    r'rogjstrstion ': 'registration ',
+    r'Cher lesion ': 'Charleston ',
+    r'travelling ': 'traveling ',
+    r'crrolina ': 'carolina ',
+    r'racisim ': 'racism ',
+    r'supplios ': 'supplies ',
+    r'mtcray ': 'mccray ',
+    r'elininating': 'eliminating',
+    r'mocray': 'mccray',
+    r'John H\* ': 'John H. ',
+    r'snartanburg': 'Spartanburg',
+    r'tounded ': 'founded ',
+    r'limcfow ': 'jimcrow ',
+    r'hanvest ': 'harvest ',
+    r'charpeston ': 'charleston ',
+    r'Ifccray ': 'McCray ',
+    r"colonialismimperialism ": "colonialism imperialism ",
+    r"PRO GRESSIVE ": "PROGRESSIVE ",
+    r"DEEOCRA TIC ": "DEMOCRATIC ",
+    r"Preetent": "President",
+    r"Harry S,": "Harry S.",
+    r"Bespectfully": "Respectfully",
+    r'Washington,D.C.': 'Washington, D.C.',
+    r'S-TATE ': "STATE",
+    r"foilowing": "following",
     }
 
     special_pattern = r'[^a-zA-Z0-9\s.,!?;:\'"()\-_/]{2,}'  # anything that's not letter, number, white space, or standard punctuation, in a sequence for 2 or more
-    letter_pattern = r'\b\w*([a-zA-Z])\1{2,}\w*\b'          # sequences of 3+ of the same letter
+    letter_pattern = r'\b\w*([a-zA-Z])\1{2,}\w*\b'          # sequences of 2+ of the same letter
+    letter_pattern_4 = r'\b\w*([a-zA-Z])\1{4,}\w*\b'          # sequences of 4+ of the same letter
 
-    # general_pattern = r'\b\S*[@#$%^&*+=<>\|\`~[\]{}]\S*\b'  # sequences with non-alpha numeric sandwiched between any other characters
+    # non_ascii -- any non-ascii character (should be 
+    non_ascii = r'[^\x00-\x7F]'
+    # non_ascii_between_ascii -- exclude whitespace around non-ascii (e.g. contentdm 72: securedΓÇönumber)
+    non_ascii_between_ascii = r'(?<=\S)[^\x00-\x7F\s]+(?=\S)'
+
     general_exceptions = [
-            r'^[a-zA-Z]{1,2}&[a-zA-Z]{1,2}$',
-            r'^[a-zA-Z]+=+[a-zA-Z]+$',
-            r'^[0-9]+\*[0-9]+$'
+            r'^[a-zA-Z]{1,2}&[a-zA-Z]{1,2}$',           # e.g., a&b, AB&CD
+            r'^[a-zA-Z]+=+[a-zA-Z]+$',                  # e.g., a=b, word=word
+            r'^[a-zA-Z0-9]+\*[a-zA-Z0-9]+$',             # e.g., 2*3, 10*20 or didn*t
+            # r"^[a-zA-Z]+\|-[a-zA-Z]+$"                   # e.g., word|-word 
         ]
+    '''
+    general_pattern example matches
+
+    '''
     general_pattern = r'\b(?!(?:\w{1,2}&\w{1,2}|\w+=\w+|\d+\*\d+)$)\S*[@#$%^&*+=<>\|\`~[\]{}]\S*\b'
 
     def compile():

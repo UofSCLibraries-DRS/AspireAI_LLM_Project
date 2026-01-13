@@ -1,0 +1,164 @@
+version: "3.1"
+
+rules:
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+  - action: action_save_conversation
+  - action: action_session_id
+  - action: action_emotion
+
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+  - action: action_save_conversation
+  - action: action_session_id
+  - action: action_emotion
+
+- rule: Ask the user to rephrase whenever they send a message with low NLU confidence
+  steps:
+  - intent: nlu_fallback
+  - action: utter_out_of_scope
+  - action: action_save_conversation
+  - action: action_session_id
+  - action: action_emotion
+
+
+- rule: Answer Do not answer
+  steps:
+  - intent: Do not answer
+  - action: utter_Do not answer
+    
+- rule: Answer naacp_publish_magazine
+  steps:
+  - intent: naacp_publish_magazine
+  - action: utter_naacp_publish_magazine
+    
+- rule: Answer white_member_naacp
+  steps:
+  - intent: white_member_naacp
+  - action: utter_white_member_naacp
+    
+- rule: Answer benjamin_ben_hook_secretary
+  steps:
+  - intent: benjamin_ben_hook_secretary
+  - action: utter_benjamin_ben_hook_secretary
+    
+- rule: Answer relationship_like_sc_state
+  steps:
+  - intent: relationship_like_sc_state
+  - action: utter_relationship_like_sc_state
+    
+- rule: Answer naacp_established_religious_organization
+  steps:
+  - intent: naacp_established_religious_organization
+  - action: utter_naacp_established_religious_organization
+    
+- rule: Answer lighthouse_informer_published
+  steps:
+  - intent: lighthouse_informer_published
+  - action: utter_lighthouse_informer_published
+    
+- rule: Answer peter_kelly_editor_lighthouse
+  steps:
+  - intent: peter_kelly_editor_lighthouse
+  - action: utter_peter_kelly_editor_lighthouse
+    
+- rule: Answer jc_parler_write_john
+  steps:
+  - intent: jc_parler_write_john
+  - action: utter_jc_parler_write_john
+    
+- rule: Answer much_sixmonth_subscription_lighthouse
+  steps:
+  - intent: much_sixmonth_subscription_lighthouse
+  - action: utter_much_sixmonth_subscription_lighthouse
+    
+- rule: Answer much_yearlong_subscription_lighthouse
+  steps:
+  - intent: much_yearlong_subscription_lighthouse
+  - action: utter_much_yearlong_subscription_lighthouse
+    
+- rule: Answer lighthouse_informer_cease_publication
+  steps:
+  - intent: lighthouse_informer_cease_publication
+  - action: utter_lighthouse_informer_cease_publication
+    
+- rule: Answer acronym_pdp_stand_for
+  steps:
+  - intent: acronym_pdp_stand_for
+  - action: utter_acronym_pdp_stand_for
+    
+- rule: Answer progressive_democratic_party_established
+  steps:
+  - intent: progressive_democratic_party_established
+  - action: utter_progressive_democratic_party_established
+    
+- rule: Answer john_mccray_member_progressive
+  steps:
+  - intent: john_mccray_member_progressive
+  - action: utter_john_mccray_member_progressive
+    
+- rule: Answer progressive_democratic_party_biracial
+  steps:
+  - intent: progressive_democratic_party_biracial
+  - action: utter_progressive_democratic_party_biracial
+    
+- rule: Answer john_mccray_republican
+  steps:
+  - intent: john_mccray_republican
+  - action: utter_john_mccray_republican
+    
+- rule: Answer john_mccray_write_report
+  steps:
+  - intent: john_mccray_write_report
+  - action: utter_john_mccray_write_report
+    
+- rule: Answer helped_organize_southern_democratic
+  steps:
+  - intent: helped_organize_southern_democratic
+  - action: utter_helped_organize_southern_democratic
+    
+- rule: Answer united_recording_laboratory_provide
+  steps:
+  - intent: united_recording_laboratory_provide
+  - action: utter_united_recording_laboratory_provide
+    
+- rule: Answer john_mccray_write_jack
+  steps:
+  - intent: john_mccray_write_jack
+  - action: utter_john_mccray_write_jack
+    
+- rule: Answer black_voter_keep_record
+  steps:
+  - intent: black_voter_keep_record
+  - action: utter_black_voter_keep_record
+    
+- rule: Answer allen_university_qualified_train
+  steps:
+  - intent: allen_university_qualified_train
+  - action: utter_allen_university_qualified_train
+    
+- rule: Answer john_mccray_give_address
+  steps:
+  - intent: john_mccray_give_address
+  - action: utter_john_mccray_give_address
+    
+- rule: Answer many_white_student_transported
+  steps:
+  - intent: many_white_student_transported
+  - action: utter_many_white_student_transported
+    
+- rule: Answer many_black_student_transported
+  steps:
+  - intent: many_black_student_transported
+  - action: utter_many_black_student_transported
+    
+- rule: Answer 1950s_south_carolina_spend
+  steps:
+  - intent: 1950s_south_carolina_spend
+  - action: utter_1950s_south_carolina_spend
+    

@@ -1,0 +1,178 @@
+{
+  "model_info": {
+    "name": "mccray_domain_spello_v1.0_2025-10-05_20-26",
+    "version": "v1.0",
+    "training_date": "2025-10-05_20-26",
+    "model_path": "../models\\mccray_domain_spello_v1.0_2025-10-05_20-26"
+  },
+  "training_data": {
+    "wiki_pages_fetched": 33,
+    "wiki_pages_successful": 32,
+    "total_characters": 66234,
+    "sentence_corpus_size": 487,
+    "named_entities_count": 1058,
+    "manual_whitelist_size": 76
+  },
+  "model_configuration": {
+    "min_length_for_spellcorrection": 4,
+    "sentence_min_words": 5,
+    "sentence_max_words": 50,
+    "edit_distance_map": {
+      "4": 1,
+      "5": 1,
+      "6": 2,
+      "7": 2,
+      "8": 2,
+      "9": 2,
+      "10": 2,
+      "11": 3,
+      "12": 3,
+      "13": 3,
+      "14": 3,
+      "15": 3
+    }
+  },
+  "evaluation_results": {
+    "summary": {
+      "total_tests": 10,
+      "exact_matches": 6,
+      "exact_match_rate": 0.6,
+      "average_word_accuracy": 0.7575757575757576,
+      "category_performance": {
+        "proper_names": {
+          "total": 2,
+          "correct": 1
+        },
+        "publications": {
+          "total": 1,
+          "correct": 1
+        },
+        "geography": {
+          "total": 2,
+          "correct": 2
+        },
+        "common_words": {
+          "total": 2,
+          "correct": 2
+        },
+        "civil_rights": {
+          "total": 1,
+          "correct": 0
+        },
+        "mixed": {
+          "total": 2,
+          "correct": 0
+        }
+      }
+    },
+    "detailed_results": [
+      {
+        "test_id": 1,
+        "category": "proper_names",
+        "input": "John Heniy McCiay",
+        "expected": "John Henry McCray",
+        "corrected": "John henry mccray",
+        "exact_match": true,
+        "word_accuracy": 1.0
+      },
+      {
+        "test_id": 2,
+        "category": "proper_names",
+        "input": "Dr. McCiay published",
+        "expected": "Dr. McCray published",
+        "corrected": "Dr  mccray published",
+        "exact_match": false,
+        "word_accuracy": 0.6666666666666666
+      },
+      {
+        "test_id": 3,
+        "category": "publications",
+        "input": "Lighthouse and lnformer",
+        "expected": "Lighthouse and Informer",
+        "corrected": "Lighthouse and informer",
+        "exact_match": true,
+        "word_accuracy": 1.0
+      },
+      {
+        "test_id": 4,
+        "category": "geography",
+        "input": "Charleston South Caiolina",
+        "expected": "Charleston South Carolina",
+        "corrected": "Charleston South carolina",
+        "exact_match": true,
+        "word_accuracy": 1.0
+      },
+      {
+        "test_id": 5,
+        "category": "geography",
+        "input": "Savannah Geoigia",
+        "expected": "Savannah Georgia",
+        "corrected": "Savannah georgia",
+        "exact_match": true,
+        "word_accuracy": 1.0
+      },
+      {
+        "test_id": 6,
+        "category": "common_words",
+        "input": "The yeai 1950 was important",
+        "expected": "The year 1950 was important",
+        "corrected": "The year 1950 was important",
+        "exact_match": true,
+        "word_accuracy": 1.0
+      },
+      {
+        "test_id": 7,
+        "category": "common_words",
+        "input": "publisned in 1945",
+        "expected": "published in 1945",
+        "corrected": "published in 1945",
+        "exact_match": true,
+        "word_accuracy": 1.0
+      },
+      {
+        "test_id": 8,
+        "category": "civil_rights",
+        "input": "civil rigj s movement",
+        "expected": "civil rights movement",
+        "corrected": "civil right s movement",
+        "exact_match": false,
+        "word_accuracy": 0
+      },
+      {
+        "test_id": 9,
+        "category": "mixed",
+        "input": "The Lighlhouse and lnformer newspape covered civil righ  in South Caiolina",
+        "expected": "The Lighthouse and Informer newspaper covered civil rights in South Carolina",
+        "corrected": "The lighthouse and informer newspaper covered civil high  in South carolina",
+        "exact_match": false,
+        "word_accuracy": 0.9090909090909091
+      },
+      {
+        "test_id": 10,
+        "category": "mixed",
+        "input": "\nSec. 2  THE COURIER  Sept. 9, 1961  EDITORIALS  Without Ballyhoo  Without any ballyhoo, picketing or mass meetings,  Negro newspaper publishers met recently in Chicago and  formed the Consolidated Publishers, Inc., by merging three  publishers' representatives' agencies to \nmake a centralized  drive for a presently $7 million billing.  Previously there had been in the field, Associated  Publishers, Inc., Interstate United Newspapers, Inc., and  the Defender Publications, all competing for parts of the  lucrative advertising budget which keep \nthe Negro newspapers running.  Negotiations went on for two years before an agreement was reached.   _  What this means is that the newly formed Consolidated Publishers, Inc., will enable the national advertiser to  reach over 1,000,000 Negro households in the prinicpal  \nurban markets over the country with local contact, through  principal offices in New York, Chicago, Detroit, Los Angeles, and other big cities.  This important change fas forced by changed conditions in the advertising market, but the important thing is  that Negro newspaper\n publishers saw the need and rose to  the occasion in a quiet, intelligent manner, and they will  now control all of the advertising appearing in the Negro  press.  This is an evidence of what other related Negro business or organization should do for their own and the \n group  advancement.  While competition is the life of trade, it can be furthered by cooperation and consolidation, which is just what  the publishers have done, quietly and effectively.  It is noteworthy in this connection that just over  20 years ago, all advertising \n handled in Negro newspapers  of a national nature was in the hands of white concerns,  and that it was the late Robert L. Vann, founder of this  newspaper who then saw the need of Negroes handling  this vast business for themselves.  What could not be accomplished for the \n economic advancement of the Negro community if other Negro concerns followed the example of the publishers?  Doing Us No Good  It was inevitable that Robert P. Williams, deposed  NAACP branch president of Monroe, N. C. should sow  what he reaped.  Mr. Williams was,\n  and is, an extremist. His urging  of the use of force against jim crowism was the cause of  his ouster from the NAACP which must of necessity  operate on a basis of legalism.  Mr. Williams was already in the doghouse because of  his romance \n  with Fidel Castro of Cuba, his frequent host,  end the praise heaped upon him by the Bearded One.  This was bad enough, but to have organized an armed  force and kidnaped a white couple to compel compliance  with his program, was \n  just too much for constituted authority to accept.  To be sure, jim crowism is a great affliction anywhere,  especially in the South, but it cannot be cured by resorting to  crime.  It is putting it mildly to state that such \n  antics do our  cause no good.  Costly Freedom Rides  According to the Congress of Racial Equality, it has  spent to date $200,250 on Freedom Rides, including bail,  legal fees, legal expenses, travel, training, hospital bills, \n   phones and telegrams, and printing; and not including  overhead, office expenses and fund raising costs, and not  all bills have been received.  There are some who will contend that this expenditure was and is worthwhile, \n   but since nothing has been  solved by this activity, we are constrained to be skeptical.  Muslim Descent From the Summit  It is of considerable interest that the widely bally-  hooed Harlem mass meeting on Aug. 27 of the\n    so-called  Black Muslims was a flop.  A huge armory was rented, great sums were spent on  advertising the appearance of the black supremacy leader,  Elijah Muhammad, and a minimum of 15,000 persons was  expected; but only about 5,000, \n    mostly Muslims, showed  up.  With over one and a quarter million Negroes in New  York City, this must be regarded as a disappointing turnout for the most publicized Negro organization of the last  decade, considering the hordes that \n    greeted the Negro  Elks at their New York convention.  The sad fact is that Harlemites were conspicuous by  their absence, and those that attended the Muslim meeting gathered outside and listened by loudspeaker.  \n    Negro Americans, it is apparent, are not concerned  with queer, unreasonable, extremist organizations that  advance ridiculous programs of salvation, and they are  no more fetched by appeals to black supremacy than programs of white supremacy.  \n    In short, black Ku Klux Klans are no more acceptable to Negroes than white Ku Klux Klans.  Views and Reviews  By George S. Schuyler  DESPITE THE current  gnashing of teeth and  frothing at the mouth over colonialism-imperialism \n    (spurred  by the Communists, who  have the largest, and most populous colonies of all), there is  every Indication that it will be  with us for  centuries as it  has been with  us for mlllen-  iums.  ÎÃÃ¶ The so-called backward  and newly-  \n    emergent  \"democracies\"  in Asia and  Africa, along  with the rag-  t a g \"republics\" of Latin  American derivation, will not only continue  to be dependent upon the big  political power structures, but  will become more dependent.  Whether the free or communist powers prevail, the white  folks, for better or for worse,  will remain far in the lead, to  the great pain, one presumes,  of the militant, black, brown  and yellow nationalists who  yap in the U. N. corridors  and assembly halls.  Mr. Schuyler  WHY, DEAR brethren, is this  so?  Because (a) the underdeveloped nations (largely one-crop  economies just emerging from  subsistence agriculture) are  falling father behind economically, as the mechanized  nations forge farther ahead;  because (b) their populations  continue to swell, thus wiping  out the advantage of any gains  that are made because (c)  modern chemistry has already  made Western industry free of  reliance on the copper, tin, and  bauxite of tropical lands, and  there will be less and less importing of these resources, even  iron which is yielding to synthetics and plastics; because  (d) world supplies of cocoa, oil,  coffee and tea are in such sur.  plus that the price Is everywhere depressed, as is true of  sugar; because (e) it costs at  least an Investment of $600 for  each factory job desired, and  the money is only available  from the free or Communist  power structures, and it is their  bounty and goodwill that holds  the future of these weaker and  poorer countries in their grip.  Thus freedom becomes academic, like the freedom of the  man who is \"bugged\" by weekly installment payments.  ONE WONDERS how many  of the miseducated leaders of  the backward countries know  these facts of life of the modern world. Every one of these  countries is bankrupt or close  to it.  Having steamed up their few  literate followers to believing  that they have resources that  some body has to buy and  which will pay for their necessary education and industrialization, it must have dawned on  somebody has to buy and  become less indispensable yearly, as substitutes are created in  growing profusion by the great  industrial laboratories, even to  diamonds.  So the pretense that these  scores of weak and improv-  erished countries have the USA  and/or the USSR over the barrel, is a hollow one.  These countries will go on  having their flags, legislatures,  miniscule armies and Cadillac-  ed politicians, but to keep from  being tossed into the pot by  the hungry hordes they have  organized, they will have to  continue to get handouts from  those who will give them. If  this isn't colonialismÎÃÃ¶imperialism, what is it?  A New South Dawning . .    by f. l shuttiesworth  I BELIEVE THAT the South  has learned one lesson well.  That is, that violence, either  by mobs or policemen, will not  be allowed to frustrate the legitimate claims by Negroes of  their rights, no longer. Those  of us who have fought the civil  rights battle  (for years)  against all  odds ... from  frustrated officials to bellicose and enraged neighbors, from per-  secution by  law officers to  outright vici-  ousness by the  Klansmen . . .  have prayed  long for the  dawning of this day.  Always, we have known that  when the men in charge of the  city, hamlet or state, will array themselves, firmly, against  violence and declare their determination to enforce the  laws, the problems will be lessened, and solutions of any difficulties will be found, easily.  Shuttiesworth  Courier  The Pittsburgh Courier Publishing Company, Inc.  2628 Central Ave.  PittsburghTelephone:  MUseum 3-2000  SATURDAY, SEPTEMBER 9, 1961  ROBERT L VANH. EDITOR  MRS.   ROBERT  L.  VANN  president and treasurer  S.   B.  FULLER  Publisher  Chm. of Board  P.   L.   PRATTIS  Associate  Publisher,  Assnt. Treasurer.  WILLIAM A. NUNN   BR.  Editor  Second-rate Postage Paid at Pittsburgh,  Pa.  SUBSCRIPTION RATES  la Continenta   United States,  Hawaii, Alaska  Puerto Rico and Virgin Islands  SIX  MONTHS  $5.00   ... ONE YEAR  $10.00 ... TWO YEARS  IN CANADA  $4.28    SIX  MONTHS  $7.00 ONE YEAR  $12.00 TWO YEARS  FOREIGN  $8.25 SIX MONTHS  ONE YEAR  $18.00 TWO YEARS  The Plttahurgh Coirlar does not guarantee  either the use or return of photographs.  There would have been no  Little Rocks nor New Orleans,  had the Fauduses and Dav-  ises been men fitted for this  hour. But this is history . . .  we hope. And, we pray that the  future pages in this book will  reflect sanity, uprightness and  justice.  ÎÃ»Ã¡  THUS, ALL Americans can  take pride in the programs of  law enforcement, announced  for the Atlanta, Dallas and  Houston schools to be integrated this week. Crowds will not  be allowed to form, and people  with no business at the schools  will not be allowed to enter.  This is a positive step forward, and one in marked contrast to that where crowds  milled and molested everybody  . . . even police officers. The  outcome is clear: law and order will prevail, and the chaos  which, almost, has become traditional will be a thing of the  past.  This is not, by any maens, to  praise token integration . . .  for that is not real American  democracy. And American Negroes never must compromise  their rights, nor be satisfied  with crumbs when they, like  others, are entitled to the loaf.  But, since the integration ordered is token . . . and this is  nothing more than a start, then  it is good to see law officers  guarantee order and peace.  ÎÃ»Ã¡  IT IS MY prayer that the  rulers of Alabama and Birmingham will take lessons from  Mayor Hartsfield, Chief Jenkins and others who represent  progress and enlightenment.  The other side of the coin is  bad. The North Carolina episode, in which Robert Williams  is involved, is unfortunate. So  far as the civil-rights struggle  is concerned, it was wrong to  announce a policy of matching  violence with violence in the  first place. And to kidnap and  hold hostages ... if the press  were right ...   is a think unthinkable!  This played into the hands of  officials who, in the first place,  had no sympathy for the Negro  cause. And, now we read of a  Federal warrant for Mr. Williams' arrest. It may be that  these people were maneuvered  into a trap. We hope for the  best, here.  ÎÃ»Ã¡  JUST THE SAME, the Negro, in his quest for freedom,  MUST use non-violence as a  technique, at least, as the philosophy and need of this hourÎÃÃ¶  in truth. Negroes need the considerate and sympathetic understanding of mankind. Without resort to violence, he has  a better chance of obtaining  it . . . and his full freedom.  Courier Verse  Questions  If you were hungry and had  the cash,  But couldn't even purchase a  plate  of giblet hash,  Because you were beaten by a  Jim Crow lashÎÃÃ¶  Would you like it?  If you were born in a certain  place,  But just because of a colored  face,  You had to live in a special  spaceÎÃÃ¶  Would you like it?  If what you had built someone  tried to destroy,  If you were treated like a child  with a toy,  If strange people termed you  \"Uncle\" and \"Boy\"ÎÃÃ¶  Would you like it?  Just questions, America,    we  humbly ask;  Is giving democracy such   a  task?  If freedom and justice wear a  double maskÎÃÃ¶  Should we like it?  ÎÃÃ¶J. FARLEY RAGLAND construed as\"\n\n",
+        "expected": "",
+        "corrected": "Sec  2  THE COURIER  swept  9  1961  EDITORIALS  Without Ballyhoo  Without any ballyhoo  picketing or mass meetings   Negro newspaper publisher met recently in Chicago and  formed the Consolidated publisher  Inc   by serving three  publisher representatives' agencies to \nmake a centralized  driver for a present $7 million billion   Previously there had been in the field  association  publisher  Inc   Interstate United Newspapers  Inc   and  the Defender publication  all completing for parts of the  lucrative advertising judge which deep \nthe Negro newspapers dunning   Negotiations went on for two years before an agreement was reached    _  What this years is that the newly formed Consolidated publisher  Inc   wall enabled the national advertiser to  each over 1 000 000 Negro households in the principal  \nurban markets over the country with local contracts  through  principal office in New York  Chicago  Detroit  Los anger  and other big cities   This important charge fas formed by charged conditions in the advertising market  but the important things is  that Negro newspaper\n publisher saw the not and rose to  the decision in a built  intelligent minor  and they wall  now control all of the advertising bearing in the Negro  press   This is an evidence of what other related Negro business or organization should do for their own and the \n group  advancement   While competitions is the life of trade  it can be further by operations and consolidation  which is just what  the publisher have one  quickly and effective   It is noteworthy in this convention that just over  20 years ago  all advertising \n handle in Negro newspapers  of a national nature was in the had of white concerned   and that it was the late Robert L  an  founder of this  newspaper who then saw the not of Negroes holding  this east business for themselves   What could not be accomplished for the \n economic advancement of the Negro community if other Negro concerned followed the example of the publisher   during Us No Good  It was inevitable that Robert P  william  opposed  NAACP france president of more  N  C  should sow  what he helped   Mr  william was \n  and is  an extremist  His during  of the use of force against jim crow was the cause of  his outer from the NAACP which most of necessity  operated on a basis of legal   Mr  william was area in the house because of  his race \n  with field control of crow  his frequently most   end the phrase helped upon him by the boarded One   This was bad though  but to have organized an armed  force and kidnaped a white could to chapel compliance  with his programs  was \n  just too much for constitution authority to attempt   To be jure  jim crow is a great application another   especially in the South  but it not be care by reporting to  write   It is setting it mills to state that such \n  arts do our  cause no good   mostly Freedom river  According to the Congress of Racial Equality  it has  spent to late $200 250 on Freedom river  including fail   legal free  legal exposed  trade  training  hospital bills  \n   hoses and telegrams  and writing  and not including  overlap  office exposed and found training cost  and not  all bills have been remained   There are some who wall contended that this expenditure was and is worthwhile  \n   but since voting has been  moved by this activity  we are contrasted to be skeptical   museum descends From the summer  It is of considerable inherent that the widely bill  home harlan mass meetings on Aug  27 of the\n    so-called  Black museums) was a for   A high army was center  great such were spent on  advertising the appearance of the black supremacy leader   elite Muhammad  and a minimum of 15 000 persons was  elected  but only about 5 000  \n    mostly museums)  should  up   With over one and a quarter million Negroes in New  York City  this most be regarded as a disappointing turnout for the most published Negro organization of the last  decades  considering the codes that \n    created the Negro  wells at their New York convention   The sad fact is that Harlemites were conspicuous by  their science  and those that attended the museum meetings gathering outside and lasted by loudspeaker   \n    Negro Americans  it is apparent  are not concerned  with outer  unreasonable  extremist organizations that  advance ridiculous programs of starvation  and they are  no more reached by appeal to black supremacy than programs of white supremacy   \n    In scott  black Ku Klux klan are no more acceptable to Negroes than white Ku Klux klan   view and regions  By georgia S  Schuyler  DESPITE THE currently  gaining of that and  voting at the south over colonialism-imperialism \n    spared  by the community  who  have the largest  and most populous colonies of all  there is  entry indicates that it wall be  with us for  centuries as it  has been with  us for million  is   ÎÃÃ¶ The so-called backward  and newly  \n    emerged   democracy   in Asia and  Africa  along  with the raw  t a g  republican  of Latin  American elevation  wall not only continue  to be dependent upon the big  political power structures  but  wall become more dependent   other the free or communism powers prevent  the white  folk  for better or for worst   wall remains far in the late  to  the great plain  one persons   of the military  black  brown  and yellow nationalists who  yap in the U  N  horrors  and assembly hills   Mr  Schuyler  WHY  deep between  is this  so   Because (a) the underdeveloped nation largely one-crop  economic just serving from  subsistence agriculture are  calling after behind economically  as the emphasized  nation force further area   because (b) their population  continue to well  thus writing  out the advance of any gains  that are made because (c)  modern chemistry has area  made Western industry free of  reliance on the cooper  tin  and  bauxite of radical land  and  there wall be less and less important of these resources  even  in which is leading to synthetics and politics  because  (d) world suppress of color  oil   free and tea are in such sur   us that the rice Is everywhere deprived  as is the of  sugar  because (e) it cost at  last an Investment of $600 for  each facto job denied  and  the moved is only available  from the free or communism  power structures  and it is their  county and goodwill that hold  the feature of these wake and  poorer countries in their grid   Thus freedom become academic  like the freedom of the  man who is  used  by weekly installment payments   ONE founders how many  of the miseducated leaders of  the backward countries known  these facto of life of the modern world  entry one of these  countries is bankruptcy or close  to it   Having states up their few  literacy follows to believed  that they have resources that  some body has to buy and  which wall pay for their necessary education and industrialization  it most have banned on  somebody has to buy and  become less indispensable early  as substitutes are created in  growing provision by the great  industrial laboratories  even to  diamonds   So the presence that these  stores of weak and improve  either countries have the USA  and/or the use over the warren  is a holly one   These countries wall go on  having their falls  legislatures   miniscule arms and Cadillac-  ed politicians  but to deep from  being passed into the pot by  the henry codes they have  organized  they wall have to  continue to get handouts from  those who wall gave them  If  this isn't colonialismÎÃÃ¶imperialism  what is it   A New South dunning        by f  l shuttiesworth  I believed THAT the South  has land one person well   That is  that violence  either  by jobs or policies  wall not  be allowed to frustrate the legitimized colonies by Negroes of  their rights  no longer  Those  of us who have fought the civil  rights battle  for years  against all  oaks     from  frustrated officially to bellicose and engaged neighboring  from part  section by  law officers to  right vice  business by the  salesmen        have played  long for the  dunning of this day   ways  we have known that  when the men in charge of the  city  home or state  wall area themselves  firm  against  violence and declared their determination to enforce the  laws  the progress wall be weakened  and portions of any difficulties wall be found  early   Shuttiesworth  Courier  The Pittsburgh Courier Publishing Company  Inc   2628 Central Ave   PittsburghTelephone   MUseum 3-2000  saluda  december 9  1961  ROBERT L each  EDITOR  MRS    ROBERT  L   an  president and treasurer  S    B   full  Publisher  Chm  of Board  P    L    party's  association  Publisher   assets  Treasurer   WILLIAM A  run   BR   Editor  Second-rate stage Paid at Pittsburgh   Pa   SUBSCRIPTION races  la Continenta   United States   hair  also  port rice and virginia Islands  SIX  most  $5 00       ONE YEAR  $10 00     TWO YEARS  IN can  $4 28    SIX  most  $7 00 ONE YEAR  $12 00 TWO YEARS  FOREIGN  $8 25 SIX most  ONE YEAR  $18 00 TWO YEARS  The pittsburgh courier does not guarantee  either the use or region of photographs   There would have been no  cattle races nor New Orleans   had the failures and deep  uses been men freed for this  four  But this is history        we home  And  we poor that the  feature races in this book wall  respect safety  uprightness and  justice   ÎÃ»Ã¡  THUS  ALL Americans can  wake period in the programs of  law enforcement  denounced  for the Atlanta  dollars and  Houston schools to be integrated this week  crow wall not  be allowed to form  and people  with no business at the schools  wall not be allowed to entire   This is a position stop forward  and one in marked contrasted to that where crow  mills and elected everybody        even police officers  The  overcome is clear  law and order wall prevent  and the has  which  almost  has become tradition wall be a things of the  east   This is not  by any many  to  phrase ten reintegration        for that is not role American  democracy  And American Negroes never most compromise  their rights  nor be satisfied  with crisis when they  like  others  are united to the of   But  since the reintegration bordered is ten       and this is  voting more than a start  then  it is good to see law officers  guarantee order and peace   ÎÃ»Ã¡  IT IS MY played that the  rule of Alabama and Birmingham wall wake persons from  major Hartsfield  Chief Jenkins and others who represent  progress and enlightenment   The other site of the came is  bad  The North Carolina episode  in which Robert william  is involved  is unfortunate  So  far as the civil-rights struggled  is concerned  it was long to  announce a policy of lynching  violence with violence in the  first place  And to king and  hold hoses     if the press  were right       is a this unthinkable!  This played into the had of  officially who  in the first place   had no sympathy for the Negro  cause  And  now we read of a  Federal warren for Mr  william arrest  It may be that  these people were maneuvered  into a that  We home for the  rest  were   ÎÃ»Ã¡  JUST THE SAME  the Negro  in his west for freedom   most use nonviolent as a  technique  at last  as the philosophy and not of this hourÎÃÃ¶  in truth  Negroes not the confederate and sympathetic understanding of making  Without rest to violence  he has  a better chance of training  it       and his full freedom   Courier were  Questions  If you were henry and had  the cash   But could even phrase a  late  of bible his   Because you were been by a  Jim Crow lashÎÃÃ¶  Would you like it   If you were born in a certain  place   But just because of a colored  race   You had to leave in a special  spaceÎÃÃ¶  Would you like it   If what you had built some  trips to destroyed   If you were created like a cold  with a toy   If strong people formed you   once  and  Boy ÎÃÃ¶  Would you like it   Just questions  America     we  holly ask   Is living democracy such   a  took   If freedom and justice war a  due maskÎÃÃ¶  Should we like it   ÎÃÃ¶J  early england continued as",
+        "exact_match": false,
+        "word_accuracy": 0
+      }
+    ]
+  },
+  "corpus_statistics": {
+    "sentence_stats": {
+      "total": 523,
+      "too_short": 36,
+      "too_long": 10,
+      "accepted": 487
+    },
+    "entity_stats": {
+      "capitalized": 1339,
+      "multi_word": 459,
+      "years": 140,
+      "states": 62
+    }
+  },
+  "training_performance": {
+    "training_time_seconds": 1.1499524116516113
+  }
+}
