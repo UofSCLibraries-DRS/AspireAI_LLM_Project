@@ -35,11 +35,18 @@ class AbstractTrainer:
         pass
 
     def _model_exists(self):
-        try:
-            AutoModel.from_pretrained(self.output_dir)
-            return True
-        except Exception:
+        """Check if model exists by looking for HuggingFace files."""
+        if not os.path.exists(self.output_dir):
             return False
+
+        required_files = [
+            "config.json",  # Model configuration
+        ]
+
+        # Check if config exists
+        return any(
+            os.path.exists(os.path.join(self.output_dir, f)) for f in required_files
+        )
 
     def train(self):
         if self._model_exists() and not self.force_retrain:
