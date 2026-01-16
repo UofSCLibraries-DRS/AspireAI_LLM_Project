@@ -1,3 +1,4 @@
+from fine_tuning.evaluation import gaico_accuracy
 from dotenv import load_dotenv, find_dotenv
 import os
 import argparse
@@ -5,10 +6,6 @@ from pathlib import Path
 
 from fine_tuning.utils.parse_pipeline import build_pipeline
 from fine_tuning.inference import batched_inference
-from fine_tuning.evaluation import (
-    calculate_bertscore_batched,
-    save_inference_results_with_metrics,
-)
 
 
 def main():
@@ -52,8 +49,7 @@ def main():
         train_step.train()
 
     inf_results = batched_inference(pipeline.inference_jobs)
-    results_with_metrics = calculate_bertscore_batched(inf_results)
-    save_inference_results_with_metrics(results_with_metrics)
+    gaico_accuracy(inf_results)
 
 
 if __name__ == "__main__":

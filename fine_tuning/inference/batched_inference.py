@@ -22,7 +22,7 @@ class InferenceJob:
     stop_sequences: List[str] = field(
         default_factory=list
     )  # Internal logic will fill this field from the prompt template
-    repeat_param: int = 1
+    repeat_param: int = 5
     max_tokens: int = 200
     temperature: float = 1.0
     top_p: float = 1.0
