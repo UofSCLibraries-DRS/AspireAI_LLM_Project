@@ -2,7 +2,6 @@ from typing import List
 import os
 import time
 from datetime import timedelta
-from transformers import AutoModel
 
 
 class AbstractTrainer:
