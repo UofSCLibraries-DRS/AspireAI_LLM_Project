@@ -7,6 +7,8 @@ import torch
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+# import openai
+# import gaico
 
 load_dotenv()
 
@@ -126,3 +128,21 @@ async def generate(req: GenerateRequest = Body(...)):
 
         case _:
             return {"text": f"Unknown model: {model_name}"}
+
+@app.post("/openai")
+async def openai_request(req: GenerateRequest = Body(...)):
+    """
+    Send user message to openai
+    return openai response
+    """
+    return "openai"
+
+@app.post("/gaico")
+async def gaico(req: GenerateRequest = Body(...)):
+    """
+    Compare chatbot responses
+    Send list of 3-tuples [(chatbot-name, chat), ...]
+    Also send the input that resulted in those responses
+    Return gaico analyis
+    """
+    return "gaico"
