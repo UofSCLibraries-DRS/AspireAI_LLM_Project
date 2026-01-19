@@ -73,20 +73,6 @@
       }
     });
 
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.querySelector('.sidebar-overlay');
-      sidebar.classList.toggle('open');
-      overlay.classList.toggle('show');
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle('dark-mode');
-      const themeBtn = document.getElementById('themeToggle');
-      themeBtn.textContent = document.body.classList.contains('dark-mode') ? '🌙' : '☀️';
-      localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-    }
-
     function openModal(modalId) {
       document.getElementById(modalId).style.display = 'flex';
     }

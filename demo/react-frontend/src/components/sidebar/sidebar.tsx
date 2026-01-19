@@ -1,13 +1,16 @@
 import { useState } from "react";
 import PolicyModal from "../modals/policy-modal"
-import './styles.modal.css'
+
+import './sidebar.css'
 
 function Sidebar() {
     // const [isOpen, setOpen] = useState(false);
     const [isPolicyOpen, setPolicyOpen] = useState(false);
 
     return (
+
     <div id="sidebar">
+
       <h2>About the Chatbot</h2>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
         magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo

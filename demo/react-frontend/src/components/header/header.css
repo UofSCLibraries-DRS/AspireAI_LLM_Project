@@ -28,15 +28,13 @@
   font-size: 1.2em;
 }
 
-.menu-toggle {
-  /* background: none; */
-  background-color: 'transparent';
+#menu-toggle {
+  background: none;
   border: none;
   color: white;
   font-size: 1.5em;
   cursor: pointer;
   padding: 5px 10px;
-  display: none;
 }
 
 /* Theme Toggle */

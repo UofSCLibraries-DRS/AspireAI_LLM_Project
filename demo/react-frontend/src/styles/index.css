@@ -1,4 +1,3 @@
-/* defaults above - site colors below */
 /* Reset and Base Styles */
 * {
   margin: 0;
@@ -45,7 +44,7 @@ body {
 #mainContainer {
   display: flex;
   flex: 1;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 /* Chat Container */
@@ -246,36 +245,6 @@ body.dark-mode .system-message {
     display: block;
   }
 
-  #sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 999;
-    transform: translateX(-100%);
-    width: 80%;
-    max-width: 300px;
-  }
-
-  #sidebar.open {
-    transform: translateX(0);
-  }
-
-  .sidebar-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 998;
-  }
-
-  .sidebar-overlay.show {
-    display: block;
-  }
-
   #header h1 {
     font-size: 1.2em;
   }
@@ -313,21 +282,6 @@ body.dark-mode .system-message {
 
 #surveyBtn:hover {
   background: var(--bg-primary);
-}
-
-/* Theme Toggle */
-#themeToggle {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.3em;
-  cursor: pointer;
-  padding: 5px;
-  transition: transform 0.3s;
-}
-
-#themeToggle:hover {
-  transform: scale(1.1);
 }
 
 /* Scrollbar */

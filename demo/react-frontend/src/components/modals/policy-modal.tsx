@@ -1,12 +1,17 @@
-import './styles.modal.css'
+import { useEffect } from 'react';
+import './styles.css'
 
-interface PolicyModalProps {
-    show: boolean;
-    onClose: () => void;
-}
+function PolicyModal({ show, onClose }: { show: boolean; onClose: () => void }) {
 
-function PolicyModal({ show, onClose }: PolicyModalProps) {
-    if (!show) return null;
+    // esc to exit 
+    useEffect(() => {
+    if (!show) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+    }, [show, onClose]);
 
     return(
         <div id="policyModal" className="modal">

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import "styles.css"
 
 function SurveyModal({ show, onClose }: { show: boolean; onClose: () => void }) {
   const [rating, setRating] = useState('');
   const [comments, setComments] = useState('');
 
+  // esc to exit 
   useEffect(() => {
     if (!show) return;
     const onKeyDown = (e: KeyboardEvent) => {
@@ -13,6 +15,7 @@ function SurveyModal({ show, onClose }: { show: boolean; onClose: () => void }) 
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [show, onClose]);
 
+  // survey submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Survey submitted:', { rating, comments });
@@ -21,8 +24,6 @@ function SurveyModal({ show, onClose }: { show: boolean; onClose: () => void }) 
     setComments('');
     onClose();
   };
-
-  if (!show) return null;
 
   const onBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) onClose();
@@ -55,7 +56,7 @@ function SurveyModal({ show, onClose }: { show: boolean; onClose: () => void }) 
             onChange={(e) => setComments(e.target.value)}
           />
 
-          <button type="submit">Submit Feedback</button>
+          <button type="submit" onClick={handleSubmit}>Submit Feedback</button>
         </form>
       </div>
     </div>
