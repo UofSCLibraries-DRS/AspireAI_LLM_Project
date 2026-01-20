@@ -1,20 +1,34 @@
 import { useEffect } from 'react';
-import './styles.css'
+import { closeModal, openModal } from '../../services/modals';
+import './modals.css'
 
 function PolicyModal({ show, onClose }: { show: boolean; onClose: () => void }) {
+    const modalId = "policyModal"
 
-    // esc to exit 
+    // Sync show prop 
     useEffect(() => {
-    if (!show) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
-    }, [show, onClose]);
+        if (show) {
+            openModal(modalId)
+        } else {
+            closeModal(modalId)
+        }
+    }, [show]);
+
+    // Esc to exit
+    useEffect(() => {
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape'  && show) {
+              onClose()
+            }
+        };
+        if(show) {
+            document.addEventListener('keydown', onKeyDown);
+        }
+        return () => document.removeEventListener('keydown', onKeyDown);
+    }, [show, onClose])
 
     return(
-        <div id="policyModal" className="modal">
+        <div id={modalId} className="modal">
             <div className="modal-content">
             <button className="close-modal" onClick={onClose}>×</button>
             <h3>Privacy Policy</h3>

@@ -1,7 +1,7 @@
 import Header from '../components/header/header'
 import Sidebar from '../components/sidebar/sidebar'
 import { useEffect, useRef } from 'react';
-// import useModal from '../hooks/useModal'
+import { toggleSidebar } from '../services/modals'
 
 import '../styles/index.css'
 
@@ -187,15 +187,14 @@ function MainChat() {
                                 <button id="sendBtn" ref={refs.sendBtn} onClick={sendMessage}>Send</button>
                             </div>
                         </div>
-                        {/* onclick */}
+                        {/* TODO: add survey submission */}
                         <button id="surveyBtn" onClick={sendMessage}>View Survey</button>
                     </div>
                 </div> {/* chatContainer */}
             </div> {/* mainContainer */}
 
-            {/* onClick */}
-            {/* mobile overlay */}
-            <div className="sidebar-overlay"/> 
+            {/* menu handling for sidebar on smaller windows / mobile */}
+            <div className="sidebar-overlay" onClick={toggleSidebar}/> 
   
         </div>
     );

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import "styles.css"
+import "modals.css"
 
 function SurveyModal({ show, onClose }: { show: boolean; onClose: () => void }) {
   const [rating, setRating] = useState('');

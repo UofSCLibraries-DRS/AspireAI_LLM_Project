@@ -87,7 +87,7 @@
   display: block;
 }
 
-/* Mobile Responsive */
+/* Small Window / Mobile Responsive */
 @media (max-width: 768px) {
   #sidebar {
     position: fixed;
@@ -98,6 +98,8 @@
     transform: translateX(-100%);
     width: 80%;
     max-width: 300px;
+    max-height: 100vh;
+    height: 100vh;
   }
 
   #sidebar.open {

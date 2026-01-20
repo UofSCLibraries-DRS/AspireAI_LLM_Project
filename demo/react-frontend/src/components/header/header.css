@@ -35,6 +35,7 @@
   font-size: 1.5em;
   cursor: pointer;
   padding: 5px 10px;
+  display: none;
 }
 
 /* Theme Toggle */
@@ -50,4 +51,10 @@
 
 #themeToggle:hover {
   transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  #menu-toggle {
+    display: block;
+  }
 }

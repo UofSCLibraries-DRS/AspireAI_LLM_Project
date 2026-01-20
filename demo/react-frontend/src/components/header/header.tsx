@@ -2,10 +2,6 @@
 import './header.css'
 
 function Header() {
-  // const toggleSidebar = () => {
-  //   // Add your sidebar toggle logic here
-  // };
-
   const toggleSidebar = () => {
       const sidebar = document.getElementById('sidebar');
       const overlay = document.querySelector('.sidebar-overlay');

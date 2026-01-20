@@ -4,24 +4,24 @@ import PolicyModal from "../modals/policy-modal"
 import './sidebar.css'
 
 function Sidebar() {
-    // const [isOpen, setOpen] = useState(false);
     const [isPolicyOpen, setPolicyOpen] = useState(false);
 
     return (
+    <div>
 
     <div id="sidebar">
 
       <h2>About the Chatbot</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
         magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
         consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-        pariatur.</p>
+        pariatur.
+      </p>
 
-        <button className="sidebar-button" onClick={() => setPolicyOpen(true)}>
+      <button className="sidebar-button" onClick={() => setPolicyOpen(true)}>
         View Privacy Policy 
       </button>
-
-      <PolicyModal show={isPolicyOpen} onClose={() => setPolicyOpen(false)} />
     
       {/* temporary link to collections */}
       <button 
@@ -60,6 +60,10 @@ function Sidebar() {
         <li>Personal data about individuals</li>
         <li>Medical or legal advice</li>
       </ul>  */}
+
+    </div>
+
+    <PolicyModal show={isPolicyOpen} onClose={() => setPolicyOpen(false)} />
 
     </div>
 
