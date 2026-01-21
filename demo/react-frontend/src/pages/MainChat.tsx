@@ -185,10 +185,10 @@ function MainChat() {
                                     }}
                                 ></textarea>
                                 <button id="sendBtn" ref={refs.sendBtn} onClick={sendMessage}>Send</button>
+                                {/* TODO: add survey submission */}
+                                <button id="surveyBtn" onClick={sendMessage}>View Survey</button>
                             </div>
                         </div>
-                        {/* TODO: add survey submission */}
-                        <button id="surveyBtn" onClick={sendMessage}>View Survey</button>
                     </div>
                 </div> {/* chatContainer */}
             </div> {/* mainContainer */}

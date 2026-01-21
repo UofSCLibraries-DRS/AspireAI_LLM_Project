@@ -149,7 +149,6 @@ body {
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s;
-  align-self: flex-end;
 }
 
 #sendBtn:hover {
@@ -164,7 +163,7 @@ body {
 .button-row {
   display: flex;
   gap: 10px;
-  align-items: center;
+  align-items: flex-end;
 }
 
 /* Messages */
@@ -264,10 +263,6 @@ body.dark-mode .system-message {
     flex-direction: column;
     align-items: stretch;
   }
-
-  /* #inputArea {
-    flex-direction: row;
-  } */
 
   #userInput {
     width: 120%;
