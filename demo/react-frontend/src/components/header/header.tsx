@@ -1,17 +1,20 @@
 // import ThemeToggle from "../buttons/theme-toggle"
+import { useNavigate } from "react-router-dom";
 import './header.css'
 
 function Header() {
   const toggleSidebar = () => {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.querySelector('.sidebar-overlay');
-      if (sidebar) {
-        sidebar.classList.toggle('open');
-      }
-      if (overlay) {
-        overlay.classList.toggle('show');
-      }
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    if (sidebar) {
+      sidebar.classList.toggle('open');
     }
+    if (overlay) {
+      overlay.classList.toggle('show');
+    }
+  }
+
+  const navigate = useNavigate()
 
   const toggleTheme = () => {
       document.body.classList.toggle('dark-mode');
@@ -26,9 +29,20 @@ function Header() {
     <div id="header">
       <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
         <button id="menu-toggle" onClick={toggleSidebar}>☰</button>
+
         <h1>
           AspireAI LLM Project
         </h1>
+
+        <div className="nav-buttons">
+          <p onClick={() => navigate('/')}>
+            Chat
+          </p>
+          <p onClick={() => navigate('/compare-chat')}>
+            Compare
+          </p>
+        </div>
+
       </div>
       {/* <ThemeToggle/> */}
       <button id="themeToggle" onClick={toggleTheme}>☀️</button>

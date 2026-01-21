@@ -8,3 +8,5 @@ protobuf
 tiktoken
 sentencepiece
 accelerate
+gaico
+openai

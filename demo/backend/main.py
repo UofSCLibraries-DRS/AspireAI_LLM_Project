@@ -1,5 +1,5 @@
 import requests
-import os
+import os, json
 import yaml
 from fastapi import FastAPI, Body
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 # import openai
-# import gaico
+from gaico import Experiment
 
 load_dotenv()
 
@@ -137,12 +137,43 @@ async def openai_request(req: GenerateRequest = Body(...)):
     """
     return "openai"
 
+# @app.post("/gaico")
+# async def gaico(req: GenerateRequest = Body(...)):
+#     """
+#     Compare chatbot responses
+#     Send json format 
+#         one INPUT = user input for chatbots
+#         multiple keys = chatbot names
+#         multiple values = chatbot responses (empty if system still needs to fetch response)
+#     Also send the input that resulted in those responses
+#     Return gaico analyis
+#     """
+#     req
+#     return "gaico"
+
 @app.post("/gaico")
-async def gaico(req: GenerateRequest = Body(...)):
-    """
-    Compare chatbot responses
-    Send list of 3-tuples [(chatbot-name, chat), ...]
-    Also send the input that resulted in those responses
-    Return gaico analyis
-    """
-    return "gaico"
+async def gaico(req: GenerateRequest):
+    user_input = req.input
+    ideal_response = req.ideal
+    chatbot_responses = req.responses
+
+    print(user_input)
+    for model_name, response in chatbot_responses.items():
+        if response == "" or response == None:
+            response = generate(model_name)
+        print(model_name, response)
+
+    exp = Experiment(
+        llm_responses=chatbot_responses,
+        reference_answer=ideal_response
+    )
+
+    results_df = exp.compare(
+        plot=True,
+        output_csv_path="bin/out.csv",
+    )
+
+    print("Scores DataFrame from compare():")
+    print(results_df)
+
+    return {"status": "ok"}

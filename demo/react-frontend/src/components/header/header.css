@@ -38,6 +38,24 @@
   display: none;
 }
 
+/* Nav buttons */
+.nav-buttons {
+  display: flex;
+}
+
+.nav-buttons p {
+  color: white;
+  font-size: 1em;
+  margin: 0;
+  padding: 0px 12px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.nav-buttons p:hover {
+  opacity: 0.8;
+}
+
 /* Theme Toggle */
 #themeToggle {
   background: none;
