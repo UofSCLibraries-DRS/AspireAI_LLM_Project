@@ -1,20 +1,17 @@
 import Header from '../components/header/header'
 import Sidebar from '../components/sidebar/sidebar'
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toggleSidebar } from '../services/modals'
+import ModelSelector from '../components/model-selector/model-selector'
+import { AVAILABLE_MODELS } from '../constants/models'
 
 import '../styles/index.css'
-
-// Model Configuration
-const AVAILABLE_MODELS = [
-    { name: 'Gemma-3-270m, Fine-tuned', apiValue: 'M8' },
-    { name: 'SafeChat', apiValue: 'SC' },
-];
 
 // Generation API endpoint
 const GENERATE_API = "https://54.162.34.113/api/generate";
 
-function MainChat() {
+function Chat() {
+    const [selectedModel, setSelectedModel] = useState('M8')
 
     // Group DOM refs
     const refs = {
@@ -22,7 +19,6 @@ function MainChat() {
         welcome: useRef<HTMLDivElement | null>(null),
         userInput: useRef<HTMLTextAreaElement | null>(null),
         sendBtn: useRef<HTMLButtonElement | null>(null),
-        modelSelector: useRef<HTMLSelectElement | null>(null),
     };
 
     // Handle outside clicks for modal removal
@@ -86,17 +82,16 @@ function MainChat() {
 
     async function sendMessage() {
       const userInput = refs.userInput.current;
-      const modelSelector = refs.modelSelector.current
       const sendBtn = refs.sendBtn.current
 
-      if (!userInput || !modelSelector || !sendBtn ) { return; }
+      if (!userInput || !sendBtn ) { return; }
 
       const message = userInput.value.trim();
       if (!message) { return; }
 
       const selectedModelValue = modelSelector.value;
-      const selectedModel = AVAILABLE_MODELS.find(m => m.apiValue === selectedModelValue);
-      const modelDisplayName = selectedModel ? selectedModel.name : selectedModelValue;
+      const modelData = AVAILABLE_MODELS.find(m => m.apiValue === selectedModelValue);
+      const modelDisplayName = modelData ? modelData.name : selectedModelValue;
 
       addMessage(message, 'user');
       userInput.value = '';
@@ -126,6 +121,8 @@ function MainChat() {
         const botText = data?.text || "No response received";
 
         addMessage(botText, 'bot', modelDisplayName);
+
+        console.log("Curr model: ", modelSelector.value)
 
       } catch (error) {
         console.error('Error:', error);
@@ -157,14 +154,10 @@ function MainChat() {
                     {/* <!-- Input Area --> */}
                     <div id="inputArea">
                         <div className="input-controls">
-                            <select id="modelSelector" ref={refs.modelSelector}>
-                                {/* load models */}
-                                {AVAILABLE_MODELS.map(model => (
-                                    <option key={model.apiValue} value={model.apiValue}>
-                                    {model.name}
-                                    </option>
-                                ))}
-                            </select>
+                            <ModelSelector 
+                                value={selectedModel} 
+                                onChange={setSelectedModel} 
+                            />
                             <div className="button-row">
                                 {/* handle user input (text-box & send) */}
                                 <textarea
@@ -185,8 +178,7 @@ function MainChat() {
                                     }}
                                 ></textarea>
                                 <button id="sendBtn" ref={refs.sendBtn} onClick={sendMessage}>Send</button>
-                                {/* TODO: add survey submission */}
-                                <button id="surveyBtn" onClick={sendMessage}>View Survey</button>
+                                
                             </div>
                         </div>
                     </div>
@@ -200,4 +192,4 @@ function MainChat() {
     );
 }
 
-export default MainChat;
+export default Chat;

@@ -2,7 +2,7 @@
 /venv
 /venv-ipynb
 /venv-jpty
-/venv-backend
+demo/backend/venv*
 __pycache__/
 *.py[cod]
 

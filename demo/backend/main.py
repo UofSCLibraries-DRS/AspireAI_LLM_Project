@@ -125,7 +125,6 @@ async def generate(req: GenerateRequest = Body(...)):
                 return {"text": "Could not connect to SafeChat service"}
             except Exception as e:
                 return {"text": f"SafeChat error: {str(e)}"}
-
         case _:
             return {"text": f"Unknown model: {model_name}"}
 
@@ -154,7 +153,6 @@ async def openai_request(req: GenerateRequest = Body(...)):
 @app.post("/gaico")
 async def gaico(req: GenerateRequest):
     user_input = req.input
-    ideal_response = req.ideal
     chatbot_responses = req.responses
 
     print(user_input)
@@ -165,7 +163,7 @@ async def gaico(req: GenerateRequest):
 
     exp = Experiment(
         llm_responses=chatbot_responses,
-        reference_answer=ideal_response
+        reference_answer=None
     )
 
     results_df = exp.compare(

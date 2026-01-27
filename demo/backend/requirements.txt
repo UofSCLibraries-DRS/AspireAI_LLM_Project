@@ -8,5 +8,5 @@ protobuf
 tiktoken
 sentencepiece
 accelerate
-gaico
+gaico[bertscore,cosine,jsd]
 openai

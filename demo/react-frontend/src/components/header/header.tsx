@@ -38,7 +38,7 @@ function Header() {
           <p onClick={() => navigate('/')}>
             Chat
           </p>
-          <p onClick={() => navigate('/compare-chat')}>
+          <p onClick={() => navigate('/compare')}>
             Compare
           </p>
         </div>
