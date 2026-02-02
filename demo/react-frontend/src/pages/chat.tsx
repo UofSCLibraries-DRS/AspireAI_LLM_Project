@@ -4,81 +4,48 @@ import { useEffect, useRef, useState } from 'react';
 import { toggleSidebar } from '../services/modals'
 import ModelSelector from '../components/model-selector/model-selector'
 import { AVAILABLE_MODELS } from '../constants/models'
+import ChatMessage from "../components/messages/chat-message"
+import SystemMessage from "../components/messages/system-message"
 
 import '../styles/index.css'
 
-// Generation API endpoint
 const GENERATE_API = "https://54.162.34.113/api/generate";
+
+interface Message {
+  id: string;
+  text: string;
+  type: 'user' | 'bot' | 'system';
+  info?: string;
+}
 
 function Chat() {
     const [selectedModel, setSelectedModel] = useState('M8')
+    const [messages, setMessages] = useState<Message[]>([])
 
-    // Group DOM refs
     const refs = {
-        chatLog: useRef<HTMLDivElement | null>(null),
-        welcome: useRef<HTMLDivElement | null>(null),
-        userInput: useRef<HTMLTextAreaElement | null>(null),
-        sendBtn: useRef<HTMLButtonElement | null>(null),
+      chatLog: useRef<HTMLDivElement | null>(null),
+      userInput: useRef<HTMLTextAreaElement | null>(null),
+      sendBtn: useRef<HTMLButtonElement | null>(null),
     };
 
-    // Handle outside clicks for modal removal
     useEffect(() => {
-        const handleOutsideModalClick = (e: MouseEvent) => {
-            const target = e.target as HTMLElement | null;
-            if (target?.classList.contains('modal')) {
-                target.style.display = 'none';
-            }
+      const handleOutsideModalClick = (e: MouseEvent) => {
+          const target = e.target as HTMLElement | null;
+          if (target?.classList.contains('modal')) {
+            target.style.display = 'none';
+          }
         };
         window.addEventListener('click', handleOutsideModalClick);
         return () => window.removeEventListener('click', handleOutsideModalClick);
     }, []);
-    
-    // Add message to chat
-    const addMessage = (text: string, type: string, info = '') => {
-        const chatLog = refs.chatLog.current;
-        const welcome = refs.welcome.current;
-        if (!chatLog) return;
 
-        if (welcome && welcome.parentNode) {
-        welcome.remove();
-        }
-
-        const wrapper = document.createElement('div');
-        wrapper.className = `message-wrapper ${type}`;
-
-        const message = document.createElement('div');
-        message.className = `message ${type}`;
-        message.textContent = text;
-        wrapper.appendChild(message);
-
-        if (info) {
-        const infoDiv = document.createElement('div');
-        infoDiv.className = 'message-info';
-        infoDiv.textContent = info;
-        wrapper.appendChild(infoDiv);
-        }
-
-        chatLog.appendChild(wrapper);
-        chatLog.scrollTop = chatLog.scrollHeight;
-    };
-
-    // 
-    function addSystemMessage(text: string) {
+    // Auto-scroll to bottom when messages change
+    useEffect(() => {
       const chatLog = refs.chatLog.current;
-      const welcome = refs.welcome.current;
-      if (!chatLog) return;
-
-      if (welcome && welcome.parentNode) {
-        welcome.remove();
+      if (chatLog) {
+        chatLog.scrollTop = chatLog.scrollHeight;
       }
-
-      const message = document.createElement('div');
-      message.className = 'system-message';
-      message.textContent = text;
-      chatLog.appendChild(message);
-      chatLog.scrollTop = chatLog.scrollHeight;
-    }
-
+    }, [messages]);
 
     async function sendMessage() {
       const userInput = refs.userInput.current;
@@ -89,11 +56,17 @@ function Chat() {
       const message = userInput.value.trim();
       if (!message) { return; }
 
-      const selectedModelValue = modelSelector.value;
+      const selectedModelValue = selectedModel;
       const modelData = AVAILABLE_MODELS.find(m => m.apiValue === selectedModelValue);
       const modelDisplayName = modelData ? modelData.name : selectedModelValue;
 
-      addMessage(message, 'user');
+      // Add user message to state 
+      setMessages(prev => [...prev, { 
+        id: Date.now().toString(), 
+        text: message, 
+        type: 'user' 
+      }]);
+      
       userInput.value = '';
       userInput.style.height = 'auto';
 
@@ -120,13 +93,22 @@ function Chat() {
         const data = await response.json();
         const botText = data?.text || "No response received";
 
-        addMessage(botText, 'bot', modelDisplayName);
+        setMessages(prev => [...prev, { 
+          id: Date.now().toString(), 
+          text: botText, 
+          type: 'bot', 
+          info: modelDisplayName 
+        }]);
 
-        console.log("Curr model: ", modelSelector.value)
+        console.log("Curr model: ", selectedModel)
 
       } catch (error) {
         console.error('Error:', error);
-        addSystemMessage('The response engine encountered an error. Please try again.');
+        setMessages(prev => [...prev, { 
+          id: Date.now().toString(), 
+          text: 'The response engine encountered an error. Please try again.', 
+          type: 'system' 
+        }]);
       } finally {
         sendBtn.disabled = false;
         sendBtn.textContent = 'Send';
@@ -141,17 +123,25 @@ function Chat() {
   
                 <Sidebar/>
 
-                {/* <!-- Chat Container --> */}
                 <div id="chatContainer">
                     
                     <div id="chatLog" ref={refs.chatLog}>
-                        <div id="welcomeScreen" ref={refs.welcome}>
-                            <h2>Welcome to AspireAI LLM Project</h2>
-                            <p>Start a conversation by typing your question below. Select a model from the dropdown to begin.</p>
-                        </div>
+                        {messages.length === 0 ? (
+                          <div id="welcomeScreen">
+                              <h2>Welcome to AspireAI LLM Project</h2>
+                              <p>Start a conversation by typing your question below. Select a model from the dropdown to begin.</p>
+                          </div>
+                        ) : (
+                          messages.map(msg => 
+                            msg.type === 'system' ? (
+                              <SystemMessage key={msg.id} text={msg.text} />
+                            ) : (
+                              <ChatMessage key={msg.id} text={msg.text} type={msg.type} info={msg.info} />
+                            )
+                          )
+                        )}
                     </div>
 
-                    {/* <!-- Input Area --> */}
                     <div id="inputArea">
                         <div className="input-controls">
                             <ModelSelector 
@@ -159,7 +149,6 @@ function Chat() {
                                 onChange={setSelectedModel} 
                             />
                             <div className="button-row">
-                                {/* handle user input (text-box & send) */}
                                 <textarea
                                     id="userInput"
                                     ref={refs.userInput}
@@ -178,14 +167,12 @@ function Chat() {
                                     }}
                                 ></textarea>
                                 <button id="sendBtn" ref={refs.sendBtn} onClick={sendMessage}>Send</button>
-                                
                             </div>
                         </div>
                     </div>
-                </div> {/* chatContainer */}
-            </div> {/* mainContainer */}
+                </div>
+            </div>
 
-            {/* menu handling for sidebar on smaller windows / mobile */}
             <div className="sidebar-overlay" onClick={toggleSidebar}/> 
   
         </div>

@@ -1,5 +1,5 @@
 // import ThemeToggle from "../buttons/theme-toggle"
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import './header.css'
 
 function Header() {
@@ -14,7 +14,7 @@ function Header() {
     }
   }
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   const toggleTheme = () => {
       document.body.classList.toggle('dark-mode');
@@ -34,14 +34,14 @@ function Header() {
           AspireAI LLM Project
         </h1>
 
-        <div className="nav-buttons">
+        {/* <div className="nav-buttons">
           <p onClick={() => navigate('/')}>
             Chat
           </p>
           <p onClick={() => navigate('/compare')}>
             Compare
           </p>
-        </div>
+        </div> */}
 
       </div>
       {/* <ThemeToggle/> */}

@@ -233,6 +233,26 @@ body {
   text-align: right;
 }
 
+.message-below {
+  display: flex;
+  justify-content: space-between;
+}
+
+.compare-button {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 3px;
+  margin-right: 5px;
+  font-size: 0.75em;
+  color: #007bff;
+}
+
+.compare-button svg {
+  width: 16px;
+  height: 16px;
+}
+
 /* System Messages */
 .system-message {
   align-self: center;
@@ -316,4 +336,15 @@ body.dark-mode .system-message {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-red);
+}
+
+.clickable-item,
+.clickable-icon {
+  cursor: pointer;
+  user-select: none;
+}
+
+.clickable-item:hover,
+.clickable-icon:hover {
+  opacity: 0.8;
 }
