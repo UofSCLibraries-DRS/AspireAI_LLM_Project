@@ -4,9 +4,10 @@ import {
   Route
 } from "react-router"
 
-import MainChat from "./pages/MainChat"
-import CompareChat from "./pages/CompareChat"
-import CompareResults from "./pages/MainChat"
+import MainChat from "./pages/chat"
+import CompareModels from './pages/CompareModels'  
+// import PromptSelect from './pages/CompareModels/prompt-select' 
+// import Results from './pages/CompareModels/results'  
 import './styles/index.css'
 
 function App() {
@@ -14,8 +15,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<MainChat />} />
-        <Route path="/compare-chat" element={<CompareChat />} />
-        <Route path="/compare-results" element={<CompareResults />} />
+        <Route path="/compare" element={<CompareModels /> } />
       </Routes>
     </Router>
   );
