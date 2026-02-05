@@ -14,7 +14,6 @@ boto3==1.24.86
 botocore==1.27.86
 CacheControl==0.12.11
 cachetools==4.2.4
-certifi @ file:///C:/b/abs_4f5wo627a3/croots/recipe/certifi_1663615677642/work/certifi
 cffi==1.15.1
 chardet==3.0.4
 charset-normalizer==2.1.1

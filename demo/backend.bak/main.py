@@ -71,34 +71,7 @@ class GenerateRequest(BaseModel):
     max_new_tokens: int = 128
 
 
-@app.post("/generate")
-async def generate(req: GenerateRequest = Body(...)):
-    prompt = req.prompt
-    model_name = req.model
-    max_new_tokens = req.max_new_tokens
-
-    match model_name:
-        case "M8":
-            # Apply prompt template
-            templated_prompt = TEMPLATE.format(user_prompt=prompt)
-
-            # Tokenize and generate
-            inputs = tokenizer(templated_prompt, return_tensors="pt").to(model.device)
-            with torch.no_grad():
-                out = model.generate(
-                    **inputs,
-                    max_new_tokens=max_new_tokens,
-                    do_sample=True,
-                    temperature=0.5,
-                )
-
-            # Decode output
-            full_text = tokenizer.decode(out[0], skip_special_tokens=True)
-            trimmed = post_process(full_text, templated_prompt)
-
-            return {"text": trimmed}
-        case "SC":
-            try:
+try:
                 webhook_response = requests.post(
                     f"{SAFECHAT_URL}/webhooks/rest/webhook",
                     headers={"Content-Type": "application/json"},
@@ -125,9 +98,6 @@ async def generate(req: GenerateRequest = Body(...)):
                 return {"text": "Could not connect to SafeChat service"}
             except Exception as e:
                 return {"text": f"SafeChat error: {str(e)}"}
-
-        case _:
-            return {"text": f"Unknown model: {model_name}"}
 
 @app.post("/openai")
 async def openai_request(req: GenerateRequest = Body(...)):

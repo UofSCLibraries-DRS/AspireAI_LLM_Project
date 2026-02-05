@@ -1,0 +1,5 @@
+template: | # This template may have an issue due to "<title>" being tokenized as "<title" + ">", but it shoudln't be too bad
+  <question>{user_prompt}</question> 
+  <answer>
+template_stop: </answer> # Step sequence for model training
+stop_sequences: ["</answer>", "<answer>"] # Used during inference

@@ -1,0 +1,4 @@
+model_id: "arn:aws:bedrock:us-east-1:777384741382:imported-model/1a7xtypu9p6v"
+model_temperature: 0.5
+prompt_template_path: configs/prompt_templates/m9.yaml
+region_name: us-east-1
