@@ -144,7 +144,8 @@ def build_pipeline(
                         q: str = row["question"]
                         gt_short: str = row["answer_short"]
                         gt_ideal: str = row["answer_ideal"]
-                        gt_agg: str = row.get("answer_agg", "")
+                        gt_short_agg: str = row.get("answer_short_agg", "")
+                        gt_ideal_agg: str = row.get("answer_ideal_agg", "")
                         dataset: str = row["dataset"]
                         subset: str = row["subset"]
 
@@ -161,7 +162,8 @@ def build_pipeline(
                                 prompt=q,
                                 ground_truth_short=gt_short,
                                 ground_truth_ideal=gt_ideal,
-                                ground_truth_agg=gt_agg,
+                                ground_truth_short_agg=gt_short_agg,
+                                ground_truth_ideal_agg=gt_ideal_agg,
                                 dataset=dataset,
                                 subset=subset,
                             )

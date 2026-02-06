@@ -30,7 +30,7 @@ def gaico_accuracy(
     results: List[InferenceResult],
 ) -> None:
     # Define ground truth variants to process
-    variants = ["short", "ideal", "agg"]
+    variants = ["short", "ideal", "short_agg", "ideal_agg"]
 
     for variant in variants:
         ground_truth_attr = f"ground_truth_{variant}"

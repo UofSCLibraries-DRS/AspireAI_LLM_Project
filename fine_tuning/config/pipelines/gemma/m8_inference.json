@@ -1,0 +1,21 @@
+[
+    {
+        "model": {
+            "start": "M8",
+            "train_steps": [],
+            "output": "M8"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    }
+]

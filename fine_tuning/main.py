@@ -5,7 +5,7 @@ import argparse
 from pathlib import Path
 
 from fine_tuning.utils.parse_pipeline import build_pipeline
-from fine_tuning.inference import batched_inference
+from fine_tuning.inference import batched_inference, save_inference_results
 
 
 def main():
@@ -49,6 +49,7 @@ def main():
         train_step.train()
 
     inf_results = batched_inference(pipeline.inference_jobs)
+    save_inference_results(inf_results)
     gaico_accuracy(inf_results)
 
 

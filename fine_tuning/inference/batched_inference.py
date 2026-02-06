@@ -20,7 +20,8 @@ class InferenceJob:
     prompt: str
     ground_truth_short: str
     ground_truth_ideal: str
-    ground_truth_agg: str
+    ground_truth_short_agg: str
+    ground_truth_ideal_agg: str
     dataset: str
     subset: str
     stop_sequences: List[str] = field(
@@ -243,11 +244,20 @@ def save_inference_results(inference_results: List[InferenceResult]):
     # Append each response to the corresponding csv
     for (model, prompt_template), results in grouped.items():
         prompt_name = os.path.basename(prompt_template).removesuffix(".yaml")
-        csv_path = os.path.join(model, "results", prompt_name)
+        csv_path = os.path.join(model, "results", prompt_name, "inference_results.csv")
 
         os.makedirs(os.path.dirname(csv_path), exist_ok=True)
 
-        fieldnames = ["question", "answer", "response", "dataset", "subset"]
+        fieldnames = [
+            "question",
+            "response",
+            "ground_truth_short",
+            "ground_truth_ideal",
+            "ground_truth_short_agg",
+            "ground_truth_ideal_agg",
+            "dataset",
+            "subset",
+        ]
 
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(
@@ -262,10 +272,11 @@ def save_inference_results(inference_results: List[InferenceResult]):
                     writer.writerow(
                         {
                             "question": result.prompt,
+                            "response": response,
                             "ground_truth_short": result.ground_truth_short,
                             "ground_truth_ideal": result.ground_truth_ideal,
-                            "ground_truth_agg": result.ground_truth_agg,
-                            "response": response,
+                            "ground_truth_short_agg": result.ground_truth_short_agg,
+                            "ground_truth_ideal_agg": result.ground_truth_ideal_agg,
                             "dataset": result.dataset,
                             "subset": result.subset,
                         }

@@ -12,7 +12,6 @@ PIPELINE_SCHEMA = {
                     "train_steps": {
                         "type": "array",
                         "items": {"type": "string"},
-                        "minItems": 1,
                     },
                     "output": {"type": "string"},
                 },
