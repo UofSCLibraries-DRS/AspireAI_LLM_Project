@@ -18,7 +18,11 @@ class InferenceJob:
     model: str
     prompt_template: str  # Path to .yaml file containing the prompt template
     prompt: str
-    ground_truth: str
+    ground_truth_short: str
+    ground_truth_ideal: str
+    ground_truth_agg: str
+    dataset: str
+    subset: str
     stop_sequences: List[str] = field(
         default_factory=list
     )  # Internal logic will fill this field from the prompt template
@@ -233,17 +237,17 @@ def save_inference_results(inference_results: List[InferenceResult]):
     # Group by model and output file
     grouped = defaultdict(list)
     for result in inference_results:
-        key = (result.model, result.output_file, result.prompt_template)
+        key = (result.model, result.prompt_template)
         grouped[key].append(result)
 
     # Append each response to the corresponding csv
-    for (model, output_file, prompt_template), results in grouped.items():
+    for (model, prompt_template), results in grouped.items():
         prompt_name = os.path.basename(prompt_template).removesuffix(".yaml")
-        csv_path = os.path.join(model, "results", prompt_name, output_file)
+        csv_path = os.path.join(model, "results", prompt_name)
 
         os.makedirs(os.path.dirname(csv_path), exist_ok=True)
 
-        fieldnames = ["question", "answer", "response"]
+        fieldnames = ["question", "answer", "response", "dataset", "subset"]
 
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(
@@ -258,7 +262,11 @@ def save_inference_results(inference_results: List[InferenceResult]):
                     writer.writerow(
                         {
                             "question": result.prompt,
-                            "answer": result.ground_truth,
+                            "ground_truth_short": result.ground_truth_short,
+                            "ground_truth_ideal": result.ground_truth_ideal,
+                            "ground_truth_agg": result.ground_truth_agg,
                             "response": response,
+                            "dataset": result.dataset,
+                            "subset": result.subset,
                         }
                     )
