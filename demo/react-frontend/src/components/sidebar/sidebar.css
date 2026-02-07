@@ -6,10 +6,10 @@
   overflow-y: auto;
   padding: 20px;
   transition: transform 0.3s ease, background 0.3s;
-  max-height: calc(100vh - 2rem);
+  height: 100vh;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding-bottom: 50px;
+  padding-bottom: 80px;
 }
 
 #sidebar h2 {
@@ -87,7 +87,7 @@
   display: block;
 }
 
-/* Small Window / Mobile Responsive */
+/* Change in size adjustment */
 @media (max-width: 768px) {
   #sidebar {
     position: fixed;
@@ -100,6 +100,7 @@
     max-width: 300px;
     max-height: 100vh;
     height: 100vh;
+    padding-bottom: 0;
   }
 
   #sidebar.open {

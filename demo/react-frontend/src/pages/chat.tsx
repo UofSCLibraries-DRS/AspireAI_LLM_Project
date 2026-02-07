@@ -36,7 +36,34 @@ function Chat() {
           }
         };
         window.addEventListener('click', handleOutsideModalClick);
-        return () => window.removeEventListener('click', handleOutsideModalClick);
+
+        const handleResize = () => {
+          const sidebar = document.getElementById('sidebar');
+          const overlay = document.querySelector('.sidebar-overlay');
+          const chatLog = refs.chatLog.current;
+
+          // Preserve scroll positions
+          const pageScrollY = window.scrollY;
+          const chatScrollTop = chatLog?.scrollTop ?? 0;
+
+          if (window.innerWidth > 768) {
+            if (sidebar) sidebar.classList.remove('open');
+            if (overlay) overlay.classList.remove('show');
+          }
+
+          requestAnimationFrame(() => {
+            window.scrollTo(0, pageScrollY);
+            if (chatLog) chatLog.scrollTop = chatScrollTop;
+          });
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => {
+          window.removeEventListener('click', handleOutsideModalClick);
+          window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     // Auto-scroll to bottom when messages change

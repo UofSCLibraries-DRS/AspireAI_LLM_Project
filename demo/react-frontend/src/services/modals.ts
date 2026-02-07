@@ -11,6 +11,7 @@ export function closeModal(modalId: string) {
 export const toggleSidebar = () => {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.querySelector('.sidebar-overlay');
+
   if (sidebar) {
     sidebar.classList.toggle('open');
   }

@@ -61,10 +61,17 @@ body {
 /* Chat Container */
 #chatContainer {
   flex: 1;
+  background: var(--bg-secondary);
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  background: var(--bg-secondary);
-  transition: background 0.3s;
+  height: 100vh;
+  transition: background 0.3s, margin-left 0.3s ease;
+  position: relative;
+}
+
+#chatContainer {
+    transition: margin-left 0.3s ease, width 0.3s ease, background 0.3s;
 }
 
 #chatLog {
@@ -74,6 +81,14 @@ body {
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+
+#chatLog .message-container:has(> .alternative-options-container) {
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: stretch;
+  padding: 0;
 }
 
 /* Welcome Screen */
@@ -116,7 +131,7 @@ body {
   flex-direction: column;
   gap: 10px;
   flex: 1;
-  padding-bottom: 40px;
+  padding-bottom: 60px;
 }
 
 #modelSelector {
@@ -294,7 +309,7 @@ body.dark-mode .system-message {
   }
 
   #userInput {
-    width: 120%;
+    width: 100%;
   }
 
   #sendBtn {
