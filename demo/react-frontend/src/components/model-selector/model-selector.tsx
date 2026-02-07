@@ -1,13 +1,12 @@
-import { useModels } from "../../hooks/useModels";
+import type { ModelOption } from "../../hooks/useModels";
 
 interface ModelSelectorProps {
     value: string
     onChange: (modelValue: string) => void
+    models: ModelOption[]
 }
 
-function ModelSelector({ value, onChange }: ModelSelectorProps) {
-    const { models } = useModels();
-
+function ModelSelector({ value, onChange, models }: ModelSelectorProps) {
     return (
         <select 
             id="modelSelector" 

@@ -5,7 +5,7 @@ import { toggleSidebar } from '../services/modals'
 import ModelSelector from '../components/model-selector/model-selector'
 import ChatMessage from "../components/messages/chat-message"
 import SystemMessage from "../components/messages/system-message"
-import { GENERATE_API } from "../api";
+import { generateResponse } from "../services/apiClient";
 import { useModels } from '../hooks/useModels';
 
 import '../styles/index.css'
@@ -74,6 +74,7 @@ function Chat() {
       }
     }, [messages]);
 
+    // Send message to model
     async function sendMessage() {
       const userInput = refs.userInput.current;
       const sendBtn = refs.sendBtn.current
@@ -101,23 +102,7 @@ function Chat() {
       sendBtn.textContent = 'Sending...';
 
       try {
-        const response = await fetch(GENERATE_API, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            prompt: message,
-            model: selectedModelValue,
-            max_new_tokens: 128
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error(`API error ${response.status}`);
-        }
-
-        const data = await response.json();
+        const data = await generateResponse(message, selectedModelValue);
         const botText = data?.text || "No response received";
 
         setMessages(prev => [...prev, { 
@@ -174,6 +159,7 @@ function Chat() {
                             <ModelSelector 
                                 value={selectedModel} 
                                 onChange={setSelectedModel} 
+                                models={models}
                             />
                             <div className="button-row">
                                 <textarea

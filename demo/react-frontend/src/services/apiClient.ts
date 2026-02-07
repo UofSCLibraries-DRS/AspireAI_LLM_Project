@@ -1,5 +1,16 @@
-// API calls
-export const GENERATE_API = "https://54.162.34.113/api/generate";
+// API calls (env-based)
+const API_BASE = (import.meta.env.VITE_API_BASE as string);
+
+function buildEndpoint(path: string) {
+  // console.log(API_BASE)
+  if (API_BASE.startsWith("/")) {
+    return `${API_BASE}${path}`;
+  }
+  return new URL(path, API_BASE).toString();
+}
+
+export const GENERATE_API = buildEndpoint("/generate");
+export const MODELS_API = buildEndpoint("/models");
 
 export async function generateResponse(prompt: string, model: string) {
   const response = await fetch(GENERATE_API, {
@@ -9,5 +20,11 @@ export async function generateResponse(prompt: string, model: string) {
   });
 
   if (!response.ok) throw new Error(`API error ${response.status}`);
+  return response.json();
+}
+
+export async function fetchModels() {
+  const response = await fetch(MODELS_API);
+  if (!response.ok) throw new Error(`Models API error ${response.status}`);
   return response.json();
 }
