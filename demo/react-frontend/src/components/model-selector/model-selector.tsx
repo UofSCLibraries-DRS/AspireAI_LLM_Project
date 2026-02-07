@@ -1,4 +1,4 @@
-import { AVAILABLE_MODELS } from '../../constants/models'
+import { useModels } from "../../hooks/useModels";
 
 interface ModelSelectorProps {
     value: string
@@ -6,13 +6,15 @@ interface ModelSelectorProps {
 }
 
 function ModelSelector({ value, onChange }: ModelSelectorProps) {
+    const { models } = useModels();
+
     return (
         <select 
             id="modelSelector" 
             value={value}
             onChange={(e) => onChange(e.target.value)}
         >
-            {AVAILABLE_MODELS.map(model => (
+            {models.map(model => (
                 <option key={model.apiValue} value={model.apiValue}>
                     {model.name}
                 </option>

@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+transformers
+torch
+pyyaml
+python-dotenv
+protobuf
+tiktoken
+sentencepiece
+accelerate
+gaico[bertscore,cosine,jsd]
+openai
+boto3

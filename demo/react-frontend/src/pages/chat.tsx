@@ -3,13 +3,12 @@ import Sidebar from '../components/sidebar/sidebar'
 import { useEffect, useRef, useState } from 'react';
 import { toggleSidebar } from '../services/modals'
 import ModelSelector from '../components/model-selector/model-selector'
-import { AVAILABLE_MODELS } from '../constants/models'
 import ChatMessage from "../components/messages/chat-message"
 import SystemMessage from "../components/messages/system-message"
+import { GENERATE_API } from "../api";
+import { useModels } from '../hooks/useModels';
 
 import '../styles/index.css'
-
-const GENERATE_API = "https://54.162.34.113/api/generate";
 
 interface Message {
   id: string;
@@ -21,6 +20,7 @@ interface Message {
 function Chat() {
     const [selectedModel, setSelectedModel] = useState('M8')
     const [messages, setMessages] = useState<Message[]>([])
+    const { models } = useModels();
 
     const refs = {
       chatLog: useRef<HTMLDivElement | null>(null),
@@ -57,7 +57,7 @@ function Chat() {
       if (!message) { return; }
 
       const selectedModelValue = selectedModel;
-      const modelData = AVAILABLE_MODELS.find(m => m.apiValue === selectedModelValue);
+      const modelData = models.find(m => m.apiValue === selectedModelValue);
       const modelDisplayName = modelData ? modelData.name : selectedModelValue;
 
       // Add user message to state 
