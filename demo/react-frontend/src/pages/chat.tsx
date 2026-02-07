@@ -30,13 +30,6 @@ function Chat() {
 
     // handle all modals + behavior of sidebar modal 
     useEffect(() => {
-      const handleOutsideModalClick = (e: MouseEvent) => {
-          const target = e.target as HTMLElement | null;
-          if (target?.classList.contains('modal')) {
-            target.style.display = 'none';
-          }
-        };
-        window.addEventListener('click', handleOutsideModalClick);
 
         const handleResize = () => {
           const sidebar = document.getElementById('sidebar');
@@ -63,7 +56,6 @@ function Chat() {
         handleResize();
 
         return () => {
-          window.removeEventListener('click', handleOutsideModalClick);
           window.removeEventListener('resize', handleResize);
         };
     }, []);

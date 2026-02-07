@@ -1,4 +1,6 @@
 import { GitCompareArrows } from 'lucide-react';
+import GaicoIntroModal from '../../components/modals/gaico-intro-modal'
+import { useState } from 'react';
 
 interface ChatMessageProps {
   text: string;
@@ -7,9 +9,7 @@ interface ChatMessageProps {
 }
 
 function ChatMessage({ text, type, info }: ChatMessageProps) {
-  const handleCompare = () => {
-
-  }
+  const [isModalOpen, setModalOpen] = useState(false);
 
   return (
     <div className={`message-wrapper ${type}`}>
@@ -18,13 +18,15 @@ function ChatMessage({ text, type, info }: ChatMessageProps) {
         {info && <div className="message-info">{info}</div>}
         {type === "bot" && (
           <div className="clickable-icon">
-          <div className="compare-button" onClick={handleCompare}>
+          <div className="compare-button" onClick={() => setModalOpen(true)}>
             <div>GAICo</div>
-            <GitCompareArrows onClick={handleCompare}/>
+            <GitCompareArrows onClick={() => setModalOpen(true)}/>
           </div>
           </div>
         )}
       </div>
+
+      <GaicoIntroModal show={isModalOpen} onClose={() => setModalOpen(false)} />
     </div>
   );
 }
