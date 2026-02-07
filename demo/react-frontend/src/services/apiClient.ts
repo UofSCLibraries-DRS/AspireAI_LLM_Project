@@ -1,4 +1,6 @@
-// API calls (env-based)
+import type { GaicoRequest } from '../constants/types';
+
+// API calls from .env file (development or production)
 const API_BASE = (import.meta.env.VITE_API_BASE as string);
 
 function buildEndpoint(path: string) {
@@ -11,8 +13,10 @@ function buildEndpoint(path: string) {
 
 export const GENERATE_API = buildEndpoint("/generate");
 export const MODELS_API = buildEndpoint("/models");
+export const GAICO_API = buildEndpoint("/gaico");
 
 export async function generateResponse(prompt: string, model: string) {
+  console.log(prompt, model)
   const response = await fetch(GENERATE_API, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -26,5 +30,16 @@ export async function generateResponse(prompt: string, model: string) {
 export async function fetchModels() {
   const response = await fetch(MODELS_API);
   if (!response.ok) throw new Error(`Models API error ${response.status}`);
+  return response.json();
+}
+
+export async function gaico(input: GaicoRequest) {
+  const response = await fetch(GAICO_API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+
+  if (!response.ok) throw new Error(`GAICo API error ${response.status}`);
   return response.json();
 }

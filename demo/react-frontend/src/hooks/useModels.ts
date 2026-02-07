@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchModels } from '../services/apiClient';
-
-export interface ModelOption {
-  name: string;
-  apiValue: string;
-}
+import type { ModelOption } from "../constants/types"
 
 // get models from api
 export function useModels() {

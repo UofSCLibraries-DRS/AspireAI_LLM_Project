@@ -28,6 +28,7 @@ function Chat() {
       sendBtn: useRef<HTMLButtonElement | null>(null),
     };
 
+    // handle all modals + behavior of sidebar modal 
     useEffect(() => {
       const handleOutsideModalClick = (e: MouseEvent) => {
           const target = e.target as HTMLElement | null;
@@ -46,6 +47,7 @@ function Chat() {
           const pageScrollY = window.scrollY;
           const chatScrollTop = chatLog?.scrollTop ?? 0;
 
+          // Ensure screen does not stay gray upon resize (sidebar behavior)
           if (window.innerWidth > 768) {
             if (sidebar) sidebar.classList.remove('open');
             if (overlay) overlay.classList.remove('show');
@@ -74,7 +76,14 @@ function Chat() {
       }
     }, [messages]);
 
-    // Send message to model
+    // Create id (time + uuid)
+    const createId = () => {
+      return (typeof crypto !== 'undefined' && 'randomUUID' in crypto)
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    }
+
+    // Function to send message
     async function sendMessage() {
       const userInput = refs.userInput.current;
       const sendBtn = refs.sendBtn.current
@@ -106,7 +115,7 @@ function Chat() {
         const botText = data?.text || "No response received";
 
         setMessages(prev => [...prev, { 
-          id: Date.now().toString(), 
+          id: createId(), 
           text: botText, 
           type: 'bot', 
           info: modelDisplayName 
@@ -117,7 +126,7 @@ function Chat() {
       } catch (error) {
         console.error('Error:', error);
         setMessages(prev => [...prev, { 
-          id: Date.now().toString(), 
+          id: createId(), 
           text: 'The response engine encountered an error. Please try again.', 
           type: 'system' 
         }]);

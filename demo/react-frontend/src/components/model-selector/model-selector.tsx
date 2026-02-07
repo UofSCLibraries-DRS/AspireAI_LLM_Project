@@ -1,4 +1,4 @@
-import type { ModelOption } from "../../hooks/useModels";
+import type { ModelOption } from "../../constants/types";
 
 interface ModelSelectorProps {
     value: string
@@ -7,6 +7,8 @@ interface ModelSelectorProps {
 }
 
 function ModelSelector({ value, onChange, models }: ModelSelectorProps) {
+    console.log(models)
+    console.log(value)
     return (
         <select 
             id="modelSelector" 
