@@ -1,5 +1,5 @@
 {
     "trainer": "FullSFTTrainer",
     "data": "sft/NQ_4000.csv",
-    "config": "ft/training/gemma/full_sft.json"
+    "config": "ft/training/gemma/full_sft.02.json"
 }

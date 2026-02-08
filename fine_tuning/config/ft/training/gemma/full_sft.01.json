@@ -1,0 +1,15 @@
+{
+    "training_args": {
+        "num_train_epochs": 2,
+        "per_device_train_batch_size": 8,
+        "learning_rate": 5e-5,
+        "lr_scheduler_type": "cosine",
+        "warmup_steps": 100,
+        "save_strategy": "epoch",
+        "logging_strategy": "epoch",
+        "optim": "adamw_torch",
+        "weight_decay": 0.01,
+        "push_to_hub": false
+    },
+    "prompt_format": "sft_xml.yaml"
+}

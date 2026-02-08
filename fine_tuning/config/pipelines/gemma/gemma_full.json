@@ -1,21 +1,17 @@
 [
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/lora_unsupervised_D_mcc_h2.json"
+                "ft/steps/gemma/full_gemm_mcc.json"
             ],
-            "output": "M9"
+            "output": "M10"
         },
         "inference": [
             {
                 "config": "inference/default.json",
                 "data": [
-                    "eval/scenarios/lighthouse_and_informer.csv",
-                    "eval/scenarios/mccray.csv",
-                    "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios.csv"
                 ],
                 "prompt_formats": [
                     "base_p1.yaml",
@@ -33,22 +29,18 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "gemma-3-270m",
             "train_steps": [
                 "ft/steps/lora_unsupervised_D_mcc_h2.json",
-                "ft/steps/llama/lora/NQ_sft_1k.01.r8.json"
+                "ft/steps/gemma/NQ_sft_1k.01.json"
             ],
-            "output": "M9.NQ1k.01.r8"
+            "output": "M10.NQ1k.01"
         },
         "inference": [
             {
                 "config": "inference/default.json",
                 "data": [
-                    "eval/scenarios/lighthouse_and_informer.csv",
-                    "eval/scenarios/mccray.csv",
-                    "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios.csv"
                 ],
                 "prompt_formats": [
                     "sft_xml.yaml"
@@ -59,22 +51,18 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "gemma-3-270m",
             "train_steps": [
                 "ft/steps/lora_unsupervised_D_mcc_h2.json",
-                "ft/steps/llama/lora/NQ_sft_1k.01.r16.json"
+                "ft/steps/gemma/NQ_sft_1k.02.json"
             ],
-            "output": "M9.NQ1k.01.r16"
+            "output": "M10.NQ1k.02"
         },
         "inference": [
             {
                 "config": "inference/default.json",
                 "data": [
-                    "eval/scenarios/lighthouse_and_informer.csv",
-                    "eval/scenarios/mccray.csv",
-                    "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios.csv"
                 ],
                 "prompt_formats": [
                     "sft_xml.yaml"
@@ -85,22 +73,18 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "gemma-3-270m",
             "train_steps": [
                 "ft/steps/lora_unsupervised_D_mcc_h2.json",
-                "ft/steps/llama/lora/NQ_sft_1k.02.r8.json"
+                "ft/steps/gemma/NQ_sft_1k.03.json"
             ],
-            "output": "M9.NQ1k.02.r8"
+            "output": "M10.NQ1k.03"
         },
         "inference": [
             {
                 "config": "inference/default.json",
                 "data": [
-                    "eval/scenarios/lighthouse_and_informer.csv",
-                    "eval/scenarios/mccray.csv",
-                    "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios.csv"
                 ],
                 "prompt_formats": [
                     "sft_xml.yaml"
@@ -111,22 +95,18 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "gemma-3-270m",
             "train_steps": [
                 "ft/steps/lora_unsupervised_D_mcc_h2.json",
-                "ft/steps/llama/lora/NQ_sft_1k.02.r16.json"
+                "ft/steps/gemma/NQ_sft_2k.01.json"
             ],
-            "output": "M9.NQ1k.02.r16"
+            "output": "M10.NQ2k.01"
         },
         "inference": [
             {
                 "config": "inference/default.json",
                 "data": [
-                    "eval/scenarios/lighthouse_and_informer.csv",
-                    "eval/scenarios/mccray.csv",
-                    "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios.csv"
                 ],
                 "prompt_formats": [
                     "sft_xml.yaml"
@@ -137,22 +117,18 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "gemma-3-270m",
             "train_steps": [
                 "ft/steps/lora_unsupervised_D_mcc_h2.json",
-                "ft/steps/llama/lora/NQ_sft_1k.03.r8.json"
+                "ft/steps/gemma/NQ_sft_2k.02.json"
             ],
-            "output": "M9.NQ1k.03.r8"
+            "output": "M10.NQ2k.02"
         },
         "inference": [
             {
                 "config": "inference/default.json",
                 "data": [
-                    "eval/scenarios/lighthouse_and_informer.csv",
-                    "eval/scenarios/mccray.csv",
-                    "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios.csv"
                 ],
                 "prompt_formats": [
                     "sft_xml.yaml"
@@ -163,22 +139,84 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "gemma-3-270m",
             "train_steps": [
                 "ft/steps/lora_unsupervised_D_mcc_h2.json",
-                "ft/steps/llama/lora/NQ_sft_1k.03.r16.json"
+                "ft/steps/gemma/NQ_sft_2k.03.json"
             ],
-            "output": "M9.NQ1k.03.r16"
+            "output": "M10.NQ2k.03"
         },
         "inference": [
             {
                 "config": "inference/default.json",
                 "data": [
-                    "eval/scenarios/lighthouse_and_informer.csv",
-                    "eval/scenarios/mccray.csv",
-                    "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/binary_factoid.csv"
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/lora_unsupervised_D_mcc_h2.json",
+                "ft/steps/gemma/NQ_sft_4k.01.json"
+            ],
+            "output": "M10.NQ4k.01"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/lora_unsupervised_D_mcc_h2.json",
+                "ft/steps/gemma/NQ_sft_4k.02.json"
+            ],
+            "output": "M10.NQ4k.02"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/lora_unsupervised_D_mcc_h2.json",
+                "ft/steps/gemma/NQ_sft_4k.03.json"
+            ],
+            "output": "M10.NQ4k.03"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
                 ],
                 "prompt_formats": [
                     "sft_xml.yaml"
