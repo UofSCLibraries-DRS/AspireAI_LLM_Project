@@ -2,6 +2,7 @@
 /venv
 /venv-ipynb
 /venv-jpty
+/demo/backend/venv*
 __pycache__/
 *.py[cod]
 
@@ -46,3 +47,8 @@ data/mccray/split_data/h1_split/*
 data/mccray/split_data/h2_split/*
 data/simkins/split_data/h1_split/*
 data/simkins/split_data/h2_split/*
+data/*/split_data/h1_split/*
+data/*/split_data/h2_split/*
+
+# TEMP - remove in merge conflict later
+/demo/react-frontend/
