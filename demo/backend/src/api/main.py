@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Body, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, Literal
 from dotenv import load_dotenv
@@ -12,6 +13,18 @@ load_dotenv()
 
 app = FastAPI(title="AspireAI Chatbot API", version="1.0.0")
 
+origins = [
+    "http://localhost:3000",
+    "https://54.162.34.113",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Request/Response Models
 class GenerateRequest(BaseModel):
