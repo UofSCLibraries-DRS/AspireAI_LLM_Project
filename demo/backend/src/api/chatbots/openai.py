@@ -12,7 +12,7 @@ from .base import Chatbot
 class OpenAIChatbotConfig:
     model_id: str
     model_temperature: float
-    base_url: str  # OpenAI client can work with other
+    base_url: str  # OpenAI client can work with other URLs
 
     @classmethod
     def from_yaml(cls, path: str) -> "OpenAIChatbotConfig":
