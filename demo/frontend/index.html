@@ -450,6 +450,22 @@
       background: var(--primary-red-dark);
     }
 
+    .modal-content ul {
+      padding-left: 25px;
+      /* Creates the "tabbed" indentation */
+      margin-bottom: 15px;
+      /* Adds space after the list */
+    }
+
+    .modal-content li {
+      margin-bottom: 8px;
+      /* Adds breathing room between each bullet point */
+      color: var(--text-primary);
+      /* Ensures text color matches your theme */
+      list-style-type: disc;
+      /* Force-restores the circle bullet shape */
+    }
+
     /* Welcome Screen */
     #welcomeScreen {
       display: flex;
@@ -658,28 +674,24 @@
     <div class="modal-content">
       <button class="close-modal" onclick="closeModal('policyModal')">×</button>
       <h3>Privacy Policy</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat.</p>
-
       <h4>Data Collection and Usage:</h4>
-      <p>We collect:</p>
+      <p>To improve our services, we collect:</p>
       <ul>
-        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-          dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-          commodo consequat.</li>
+        <li>All chatbot interactions and conversations.</li>
+        <li>User feedback and ratings.</li>
+        <li>General usage statistics (e.g., frequency of use, feature engagement).</li>
       </ul>
+
       <p>We do <strong>NOT</strong> collect:</p>
       <ul>
-        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-          dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-          commodo consequat.
+        <li>
+          Any personally identifying information (PII) <strong>unless explicitly provided</strong> by you through
+          chatbot interactions or submitted forms.
         </li>
       </ul>
 
-      <p>By using this chatbot, you agree Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-        nisi ut aliquip ex ea commodo consequat.</p>
+      <p>By using this chatbot, you agree to the collection of the data mentioned above for the purposes of service
+        improvement and troubleshooting.</p>
     </div>
   </div>
 
