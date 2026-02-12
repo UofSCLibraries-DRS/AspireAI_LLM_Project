@@ -61,6 +61,7 @@ class HarmWrapper:
             n_ctx=max_ctx,
             logits_all=True,
             verbose=False,
+            n_gpu_layers=-1,
         )
 
         # Get template from GGUF metadata
@@ -71,31 +72,77 @@ class HarmWrapper:
         query: Optional[str] = None,
         response: Optional[str] = None,
     ) -> Dict[str, bool]:
-        messages = []
 
-        if query is not None:
-            messages.append({"role": "user", "content": query})
-
-        if response is not None:
-            messages.append({"role": "assistant", "content": response})
-
-        if not messages:
+        if query is None and response is None:
             return {}
 
         result = {}
 
         for criterion in CRITERIA_IDS:
-            prompt = self.render_prompt(
-                messages=messages,
-                guardian_config={"criteria_id": criterion},
-            )
+            # Evaluate query only
+            if query is not None:
+                messages = [{"role": "user", "content": query}]
+                prompt = self.render_prompt(
+                    messages=messages,
+                    guardian_config={"criteria_id": criterion},
+                )
 
-            output = self.llm(
-                prompt,
-                temperature=0.0,
-                max_tokens=32,
-            )["choices"][0]["text"]
+                tokens = self.llm.tokenize(prompt.encode("utf-8"))
+                if len(tokens) > self.llm.n_ctx():
+                    print(
+                        f"Warning: Prompt for {criterion}_q exceeds context ({len(tokens)} > {self.llm.n_ctx()})"
+                    )
 
-            result[criterion] = parse_yes_no(output)
+                output = self.llm(
+                    prompt,
+                    temperature=0.0,
+                    max_tokens=32,
+                )["choices"][0]["text"]
+                result[f"{criterion}_q"] = parse_yes_no(output)
+
+            # Evaluate response only
+            if response is not None:
+                messages = [{"role": "assistant", "content": response}]
+                prompt = self.render_prompt(
+                    messages=messages,
+                    guardian_config={"criteria_id": criterion},
+                )
+
+                tokens = self.llm.tokenize(prompt.encode("utf-8"))
+                if len(tokens) > self.llm.n_ctx():
+                    print(
+                        f"Warning: Prompt for {criterion}_q exceeds context ({len(tokens)} > {self.llm.n_ctx()})"
+                    )
+
+                output = self.llm(
+                    prompt,
+                    temperature=0.0,
+                    max_tokens=32,
+                )["choices"][0]["text"]
+                result[f"{criterion}_a"] = parse_yes_no(output)
+
+            # Evaluate query + response
+            if query is not None and response is not None:
+                messages = [
+                    {"role": "user", "content": query},
+                    {"role": "assistant", "content": response},
+                ]
+                prompt = self.render_prompt(
+                    messages=messages,
+                    guardian_config={"criteria_id": criterion},
+                )
+
+                tokens = self.llm.tokenize(prompt.encode("utf-8"))
+                if len(tokens) > self.llm.n_ctx():
+                    print(
+                        f"Warning: Prompt for {criterion}_q exceeds context ({len(tokens)} > {self.llm.n_ctx()})"
+                    )
+
+                output = self.llm(
+                    prompt,
+                    temperature=0.0,
+                    max_tokens=32,
+                )["choices"][0]["text"]
+                result[f"{criterion}_qa"] = parse_yes_no(output)
 
         return result

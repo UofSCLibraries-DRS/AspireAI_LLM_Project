@@ -9,5 +9,5 @@ dependencies = [
     "llama-cpp-python>=0.3.16",
     "python-dotenv>=1.2.1",
     "torch>=2.10.0",
-    "transformers>=5.1.0",
+    "tqdm>=4.67.3",
 ]
