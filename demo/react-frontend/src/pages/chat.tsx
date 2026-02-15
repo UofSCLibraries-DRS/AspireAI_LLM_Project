@@ -7,6 +7,7 @@ import ChatMessage from "../components/messages/chat-message"
 import SystemMessage from "../components/messages/system-message"
 import { generateResponse } from "../services/apiClient";
 import { useModels } from '../hooks/useModels';
+import type { GaicoRequest } from '../constants/types'
 
 import '../styles/index.css'
 
@@ -149,7 +150,10 @@ function Chat() {
                             msg.type === 'system' ? (
                               <SystemMessage key={msg.id} text={msg.text} />
                             ) : (
-                              <ChatMessage key={msg.id} text={msg.text} type={msg.type} info={msg.info} />
+                              <ChatMessage 
+                                key={msg.id} text={msg.text} type={msg.type} info={msg.info} 
+                                gaicoObject={{} as GaicoRequest} 
+                              />
                             )
                           )
                         )}

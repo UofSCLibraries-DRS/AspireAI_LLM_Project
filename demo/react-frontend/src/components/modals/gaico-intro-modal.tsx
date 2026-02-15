@@ -1,12 +1,20 @@
 import GenericModal from './generic-modal';
 import './modals.css'
 
-function GaicoIntroModal({ show, onClose }: { show: boolean; onClose: () => void }) {
+import type { GaicoRequest } from '../../constants/types'
+
+interface GaicoIntroModalProps {
+  show: boolean;
+  onClose: () => void;
+  gaicoReq: GaicoRequest;
+}
+
+function GaicoIntroModal({ show, onClose, gaicoReq }: GaicoIntroModalProps) {
   return(
     <GenericModal show={show} onClose={onClose} title="Compare AI Responses with AI">
-      <p>prompt aakmkaknanknvknkvneknvkneve vekvnkenkveknvnkeknvnkevknnkevnkenkvnkevnkkvnenkvn</p>
-      <p>response aakmkaknanknvknkvneknvkneve vekvnkenkveknvnkeknvnkevknnkevnkenkvnkevnkkvnenkvn</p>
-      <p>GenAI Results Comparator, GAICo, can compare MODEL's response to other models.</p>
+      <p>prompt - {gaicoReq.prompt}</p>
+      <p>response - {gaicoReq.chatbotResponse}</p>
+      <p>GenAI Results Comparator, GAICo, can compare {gaicoReq.modelName}'s ({gaicoReq.apiValue}) response to other models.</p>
       <button>Compare</button>
     </GenericModal>
   );
