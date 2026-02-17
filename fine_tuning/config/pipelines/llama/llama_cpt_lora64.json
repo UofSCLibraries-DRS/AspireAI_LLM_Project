@@ -1,0 +1,36 @@
+[
+    {
+        "model": {
+            "start": "Llama-3.1-8b",
+            "train_steps": [
+                "ft/steps/llama/lora/lora64_cpt.json"
+            ],
+            "output": "M11"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios/lighthouse_and_informer.csv",
+                    "eval/scenarios/mccray.csv",
+                    "eval/scenarios/naacp.csv",
+                    "eval/scenarios/pdp.csv",
+                    "eval/scenarios/student.csv",
+                    "eval/scenarios/voting_rights.csv",
+                    "eval/scenarios/black_journalism.csv"
+                ],
+                "prompt_formats": [
+                    "base_p1.yaml",
+                    "base_p2.yaml",
+                    "base_p3.yaml",
+                    "base_p4.yaml",
+                    "base_p5.yaml",
+                    "icl_test/icl_p6.yaml",
+                    "icl_test/icl_p7.yaml",
+                    "icl_test/icl_p8.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    }
+]
