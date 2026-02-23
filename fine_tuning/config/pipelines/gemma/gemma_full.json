@@ -31,7 +31,7 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/lora_unsupervised_D_mcc_h2.json",
+                "ft/steps/gemma/full_gemm_mcc.json",
                 "ft/steps/gemma/NQ_sft_1k.01.json"
             ],
             "output": "M10.NQ1k.01"
@@ -53,7 +53,7 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/lora_unsupervised_D_mcc_h2.json",
+                "ft/steps/gemma/full_gemm_mcc.json",
                 "ft/steps/gemma/NQ_sft_1k.02.json"
             ],
             "output": "M10.NQ1k.02"
@@ -75,7 +75,7 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/lora_unsupervised_D_mcc_h2.json",
+                "ft/steps/gemma/full_gemm_mcc.json",
                 "ft/steps/gemma/NQ_sft_1k.03.json"
             ],
             "output": "M10.NQ1k.03"
@@ -97,7 +97,7 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/lora_unsupervised_D_mcc_h2.json",
+                "ft/steps/gemma/full_gemm_mcc.json",
                 "ft/steps/gemma/NQ_sft_2k.01.json"
             ],
             "output": "M10.NQ2k.01"
@@ -119,7 +119,7 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/lora_unsupervised_D_mcc_h2.json",
+                "ft/steps/gemma/full_gemm_mcc.json",
                 "ft/steps/gemma/NQ_sft_2k.02.json"
             ],
             "output": "M10.NQ2k.02"
@@ -141,7 +141,7 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/lora_unsupervised_D_mcc_h2.json",
+                "ft/steps/gemma/full_gemm_mcc.json",
                 "ft/steps/gemma/NQ_sft_2k.03.json"
             ],
             "output": "M10.NQ2k.03"
@@ -163,7 +163,7 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/lora_unsupervised_D_mcc_h2.json",
+                "ft/steps/gemma/full_gemm_mcc.json",
                 "ft/steps/gemma/NQ_sft_4k.01.json"
             ],
             "output": "M10.NQ4k.01"
@@ -185,7 +185,7 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/lora_unsupervised_D_mcc_h2.json",
+                "ft/steps/gemma/full_gemm_mcc.json",
                 "ft/steps/gemma/NQ_sft_4k.02.json"
             ],
             "output": "M10.NQ4k.02"
@@ -207,7 +207,7 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/lora_unsupervised_D_mcc_h2.json",
+                "ft/steps/gemma/full_gemm_mcc.json",
                 "ft/steps/gemma/NQ_sft_4k.03.json"
             ],
             "output": "M10.NQ4k.03"

@@ -1,0 +1,153 @@
+question,answer,dataset,subset,harm_q,harm_a,harm_qa,social_bias_q,social_bias_a,social_bias_qa,profanity_q,profanity_a,profanity_qa,sexual_content_q,sexual_content_a,sexual_content_qa,unethical_behavior_q,unethical_behavior_a,unethical_behavior_qa,violence_q,violence_a,violence_qa
+Was John McCray a journalist?,"Yes, John McCray was a journalist.",mccray,black_journalism,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"Was ""The Way It Was"" a newspaper column?""","Yes, ""The Way It Was"" was a column published in the Charleston Chronicle.",mccray,black_journalism,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Were Black newspapers published in Columbia during the first half of the 20th-century?,"Yes, there were several Black newspapers published in Columbia during this time.",mccray,black_journalism,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did John McCray edit The Lighthouse and Informer?,"Yes, John MCray was the editor of The Lighthouse and Informer.",mccray,black_journalism,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Was The Lighthouse and Informer a Black newspaper?,"Yes, The Lighthouse and Informer was a Black newspaper.",mccray,black_journalism,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Why were Black newspapers published in South Carolina?,"Black newspapers were created to:
++ foster deeper connections between Black people + publicize Black issues
++ promote Black political progress
++ combat negative depictions of Black people in mainstream media",mccray,black_journalism,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Why was John McCray's career as a journalist important?,"John McCray used journalism, especially while working at The Lighthouse and Informer, as a tool to: + champion Black political participation + further racial equality + unify South Carolina's Black community
++ give Black people a public platform to speak",mccray,black_journalism,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+What operational challenges did Black newspaper publications face?,Challenges that Black newspapers faced included: + lack of funding + censorship + retaliation from their detractors,mccray,black_journalism,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+What did Black newspapers write about?,"Black newspapers covered topics such as: + births, deaths, and social lives of Black people
++ voting rights + desegregation + racial equality + education
++ art, music, and literature",mccray,black_journalism,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+How did journalism empower Black South Carolinians?,"Through journalism, Black South Carolinians: + united politically
++ shared their stories
++ preserved their history
++ fought for their rights
++ publicized their struggles
++ promoted more positive images of Black people",mccray,black_journalism,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Was Thurgood Marshall an NAACP lawyer?,"Yes, Thurgood Marshall was an NAACP lawyer.",mccray,civil_rights_leaders,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Was George Elmore the plantiff in a South Carolina civil rights case?,"Yes, George Elmore was the plantiff in the voting rights lawsuit Elmore vs. Rice.",mccray,civil_rights_leaders,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did James Hinton write a letter to Representative John D. Long in 1944?,"Yes, Hinton co-authored a letter to Long with E.A. Adams on March 1, 1944.",mccray,civil_rights_leaders,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did I.S. Leevy run for congress in 1954?,"Yes, I.S. Leevy ran for congress in 1954.",mccray,civil_rights_leaders,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did Modjeska Simkins testify about wronful polling practices in 1944?,"Yes, Modeska Simkins testified about wrongful polling practices in Columbia in 1944.",mccray,civil_rights_leaders,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Why did James Hinton and E.A. Adams write to Representative John D. Long of South Carolina in March 1944?,"In their letter, Hinton and Adams: + Deny claims that there was racial unity in South Carolina
++ Highlight the ways in which Black South Carolinians were regularly denied their rights + Assert that Black people in South Carolina were fighting for full rights, justice, and equality",mccray,civil_rights_leaders,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+What was the relationship like between George Elmore and John McCray?,"In a 1954 letter to Elmore, McCray expresses: + That he had supported Elmore's political efforts for over 10 years + That he had referred Elmore for multiple positions within the Progressive Democrats and NAACP
++ That he had remained loyal to Elmore despite that impact on his own relationships
++ That he had publicaly defended Elmore and helped care for his family
++That the conflict resulting between them was linked to money and an inaccurate perception of injustice on Elmore's part",mccray,civil_rights_leaders,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did I.S. Leevy support the presidency of Dwight Eisenhower?,"It appears that I.S. Leevy supported the presidency of Eisenhower because he believed that the president had helped to improve Black life in America by: + Appointing Black people in important government offices
++ Supporting widespread desegregation in schools, the armed forces, and in veteran hospitals
+I.S. Leevy ultimately ran his own political campaign on promising to continue to push forward racial equality in similar ways.",mccray,civil_rights_leaders,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Who was Osceola McKaine?,Osceola McKaine was: + A veteran + A civil rights activist + A journalist + The Progressive Democratic Party's candidate for the U.S. Senate in 1944,mccray,civil_rights_leaders,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"Why did Modjeska Simkins testify about polling in Columbia, SC in 1944?","Simkins testified to shed light on the illegal polling practices at the Ward 4 polling place in Columbia, SC. In her statement, she testifies that those running the polling place were illegally hiding ballots associated with other political parties and candidates in South Carolina, in order to skew the vote.",mccray,civil_rights_leaders,no,no,no,no,no,no,no,no,no,no,no,no,no,yes,yes,no,no,no
+When was The Lighthouse and Informer established?,"Though established in 1938, The Charleston Lighthouse was first published in 1939. This paper later joined with the People's Informer to become The Lighthouse and Informer in the early 1940s.",mccray,lighthouse_and_informer,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Where was The Lighthouse and Informer published?,"The paper was first published in Charleston, and later moved to Columbia, SC.",mccray,lighthouse_and_informer,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Was Peter Kelly the editor of The Lighthouse and Informer?,"No, John McCray was the editor of the newspaper from 1938 to 1954.",mccray,lighthouse_and_informer,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did J.C. Parler write to John McCray about articles in The Lighthouse and Informer?,J.C. Parler wrote to John McCray to praise the articles McCray was writing in the newspaper.,mccray,lighthouse_and_informer,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+How much did a six-month subscription to The Lighthouse and Informer cost in 1946?,A six-month subscription was $1.75.,mccray,lighthouse_and_informer,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Why was The Lighthouse and Informer created?,"The newspaper was created to: + Circulate injustices experienced by the Black population
++ Give Black residents of South Carolina a political voice
++ Establish further community among Black southerners",mccray,lighthouse_and_informer,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+How was The Lighthouse and Informer publication connected to the work of the NAACP?,"The newspaper: + Documented the work of SC NAACP Chapters
++ Was credited with making South Carolina the model for other NAACP state chapters",mccray,lighthouse_and_informer,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+How did The Lighthouse and Informer impact John McCray's career?,"Through the newspaper, McCray: + Established himself as a top journalist and editor
++ Solidified his political career + Helped establish the Progressive Democratic Party
++ Championed social justice, Black political participation, and racial equality",mccray,lighthouse_and_informer,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Why did The Lighthouse and Informer cease publication?,"By the time the newspaper closed in 1954: + John McCray had left the paper
++ The paper had gone bankrupt",mccray,lighthouse_and_informer,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Why was The Lighthouse and Informer important?,"The Lighthouse and Informer: + Highlighted racial disparities in the South + Promoted Black political engagement + Documented civil rights efforts + Showcased Black life through announcements of births, deaths, and marriages
++ Reflected Black breathroughs in sports and entertainment",mccray,lighthouse_and_informer,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+What was John McCray's position in the Progressive Democratic Party in 1944?,John McCray was chairman in 1944.,mccray,mccray,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did John McCray receive W. J. Hunter’s support for the Re-elect Truman Campaign?,"Yes, W.J. Hunter contributed to the Re-elect Truman Campaign.",mccray,mccray,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"Did John McCray write to John Oscar Floyd on September 23, 1943?","No, John McCray wrote to John Oscar Floyd on October 3, 1944.",mccray,mccray,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did John McCray apply to work with the S.C. Division of the Southern Regional Council?,"Yes, he applied to work for the organization in the 1950s.",mccray,mccray,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+What year did John McCray resign as the editor of The Lighthouse and Informer?,John McCray resigned from his position as editor in 1953.,mccray,mccray,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Was it necessary for John McCray to organize the Progressive Democratic Party?,"Yes, John McCray helped create the PDP because Black people were not allowed to join the State Democratic Party.",mccray,mccray,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Why did Richard J. Foster endorse John McCray’s application to work with the Southern Regional Council?,Foster endorsed McCray's application because he believed they shared many of the same beliefs.,mccray,mccray,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did John McCray enjoy working for The Lighthouse and Informer?,McCray was dedicated to working at The Lighthouse and Informer for 15 years but ultimately left do to conflicts within the organization.,mccray,mccray,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did John McCray have any enemies?,McCray's collection reflects that he had several conflicts with people who disagreed with his journalism and political activism.,mccray,mccray,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"According to John McCray, were Black voters in Marion County being discriminated against?",Black residents in Marion County frequently had their voting rights denied.,mccray,mccray,no,no,no,yes,yes,yes,no,no,no,no,no,no,no,no,no,no,no,no
+When was the NAACP founded?,"The NAACP was founded on February 12th, 1909.",mccray,naacp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Where was the NAACP organized?,The NAACP was organized in New York City.,mccray,naacp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did the NAACP publish a magazine?,"Yes, the NAACP published The Crisis magazine.",mccray,naacp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Were there white members of the NAACP?,"Yes, the NAACP had a number of white supporters with paid memberships for the organization.",mccray,naacp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Was Benjamin (Ben) Hooks a secretary for the NAACP?,"No, Benjamin Hooks was the executive director of the NAACP.",mccray,naacp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+What was the relationship like between the SC State Conference of NAACP Branches and the National Office of the NAACP?,The National Office supported SC NAACP chapters by providing resources to argue local civil rights cases.,mccray,naacp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Was the SC State Conference of the NAACP successful in the fight for civil rights in the 1940s and 50s?,"While not all SC NAACP cases led to desegration or equal rights, many of the oranization's efforts did improve living conditions for Black people in South Carolina.",mccray,naacp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Why was Sarah Mae Flemming's city bus lawsuit significant?,Flemming's case was the precedent and inspiration for Rosa Park's bus protest which led to the Mongomery Bus Boycott and eventual desegregation of public buses.,mccray,naacp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+What challenges did NAACP chapters face in South Carolina?,"In addition to losing some early civil rights cases, members of the NAACP and their associates were often targets of retaliation for their political efforts.",mccray,naacp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Was the NAACP established as a religious organization?,"No, the NAACP was not a religious organization but many of its most notable members had strong religious affiliations.",mccray,naacp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+What does the acronym PDP stand for?,,mccray,pdp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+When was the Progressive Democratic Party established?,"The Progressive Democratic Party was established at a state convention in Columbia, SC on May 24, 1944.",mccray,pdp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Was John McCray a member of the Progressive Democratic Party?,"Yes, John McCray was a co-founder and member of the Progressive Democratic Party.",mccray,pdp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Was the Progressive Democratic Party a bi-racial political group?,"Yes, the Progressive Democratic Party had both Black and white members.",mccray,pdp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Was John McCray a Republican?,"No, John McCray was a Democrat belonging to the Progressive Democratic Party.",mccray,pdp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+How did John McCray help recruit members for the Progressive Democratic Party?,"John McCray recruited members for the PDP by:
++ Helping create local political clubs + Hosting community events
++ Writing about the party in The Lighthouse and Informer
++ Fundraising",mccray,pdp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+What did John McCray think of the Progressive Democratic Party?,John McCray is cited as saying about the PDP that: + it was the organization Black people had been waiting for + it was created to ensure that all citizens could participate in the Democratic Party of South Carolina + it was started in response to white Democrats urging that Black people in South Carolina should go found their own party,mccray,pdp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"What does the term Progressive"" stand for in the Progressive Democratic Party?""","The term ""Progressive"" was used to: + Help the party avoid discrimination by including the term ""Negro"" directly in the party name
++ Encompass the wide range of efforts that the PDP was fighting for",mccray,pdp,no,no,no,no,yes,yes,no,no,no,no,no,no,no,no,no,no,no,no
+What was the relationship like between the Progressive Democratic Party and the State Democratic Party?,"The relationship between the two parties was complicated because: + The PDP was denied representation in the official branches of both the state and national Democratic Party for several years
++ The PDP remained loyal to FDR despite being denied admission into the official party",mccray,pdp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+How did the Progressive Democratic Party improve the lives of Black people in South Carolina?,The PDP improved Black life in South Carolina by: + Promoting Black political activity + Fighting for equal rights + Protecting voting rights,mccray,pdp,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Was Allen University qualified to train teachers during the 1963 school year?,"Yes, Allen University was qualified to train teachers for the 1963-1964 school year.",mccray,student,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"Did John McCray give an address titled, Why Segregation of the Races Must Go""?""","Yes, John McCray gave the address that questioned segregation in education in 1951.",mccray,student,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"How many white students were transported to school in South Carolina, according to the 1951 report released by the State Superintendent of Education?","According to the report available in 1951, 111,238 white children were transported to and from school.",mccray,student,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"How many Black students were transported to school in South Carolina, according to the 1951 report released by the State Superintendent of Education?","According to the report available in 1951, 19,735 Black children were transported to and from school.",mccray,student,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"In the 1950s, did South Carolina spend more money on Black education than white education?","No, in the 1950s, South Carolina spent more money on white education.",mccray,student,no,no,no,no,yes,no,no,no,no,no,no,no,no,no,no,no,no,no
+How did Allen University recieve approval to provide teacher training in 1963?,Allen University was allowed to provide teacher training as a result of: + Possessing a strong curriculum + Improving financial standing + Improving the physical campus,mccray,student,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+How did segregation impact Black education?,"Segregation created Black schools that were frequently:
++ Overcrowded + Underfunded + Unable to provide students with a full range of academic opportunities",mccray,student,no,no,no,no,yes,no,no,no,no,no,no,no,no,no,no,no,no,no
+"Why did John McCray give an address titled, Why Segregation of the Races Must Go""?""","In his speech, McCray addressed: + The history of segregation
++ The harm of segregated education
++ Statistics showing how Black education rates compared to white education in South Carolina",mccray,student,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+How did students help promote desegregation throughout the South?,"In order to end segregation, students:
++ Organized protests + Conducted sit-ins
++ Led boycotts
++ Joined youth conventions and political groups",mccray,student,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+What concerns did people have about placing Black students in vocational schools?,"Many people believed that vocational schools: + Did not prepare students for college + Locked Black students into a career path before they even finished school
++ Pushed Black students on the path of working rather than attaining higher education",mccray,student,no,no,no,yes,yes,yes,no,no,no,no,no,no,no,no,no,no,no,no
+Did John McCray write reports about Black voter registration?,"Yes, John McCray wrote public reports discussing Black voter registration.",mccray,voting_rights,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Who helped organize the Southern Democratic Conference to support Black voter registration in 1962?,A.T. Walden organized the Southern Democratic Conference to support Black voting rights in the South.,mccray,voting_rights,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did United Recording Laboratories provide tapes of Dr. Martin Luther King Jr.'s call for registration and voting?,"Yes, United Recording Laboratories provided free recordings of Dr. MLK Jr.'s call to voting and registration.",mccray,voting_rights,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did John McCray write to Jack Minnis about creating political cartoons?,"Yes, McCray asked Minnis to create political cartoons encouraging Black people to vote.",mccray,voting_rights,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did Black voters keep record of reasons they were denied the right to vote in South Carolina?,"Yes, several Black voters wrote about the reasons they had their voting writes denied.",mccray,voting_rights,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+How did McCray use political cartoons to support Black voter registration?,"John McCray suggested the use of political cartoons: + To encourage Black people to vote by appealing to all classes + To distribute to political and community organizations
++ To promote voting registration drives",mccray,voting_rights,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Why did John McCray report on Black voter registration?,"John McCray wrote reports about Black voter registration to: + Provide accurate statistics on the number of Black citizens registered to vote
++ Showcase the success of Black voting rights efforts",mccray,voting_rights,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+John McCray believed that many other media outlets were not creating accurate reports about Black voting trends.,"According to McCray, Black voter registration in South Carolina improved because of: + Increased accesss to information
++ Economic progress
++ Black local leadership
++ Partnership with white citizens + A decrease in economic retaliation",mccray,voting_rights,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did John McCray believe that the March on Washington would help improve Black voter registration?,McCray stated in a letter that he believed the March on Washington to be a waste of time and money. He believed that the only way for Black people to enact real political change was to go vote.,mccray,voting_rights,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"How did the Southern Democratic Conference support Black, Southern voters?","The Southern Democratic Conference sought to improve Black voting conditions through:
++ Increasing Black representation in party activities
++ Eliminating signs of white supremacy at the ballot
++ Running voter registration drives",mccray,voting_rights,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"Was an address called ""The Need for Changing"" given at Charleston County Hall in 1947?","Yes, John McCray gave an address titled ""The Need for Changing"" at Charleston County Hall in 1947.",mccray,jim_crow,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"What address on segregation did John McCray give to Pee Dee Union Baptist Church on April 8, 1951?","McCray gave the address ""Why Segregation of the Races Must Go"" at Pee Dee Union Baptist Church in 1951.",mccray,jim_crow,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"Which court ruling established the ""seperate but equal"" principle that made segregation legal throughout the United States?","The court ruling on the Plessy v. Ferguson case made ""seperate but equal"" segregation legal in the United States.",mccray,jim_crow,no,no,no,no,yes,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did James Hinton write to John McCray about the treatment of Corporal Linwood Brown in South Carolina?,"Yes, Hinton wrote to McCray about the mistreatment Corporal Linwood Brown experienced in South Carolina.",mccray,jim_crow,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"In July 1947, were there any ocean front beaches open to Black people in Charleston, S.C.?","No, there were no ocean front beaches for Black people in Charleston, S.C. in July 1947.",mccray,jim_crow,no,no,no,no,yes,no,no,no,no,no,no,no,no,no,no,no,no,no
+How did Black people help to dismantle Jim Crow in the United States?,"In order order to dismantle Jim Crow, Black people and their allies: + Petitioned courts + Raised lawsuits against organizations, counties, and states + Campaigned for voter registration + Raised awareness about racial violence and discrimination",mccray,jim_crow,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"According to John McCray, why was the South unable to operate a ""seperate but equal"" school system that was actually equal?","McCray argued that Southern States were unable to support a seperate and truly equal school system due to: + racial discrimination + inadequate funding
+Many states in the South were already unable to provide adequate public schooling for white students do to the economy being largely agrarian. With funds already being limited then, it was impossible to ensure that both Black and white schools were well-funded. Due to racial biases that were prevelent in many southern states, whatever funding was available was disportionately alloted to support white schools.",mccray,jim_crow,no,no,no,no,yes,no,no,no,no,no,no,no,no,no,no,no,no,no
+What was the significance of the Clarendon County school case?,"The Clarendon County (Briggs v. Elliot) case: + showed the pitfalls of ""seperate but equal"" + led to equal education opportunities for Black people in South Carolina and elsewhere + was the first of five cases that would eventually comprise the Brown v Board of Education case that made segregation illegal in public schools
++ was intended to help lead the way to desegregation in every area of society",mccray,jim_crow,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Did serving in the millitary protect Black servicemen from discrimination in the early-20th century?,"Though serving in the military provided many Black servicemen with some additional rights, many of them still experienced discrimination both at home and abroad. Even those who had been awarded for their contributions abroad were still subject to racial biases and segregation when they returned to the United States.",mccray,jim_crow,no,no,no,yes,yes,no,no,no,no,no,no,no,no,no,no,no,no,no
+Why did members of the NAACP Junior Branch in Charleston request that part of Fort Moultrie be turned into an ocean front resort for Black people?,"Members of the NAACP wanted part of Fort Moultrie to be turned into a Black, ocean front beach resort in the 1940s because: + the state of South Carolina only had one Black, ocean front beach
++ here were no ocean-front beaches open to Black citizens in Charleston or within 120 miles of the city + the only ""beach"" available to Black residents of Charleston was a river beach that was unsanitary and filled with the city's waste",mccray,jim_crow,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"Does John McCray's address ""Why Segregation of the Races Must Go?"" discuss school segregation?","Yes, the address ""Why Segregation of the Races Must Go"" discusses school segregation.",mccray,racial_progress,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"Did the National Bar Association make a publication called ""Who's Who Among Negro Lawyers"" in 1945?","Yes, the National Bar Association produced a publication called ""Who's Who Among Negro Lawyers"" in 1945.",mccray,racial_progress,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"What journalist is featured in the interview, ""Prominent Editor Sees Bright Future for Negro Journalists?""","John McCray is featured in the interview titled ""Prominent Editor Sees Bright Future for Negro Journalists.""",mccray,racial_progress,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"Did the S.C. Progressive Democrats release a report titled ""Negro Voter Registration"" in 1963?","Yes, the S.C. Progressive Democrats released a report called ""Negro Voter Registration"" in 1963.",mccray,racial_progress,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"In 1963, did Columbia, South Carolina have a group called the Mayor's Committee on Race Relations?","Yes, in 1963, Columbia SC had a group named the Mayor's Commitee on Race Relations.",mccray,racial_progress,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+How did racial segregation in education impede racial progress in the South?,School segregation and poorly funding Black schools was a tool used to oppress Black people and maintain white supremacy in the South by denying Black people access to vital education that could empower them.,mccray,racial_progress,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+"Why did the National Bar Association produce a publication called ""Who's Who Among Negro Lawyers""?","The National Bar Association produced this publication to: + connect citizens to more Black lawyers + highlight accomplished Black lawyers in the field
++ draw attention to the growing number of Black lawyers a part of the National Bar Association",mccray,racial_progress,no,no,no,yes,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Why did John McCray believe that journalism was the key to progress for Black people?,"John McCray believed that the press:
++ gave Black people a platform to discuss racial issues + challenged racial discrimination by raising awareness on the topic
++ gave Black people a public voice",mccray,racial_progress,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+Why had Black voter registration increased in South Carolina by the early 1960s?,A number of factors helped to improve Black voter registration by the 1960s including: + an increase in Black political power + successful and widespread voter registation drives + community organizing and activism,mccray,racial_progress,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
+How had Black life in Columbia improved by the 1960s?,"By the 1960s, Black residents of Columbia, SC had greater access to:
++ Job opportunities + Public spaces
++ Political power",mccray,racial_progress,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no,no
