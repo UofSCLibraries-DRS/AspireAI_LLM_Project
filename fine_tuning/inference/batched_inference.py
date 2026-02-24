@@ -99,6 +99,11 @@ def _batched_inference(
         tokenizer = AutoTokenizer.from_pretrained(
             model_path, use_fast=True, padding_side="left"
         )
+
+        if tokenizer.pad_token is None:
+            tokenizer.pad_token = tokenizer.eos_token
+            tokenizer.pad_token_id = tokenizer.eos_token_id
+
         tokenizer.model_max_length = max_prompt_length
 
         model = AutoModelForCausalLM.from_pretrained(
