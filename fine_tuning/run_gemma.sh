@@ -3,14 +3,15 @@
 #SBATCH -N 1
 #SBATCH -n 16
 #SBATCH --gres=gpu:1
+#SBATCH --time=8:00:00
 #SBATCH --output logs/lora_ft_%j.out
 #SBATCH --error logs/lora_ft_%j.err
-#SBATCH -p AI_Center_L40S
+#SBATCH -p gpu-A100
 
 export CUDA_VISIBLE_DEVICES=0
 cd /work/jaaydin/AspireAI_LLM_Project
 
-source ~/miniforge3/etc/profile.d/conda.sh
+source /work/jaaydin/miniconda3/etc/profile.d/conda.sh
 conda activate lib_train
 
 module load cuda/12.1
