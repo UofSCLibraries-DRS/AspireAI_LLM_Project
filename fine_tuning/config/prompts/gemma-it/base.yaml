@@ -1,0 +1,10 @@
+template: |
+  <start_of_turn>user
+  {user_prompt}
+  <end_of_turn>
+  <start_of_turn>model
+
+stop_sequences:
+  - "<end_of_turn>"
+  - "<start_of_turn>user"
+  - "<start_of_image>"

@@ -19,5 +19,5 @@ module load cuda/12.1
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 python -u -m fine_tuning.main \
-    --pipeline-path /work/jaaydin/AspireAI_LLM_Project/fine_tuning/config/pipelines/gemma/gemma_full.json \
+    --pipeline-path /work/jaaydin/AspireAI_LLM_Project/fine_tuning/config/pipelines/baseline_inference.json \
     --env .env.rci
