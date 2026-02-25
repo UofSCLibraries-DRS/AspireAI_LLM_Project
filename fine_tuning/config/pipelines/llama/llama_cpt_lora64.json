@@ -11,13 +11,7 @@
             {
                 "config": "inference/default.json",
                 "data": [
-                    "eval/scenarios/lighthouse_and_informer.csv",
-                    "eval/scenarios/mccray.csv",
-                    "eval/scenarios/naacp.csv",
-                    "eval/scenarios/pdp.csv",
-                    "eval/scenarios/student.csv",
-                    "eval/scenarios/voting_rights.csv",
-                    "eval/scenarios/black_journalism.csv"
+                    "eval/scenarios.csv"
                 ],
                 "prompt_formats": [
                     "base_p1.yaml",
