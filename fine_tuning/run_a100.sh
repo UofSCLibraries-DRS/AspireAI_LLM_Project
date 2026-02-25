@@ -3,10 +3,10 @@
 #SBATCH -N 1                   # 1 node
 #SBATCH -n 16                  # 16 CPU tasks (threads)
 #SBATCH --gres=gpu:4           # request 4 A100 GPUs
-#SBATCH --account=rc_gener#SBATCH --output=logs/lora_ft_%j.out
+#SBATCH --output=logs/lora_ft_%j.out
 #SBATCH --error=logs/lora_ft_%j.err
 #SBATCH -p gpu-A100
-#SBATCH --time=00:05:00
+#SBATCH --time=12:00:00
 
 # Navigate to project directory
 cd /work/jaaydin/AspireAI_LLM_Project
