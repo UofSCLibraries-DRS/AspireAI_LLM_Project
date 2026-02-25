@@ -70,11 +70,8 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
         # Load local model
         model = AutoModelForCausalLM.from_pretrained(
             self.start_model,
-            device_map="auto",
             torch_dtype="auto",
         )
-
-        print(next(model.parameters()).device)
 
         # Apply Lora cfg
         lora_config = LoraConfig(**lora_cfg)
