@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import requests
 import yaml
+import re
 from .base import Chatbot
 
 # TODO:
@@ -46,7 +47,18 @@ class SafeChat(Chatbot):
         # Load config
         self.config = SafeChatConfig.from_yaml(config_path)
 
-    def generate(self, prompt: str, max_new_tokens=None) -> str:
+    def _extract_sources(self, text: str) -> tuple[str, list[str]]:
+        """Extract source URLs from [Source: ...; Date: ] pattern and remove it from text."""
+        match = re.search(r"\[Source:\s*(.*?);\s*Date:.*?\]", text)
+        if not match:
+            return text, []
+
+        sources_str = match.group(1)
+        sources = [s.strip() for s in sources_str.split(",") if s.strip()]
+        cleaned_text = re.sub(r"\[Source:.*?;\s*Date:.*?\]\s*", "", text).strip()
+        return cleaned_text, sources
+
+    def generate(self, prompt: str, max_new_tokens=None) -> (str, list[str]):
         try:
             response = requests.post(
                 f"{self.config.url}/webhooks/rest/webhook",
@@ -66,13 +78,17 @@ class SafeChat(Chatbot):
             if not replies:
                 return "SafeChat returned an empty response"
 
-            return replies[0].get("text", "No response received")
+            text = replies[0].get("text", "No response received")
+
+            text, sources = self._extract_sources(text)
+
+            return text, sources
 
         except requests.exceptions.Timeout:
-            return "SafeChat request timed out"
+            return "SafeChat request timed out", []
 
         except requests.exceptions.ConnectionError:
-            return "Could not connect to SafeChat service"
+            return "Could not connect to SafeChat service", []
 
         except Exception as e:
-            return f"SafeChat error: {str(e)}"
+            return f"SafeChat error: {str(e)}", []

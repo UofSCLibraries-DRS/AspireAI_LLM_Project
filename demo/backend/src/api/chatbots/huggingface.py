@@ -76,7 +76,9 @@ class HuggingFaceChatbot(Chatbot):
         text = text[:min_idx].strip()
         return text
 
-    def generate(self, prompt: str, max_new_tokens: Optional[int] = 128) -> str:
+    def generate(
+        self, prompt: str, max_new_tokens: Optional[int] = 128
+    ) -> (str, list[str]):
         templated_prompt = self.prompt_template.format(user_prompt=prompt)
 
         # Tokenize and generate
@@ -95,4 +97,4 @@ class HuggingFaceChatbot(Chatbot):
         full_text = self.tokenizer.decode(out[0], skip_special_tokens=True)
 
         # Post-process (trim at stop sequences)
-        return self._post_process(full_text, templated_prompt)
+        return self._post_process(full_text, templated_prompt), []

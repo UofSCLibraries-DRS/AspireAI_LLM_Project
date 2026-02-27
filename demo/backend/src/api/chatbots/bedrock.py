@@ -90,7 +90,9 @@ class BedrockChatbot(Chatbot):
         text = text[:min_idx].strip()
         return text
 
-    def generate(self, prompt: str, max_new_tokens: Optional[int] = None) -> str:
+    def generate(
+        self, prompt: str, max_new_tokens: Optional[int] = None
+    ) -> (str, list[str]):
         """
         Generate a response using AWS Bedrock InvokeModel API.
 
@@ -129,18 +131,18 @@ class BedrockChatbot(Chatbot):
             # Extract generated text
             # Llama models return: {"generation": "text", "prompt_token_count": N, ...}
 
-            return self._post_process(response_body["generation"], templated_prompt)
+            return self._post_process(response_body["generation"], templated_prompt), []
 
         except ClientError as e:
             error_code = e.response.get("Error", {}).get("Code", "Unknown")
             error_message = e.response.get("Error", {}).get("Message", str(e))
-            return f"Bedrock API error [{error_code}]: {error_message}"
+            return f"Bedrock API error [{error_code}]: {error_message}", []
 
         except KeyError as e:
-            return f"Bedrock response parsing error: missing key {str(e)}"
+            return f"Bedrock response parsing error: missing key {str(e)}", []
 
         except json.JSONDecodeError as e:
-            return f"Bedrock JSON parsing error: {str(e)}"
+            return f"Bedrock JSON parsing error: {str(e)}", []
 
         except Exception as e:
-            return f"Bedrock error: {str(e)}"
+            return f"Bedrock error: {str(e)}", []

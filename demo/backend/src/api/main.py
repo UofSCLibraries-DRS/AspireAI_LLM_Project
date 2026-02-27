@@ -29,6 +29,7 @@ class GenerateResponse(BaseModel):
     model: str
     prompt: str
     text: str
+    sources: list[str]
     max_new_tokens: Optional[int]
 
 
@@ -109,7 +110,7 @@ async def generate(req: GenerateRequest = Body(...)):
 
     try:
         # Generate response
-        response = chatbot.generate(
+        response, sources = chatbot.generate(
             prompt=req.prompt, max_new_tokens=req.max_new_tokens
         )
 
@@ -117,6 +118,7 @@ async def generate(req: GenerateRequest = Body(...)):
             model=req.model,
             prompt=req.prompt,
             text=response,
+            sources=sources,
             max_new_tokens=req.max_new_tokens,
         )
 

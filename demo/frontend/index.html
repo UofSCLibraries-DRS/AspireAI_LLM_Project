@@ -241,6 +241,23 @@
       text-align: right;
     }
 
+    .message-sources {
+      font-size: 0.75em;
+      margin-top: 4px;
+      padding: 0 5px;
+      color: var(--text-secondary);
+    }
+
+    .message-sources a {
+      color: var(--primary-red);
+      text-decoration: none;
+      margin: 0 2px;
+    }
+
+    .message-sources a:hover {
+      text-decoration: underline;
+    }
+
     /* System Messages */
     .system-message {
       align-self: center;
@@ -757,7 +774,7 @@
       document.getElementById(modalId).style.display = 'none';
     }
 
-    function addMessage(text, type, info = '') {
+    function addMessage(text, type, info = '', sources = []) {
       if (welcomeScreen && welcomeScreen.parentNode) {
         welcomeScreen.remove();
       }
@@ -770,6 +787,15 @@
       message.textContent = text;
 
       wrapper.appendChild(message);
+
+      if (sources && sources.length > 0) {
+        const sourcesDiv = document.createElement('div');
+        sourcesDiv.className = 'message-sources';
+        sourcesDiv.innerHTML = 'Sources: ' + sources.map((url, i) =>
+          `<a href="${url}" target="_blank" rel="noopener noreferrer">[${i + 1}]</a>`
+        ).join(' ');
+        wrapper.appendChild(sourcesDiv);
+      }
 
       if (info) {
         const infoDiv = document.createElement('div');
@@ -828,8 +854,9 @@
 
         const data = await response.json();
         const botText = data?.text || "No response received";
+        const sources = data?.sources || [];
 
-        addMessage(botText, 'bot', modelDisplayName);
+        addMessage(botText, 'bot', modelDisplayName, sources);
 
       } catch (error) {
         console.error('Error:', error);

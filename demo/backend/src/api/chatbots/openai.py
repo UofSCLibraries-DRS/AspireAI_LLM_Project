@@ -51,7 +51,7 @@ class OpenAIChatbot(Chatbot):
             base_url=self.config.base_url,
         )
 
-    def generate(self, prompt: str, max_new_tokens: Optional[int]) -> str:
+    def generate(self, prompt: str, max_new_tokens: Optional[int]) -> (str, list[str]):
         response = self.client.chat.completions.create(
             model=self.model,
             messages=[
@@ -61,4 +61,4 @@ class OpenAIChatbot(Chatbot):
             temperature=self.config.model_temperature,
         )
 
-        return response.choices[0].message.content
+        return response.choices[0].message.content, []

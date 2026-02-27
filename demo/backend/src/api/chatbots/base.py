@@ -10,5 +10,8 @@ class Chatbot(ABC):
         self.id = id
 
     @abstractmethod
-    def generate(self, prompt: str, max_new_tokens: Optional[int]) -> str:
+    def generate(self, prompt: str, max_new_tokens: Optional[int]) -> (str, list[str]):
+        """
+        Returns response and list of sources.
+        """
         pass
