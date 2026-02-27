@@ -58,6 +58,12 @@ class SafeChat(Chatbot):
         cleaned_text = re.sub(r"\[Source:.*?;\s*Date:.*?\]\s*", "", text).strip()
         return cleaned_text, sources
 
+    def _format_bullets(self, text: str) -> str:
+        """Convert inline + bullet points to newline-separated list."""
+        # Split on " +" but keep the + by using a lookahead
+        parts = re.split(r"\s+(?=\+)", text)
+        return "\n".join(part.strip() for part in parts)
+
     def generate(self, prompt: str, max_new_tokens=None) -> (str, list[str]):
         try:
             response = requests.post(
@@ -81,6 +87,8 @@ class SafeChat(Chatbot):
             text = replies[0].get("text", "No response received")
 
             text, sources = self._extract_sources(text)
+
+            text = self._format_bullets(text)
 
             return text, sources
 
