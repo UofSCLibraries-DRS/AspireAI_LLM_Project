@@ -10,7 +10,7 @@ from .base import Chatbot
 @dataclass
 class HuggingFaceChatbotConfig:
     model_path: str
-    model_temperature: str
+    model_temperature: float
     prompt_template_path: str
 
     @classmethod
