@@ -123,6 +123,7 @@ async def generate(req: GenerateRequest = Body(...)):
         )
 
     except Exception as e:
+        print(str(e))
         raise HTTPException(
             status_code=500, detail=f"Error generating response: {str(e)}"
         )
