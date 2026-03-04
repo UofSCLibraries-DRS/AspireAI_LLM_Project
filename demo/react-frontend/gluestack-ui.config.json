@@ -1,5 +1,5 @@
 {
   "app": {
-    "components": "src/components/glustack-ui"
+    "components": "components/ui"
   }
 }

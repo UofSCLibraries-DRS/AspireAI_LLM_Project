@@ -16,10 +16,13 @@ interface Message {
   text: string;
   type: 'user' | 'bot' | 'system';
   info?: string;
+  prompt?: string;    
+  response?: string;
+  modelApiValue?: string;
 }
 
 function Chat() {
-    const [selectedModel, setSelectedModel] = useState('M8')
+    const [selectedModel, setSelectedModel] = useState('M9')
     const [messages, setMessages] = useState<Message[]>([])
     const { models } = useModels();
 
@@ -111,7 +114,10 @@ function Chat() {
           id: createId(), 
           text: botText, 
           type: 'bot', 
-          info: modelDisplayName 
+          info: modelDisplayName,
+          prompt: message,
+          response: botText,
+          modelApiValue: selectedModelValue
         }]);
 
         console.log("Curr model: ", selectedModel)
@@ -152,7 +158,16 @@ function Chat() {
                             ) : (
                               <ChatMessage 
                                 key={msg.id} text={msg.text} type={msg.type} info={msg.info} 
-                                gaicoObject={{} as GaicoRequest} 
+                                // modelName: display name for model
+                                // apiValue: backend model ID (e.g., "M8")
+                                // prompt: user input text
+                                // chatbotResponse: model response text
+                                gaicoObject={{
+                                  modelName: msg.info || '',
+                                  apiValue: msg.modelApiValue || selectedModel,
+                                  prompt: msg.prompt || '',
+                                  chatbotResponse: msg.response || msg.text
+                                } as GaicoRequest} 
                               />
                             )
                           )

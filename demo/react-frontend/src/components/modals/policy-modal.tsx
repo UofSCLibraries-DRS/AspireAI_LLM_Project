@@ -5,28 +5,21 @@ function PolicyModal({ show, onClose }: { show: boolean; onClose: () => void }) 
 
     return(
         <GenericModal show={show} onClose={onClose} title="Privacy Policy">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat.</p>
-            
-            <h4>Data Collection and Usage:</h4>
-            <p>We collect:</p>
-            <ul>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                commodo consequat.</li>
-            </ul>
-            <p>We do <strong>NOT</strong> collect:</p>
-            <ul>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                commodo consequat.
-                </li>
-            </ul>
 
-            <p>By using this chatbot, you agree Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.</p>
+        <h4>Data Collection and Usage:</h4>
+        <p>To improve our services, we collect:</p>
+        <ul>
+            <li>All chatbot interactions and conversations.</li>
+
+            <li>User feedback and ratings.</li>
+
+            <li>General usage statistics (e.g., frequency of use, feature engagement).</li>
+        </ul>
+        <p>We do <strong>NOT</strong> collect:</p>
+        <ul>
+            <li>Any personally identifying information unless explicitly provided by you through chatbot interactions or submitted forms.</li>
+        </ul>
+        <p>By using this chatbot, you agree to the collection of the data mentioned above for the purposes of service improvement and troubleshooting.</p>
         </GenericModal>
     );
 }

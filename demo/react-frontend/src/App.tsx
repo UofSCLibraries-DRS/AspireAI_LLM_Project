@@ -5,9 +5,7 @@ import {
 } from "react-router"
 
 import MainChat from "./pages/chat"
-// import CompareModels from './pages/CompareModels'  
-// import PromptSelect from './pages/CompareModels/prompt-select' 
-// import Results from './pages/CompareModels/results'  
+import Gaico from "./pages/gaico"
 import './styles/index.css'
 
 function App() {
@@ -15,7 +13,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<MainChat />} />
-        {/* <Route path="/compare" element={<CompareModels /> } /> */}
+        <Route path="/gaico" element={<Gaico /> } />
       </Routes>
     </Router>
   );
