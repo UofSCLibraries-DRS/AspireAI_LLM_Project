@@ -26,9 +26,8 @@ data/mccray/bin
 my_files/
 
 # logs
-llm_tuning/logs/
-llm_tuning/cache/
 fine_tuning/logs/
+fine_tuning/slurm_scripts/logs/
 
 
 # ocr data + csvs
