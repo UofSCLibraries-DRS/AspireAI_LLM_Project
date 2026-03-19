@@ -3,7 +3,8 @@
 #SBATCH -N 1
 #SBATCH -n 16
 #SBATCH --gres=gpu:1
-#SBATCH --time=8:00:00
+#SBATCH --exclusive
+#SBATCH --time=16:00:00
 #SBATCH --output logs/lora_ft_%j.out
 #SBATCH --error logs/lora_ft_%j.err
 #SBATCH -p gpu-A100
