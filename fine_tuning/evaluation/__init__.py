@@ -3,7 +3,7 @@ from .accuracy import (
     save_inference_results_with_metrics,
     InferenceResultWithMetrics,
 )
-from .accuracy_2 import gaico_accuracy
+from .accuracy import gaico_accuracy
 
 __all__ = [
     "calculate_bertscore_batched",
