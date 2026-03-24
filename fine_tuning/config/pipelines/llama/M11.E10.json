@@ -27,9 +27,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_1k.01.r8.json"
             ],
             "output": "M11.E10.NQ1k.01.r8"
@@ -49,9 +48,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_1k.01.r16.json"
             ],
             "output": "M11.E10.NQ1k.01.r16"
@@ -71,9 +69,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_1k.02.r8.json"
             ],
             "output": "M11.E10.NQ1k.02.r8"
@@ -93,9 +90,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_1k.02.r16.json"
             ],
             "output": "M11.E10.NQ1k.02.r16"
@@ -115,9 +111,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_1k.03.r8.json"
             ],
             "output": "M11.E10.NQ1k.03.r8"
@@ -137,9 +132,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_1k.03.r16.json"
             ],
             "output": "M11.E10.NQ1k.03.r16"
@@ -159,9 +153,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_2k.01.r8.json"
             ],
             "output": "M11.E10.NQ2k.01.r8"
@@ -181,9 +174,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_2k.01.r16.json"
             ],
             "output": "M11.E10.NQ2k.01.r16"
@@ -203,9 +195,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_2k.02.r8.json"
             ],
             "output": "M11.E10.NQ2k.02.r8"
@@ -225,9 +216,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_2k.02.r16.json"
             ],
             "output": "M11.E10.NQ2k.02.r16"
@@ -247,9 +237,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_2k.03.r8.json"
             ],
             "output": "M11.E10.NQ2k.03.r8"
@@ -269,9 +258,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_2k.03.r16.json"
             ],
             "output": "M11.E10.NQ2k.03.r16"
@@ -291,9 +279,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_4k.01.r8.json"
             ],
             "output": "M11.E10.NQ4k.01.r8"
@@ -313,9 +300,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_4k.01.r16.json"
             ],
             "output": "M11.E10.NQ4k.01.r16"
@@ -335,9 +321,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_4k.02.r8.json"
             ],
             "output": "M11.E10.NQ4k.02.r8"
@@ -357,9 +342,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_4k.02.r16.json"
             ],
             "output": "M11.E10.NQ4k.02.r16"
@@ -379,9 +363,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_4k.03.r8.json"
             ],
             "output": "M11.E10.NQ4k.03.r8"
@@ -401,9 +384,8 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M11.E10",
             "train_steps": [
-                "ft/steps/llama/lora/lora64_cpt.json",
                 "ft/steps/llama/lora/NQ_sft_4k.03.r16.json"
             ],
             "output": "M11.E10.NQ4k.03.r16"
