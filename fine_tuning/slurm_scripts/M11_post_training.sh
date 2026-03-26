@@ -21,9 +21,5 @@ module load cuda/12.1
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 python -u -m fine_tuning.main \
-    --pipeline-path /work/jaaydin/AspireAI_LLM_Project/fine_tuning/config/pipelines/llama/M11.E20.json \
-    --env .env.rci
-
-python -u -m fine_tuning.main \
-    --pipeline-path /work/jaaydin/AspireAI_LLM_Project/fine_tuning/config/pipelines/llama/M11.E10.json \
+    --pipeline-path /work/jaaydin/AspireAI_LLM_Project/fine_tuning/config/pipelines/llama/M11_full.json \
     --env .env.rci
