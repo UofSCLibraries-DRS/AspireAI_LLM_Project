@@ -21,7 +21,6 @@
         "logging_strategy": "epoch",
         "optim": "adamw_torch",
         "weight_decay": 0.01,
-        "push_to_hub": false,
-        "gradient_checkpointing": true
+        "push_to_hub": false
     }
 }
