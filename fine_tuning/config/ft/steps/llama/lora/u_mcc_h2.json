@@ -1,5 +1,5 @@
 {
     "trainer": "LoRAUnsupervisedTrainer",
-    "data": "raw/D_mcc_h2.csv",
+    "data": "raw/combined.csv",
     "config": "ft/training/lora_unsupervised_D_mcc_h2.json"
 }
