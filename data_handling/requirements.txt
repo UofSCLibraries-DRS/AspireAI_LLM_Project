@@ -4,3 +4,5 @@ numpy
 matplotlib
 ipykernel
 openpyxl
+ployly
+nbformat>=4.2.0
