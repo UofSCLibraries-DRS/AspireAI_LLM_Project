@@ -1,5 +1,9 @@
 # Data handling of USC digital collections metadata
 
+## Notebook usecases
+
+- 01-contentdm
+
 ## Notebooks setup 
 ### Setup venv & notebook kernel
 #### Create a virtual environment
