@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>About This Project</title>
 </head>
 
 <body>
@@ -25,6 +25,15 @@
       margin-bottom: 30px;
       padding-bottom: 10px;
       border-bottom: 2px solid #73000a;
+    }
+
+    h2 {
+      color: #73000a;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      font-size: 20px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 6px;
     }
 
     p {
@@ -61,16 +70,130 @@
       color: white;
       text-decoration: none;
     }
+
+    .collections-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .collections-list li {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-left: 4px solid #73000a;
+      border-radius: 4px;
+      padding: 14px 18px;
+      margin-bottom: 14px;
+    }
+
+    .collections-list li strong {
+      display: block;
+      color: #73000a;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .collections-list li span {
+      font-size: 15px;
+      color: #555;
+    }
   </style>
+
   <!-- go back link -->
-  <a href="index.html" class="back-button">← Back to Chatbot</a>
+  <a href="index.html" class="back-button">Back to Chatbot</a>
 
   <h1>About This Project</h1>
-  <p>This project is a chatbot that helps users find information from the University of South Carolina's digitized
-    special collections.
-  </p>
-  <p>The chatbot is hosted on AWS and is available 24/7.</p>
-  <p>More information coming soon...</p>
+
+  <p>Libraries have enormous amounts of data in the form of text, audio, and images. These rich digital archives
+    contain detailed, authoritative records of social, cultural, and political history of a specific period or
+    geographical location.</p>
+
+  <p>Commercially available LLM chatbots can generate responses to questions on these collections; however, their
+    answers may be unreliable or hallucinatory for several reasons. First, these models do not have direct access to
+    the collections, nor were the materials included in their training data. Second, there is typically no systematic
+    evaluation of the accuracy or scholarly quality of their responses.</p>
+
+  <p>On the contrary, Libraries provide authoritative access to these collections, positioning them uniquely to
+    support more reliable and accountable AI-driven research tools.</p>
+
+  <p>In this project, we are developing a chatbot that is fine-tuned on these specific archival materials and whose
+    responses are rigorously evaluated against a gold standard established by domain experts—historians and
+    civil-rights scholars in our case. This approach aims to produce responses that are not only contextually
+    relevant but also historically accurate and verifiable.</p>
+
+  <h2>University of South Carolina Civil Rights Collections</h2>
+
+  <p>The following collections from the University of South Carolina are included in this pilot project:</p>
+
+  <ol class="collections-list">
+    <li>
+      <strong><a
+          href="https://digital.library.sc.edu/collections/new-insights-in-the-american-civil-rights-movement-south-carolina-council-on-human-relations-records/"
+          target="_blank">New Insights in the American Civil Rights Movement: South
+          Carolina Council on Human Relations
+          Records</a></strong>
+      <span>The South Carolina Council on Human Relations (SCCHR) played a key role in fostering better living and
+        social conditions for African Americans and promoting racial harmony within South Carolina and the South
+        generally.</span>
+    </li>
+    <li>
+      <strong><a href="https://digital.library.sc.edu/collections/john-henry-mccray-papers-1929-1989/"
+          target="_blank">John Henry McCray Papers, 1929–1989</a></strong>
+      <span>This collection of manuscripts and photographs documents the life and work of journalist and politician
+        John H. McCray (1910–1987).</span>
+    </li>
+    <li>
+      <strong><a href="https://digital.library.sc.edu/collections/modjeska-monteith-simkins-papers-1909-1992/"
+          target="_blank">Modjeska Monteith Simkins Papers, 1909–1992</a></strong>
+      <span>Columbia civil rights activist Simkins was a founder of the Victory Savings Bank and proved to be a key
+        influence in many SC political campaigns.</span>
+    </li>
+    <li>
+      <strong><a href="https://digital.library.sc.edu/collections/briggs-v-elliott/" target="_blank">Briggs v.
+          Elliott</a></strong>
+      <span>Comprised of special collections and archives from UofSC's South Caroliniana Library and South Carolina
+        Political Collections, South Carolina Department of Archives and History, Richland County Public Library,
+        and the S.C. State Library, this digital collection provides a contextual glance into primary sources
+        surrounding the legal case Briggs v. Elliott.</span>
+    </li>
+    <li>
+      <strong><a href="https://digital.library.sc.edu/collections/m-hayes-mizell-papers/" target="_blank">M. Hayes
+          Mizell Papers</a></strong>
+      <span>This digital collection consists chiefly of reports relating to implementation of school desegregation
+        that were sent to M. Hayes Mizell in his role with the American Friends Service Committee, his own speeches
+        and writings, and photographs.</span>
+    </li>
+    <li>
+      <strong><a href="https://digital.library.sc.edu/collections/james-t-mccain-papers-1957-1972/"
+          target="_blank">James T. McCain Papers, 1957–1972</a></strong>
+      <span>This digital collection includes calendars, notebooks, letters, publications, essays, speeches, and other
+        papers documenting McCain's involvement with local and national civil rights organizations. The bulk of the
+        items evidence his interest in local issues such as illiteracy, integration of public schools, and voter
+        turnout in South Carolina's African American community.</span>
+    </li>
+    <li>
+      <strong><a href="https://digital.library.sc.edu/collections/eugene-avery-adams-papers-1892-1968/"
+          target="_blank">Eugene Avery Adams Papers, 1892–1968</a></strong>
+      <span>Papers documenting the life of a twentieth-century AME minister and leader in the fields of education,
+        civil rights, and business.</span>
+    </li>
+    <li>
+      <strong><a href="https://digital.library.sc.edu/collections/joseph-a-de-laine-papers-ca-1918-2000/"
+          target="_blank">Joseph A. De Laine Papers, c. 1918–2000</a></strong>
+      <span>This core unit of three hundred fifty items covers chiefly the period from 1942, when Joseph Armstrong
+        DeLaine submitted his annual report as secretary of the Clarendon County Citizens Committee, to 1974, when
+        he delivered an address entitled "History leading up to the U.S. Supreme Court's Decision outlawing
+        Segregation in Public Schools."</span>
+    </li>
+    <li>
+      <strong><a href="https://digital.library.sc.edu/collections/isleevy/" target="_blank">Isaac Samuel Leevy Papers,
+          1905–1973</a></strong>
+      <span>Isaac Samuel Leevy (1876–1968) was an entrepreneur and civic leader in Columbia, South Carolina best
+        known for directing Leevy's Funeral Home and staunchly supporting a two-party political system in the state
+        as a Republican and Richland County Chairman of the South Carolina Republican Party.</span>
+    </li>
+  </ol>
+
 </body>
 
 </html>

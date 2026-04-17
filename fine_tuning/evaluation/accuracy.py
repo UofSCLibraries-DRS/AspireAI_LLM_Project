@@ -1,164 +1,106 @@
+from typing import Dict
 from dataclasses import dataclass, field
-from typing import Dict, List
+from gaico import Experiment
+from typing import List
 from fine_tuning.inference import InferenceResult
-from bert_score import score
+import pandas as pd
 
 import os
 import csv
 from collections import defaultdict
 
+DELIMITER = "__@__"
 
-# TODOs:
-#   - Optimize KV by sub batching prompt formats
+
 @dataclass
 class InferenceResultWithMetrics(InferenceResult):
     metrics: Dict[str, float] = field(default_factory=dict)
 
 
-def calculate_bertscore_batched(
-    results: List[InferenceResult],
-    model_type: str = "microsoft/deberta-xlarge-mnli",
-    device: str = "cuda",
-    batch_size: int = 64,
-) -> List[InferenceResultWithMetrics]:
-    """ """
-    # Collect all candidates and references with tracking info
-    all_candidates = []
-    all_references = []
-    result_mapping = []  # Maps back to (result_idx, response_idx)
-
-    for result_idx, result in enumerate(results):
-        for response_idx, response in enumerate(result.responses):
-            all_candidates.append(response)
-            all_references.append(result.ground_truth)
-            result_mapping.append((result_idx, response_idx))
-
-    if not all_candidates:
-        # No responses to evaluate
-        return [
-            InferenceResultWithMetrics(**vars(result), metrics={}) for result in results
-        ]
-
-    # Calculate BERTScore for all at once
-    P, R, F1 = score(
-        cands=all_candidates,
-        refs=all_references,
-        model_type=model_type,
-        device=device,
-        batch_size=batch_size,
-        lang="en",
-        verbose=False,
+def _get_id(inference_result: InferenceResult, variant: str) -> str:
+    return os.path.join(
+        inference_result.model,
+        "results",
+        os.path.basename(inference_result.prompt_template).removesuffix(".yaml"),
+        f"metrics_summary_{variant}.csv",
     )
 
-    # Convert to lists
-    precision_scores = P.tolist()
-    recall_scores = R.tolist()
-    f1_scores = F1.tolist()
 
-    # Organize scores back by result
-    result_scores = {}
-    for idx, (result_idx, response_idx) in enumerate(result_mapping):
-        if result_idx not in result_scores:
-            result_scores[result_idx] = {"precision": [], "recall": [], "f1": []}
-        result_scores[result_idx]["precision"].append(precision_scores[idx])
-        result_scores[result_idx]["recall"].append(recall_scores[idx])
-        result_scores[result_idx]["f1"].append(f1_scores[idx])
+def gaico_accuracy(
+    results: List[InferenceResult],
+) -> None:
+    # Define ground truth variants to process
+    variants = ["short", "ideal", "short_agg", "ideal_agg"]
 
-    # Create results with metrics
-    results_with_metrics = []
-    for result_idx, result in enumerate(results):
-        if result_idx not in result_scores:
-            # No responses for this result
-            results_with_metrics.append(
-                InferenceResultWithMetrics(**vars(result), metrics={})
-            )
+    for variant in variants:
+        ground_truth_attr = f"ground_truth_{variant}"
+
+        # Group results by ground truth variant, filtering out empty/NaN values
+        grouped = defaultdict(list)
+        for result in results:
+            gt_value = getattr(result, ground_truth_attr, None)
+
+            # Skip if ground truth is None, empty string, or NaN
+            if (
+                gt_value is None
+                or gt_value == ""
+                or (isinstance(gt_value, float) and pd.isna(gt_value))
+            ):
+                continue
+
+            grouped[gt_value].append(result)
+
+        # Skip this variant if no valid ground truths found
+        if not grouped:
             continue
 
-        scores = result_scores[result_idx]
-        f_scores = scores["f1"]
+        master_df = pd.DataFrame()
 
-        metrics = {
-            "bertscore": sum(f_scores) / len(f_scores),
-        }
+        for ground_truth, group_results in grouped.items():
+            # Populate responses for exp class
+            responses = {}
+            for result in group_results:
+                for i, response in enumerate(result.responses):
+                    responses[f"{_get_id(result, variant)}{DELIMITER}{i}"] = response
 
-        results_with_metrics.append(
-            InferenceResultWithMetrics(**vars(result), metrics=metrics)
-        )
-
-    return results_with_metrics
-
-
-def save_inference_results_with_metrics(
-    inference_results: List[InferenceResultWithMetrics],
-):
-    # Group by model and output file
-    grouped = defaultdict(list)
-    for result in inference_results:
-        key = (result.model, result.output_file, result.prompt_template)
-        grouped[key].append(result)
-
-    # Track metrics by model-prompt combo for averaging
-    model_prompt_metrics = defaultdict(lambda: defaultdict(list))
-
-    # Write each group to the corresponding csv
-    for (model, output_file, prompt_template), results in grouped.items():
-        prompt_name = os.path.basename(prompt_template).removesuffix(".yaml")
-        csv_path = os.path.join(model, "results", prompt_name, output_file)
-
-        os.makedirs(os.path.dirname(csv_path), exist_ok=True)
-
-        # Collect all unique metric keys from all results in this group
-        metric_keys = set()
-        for result in results:
-            metric_keys.update(result.metrics.keys())
-            # Accumulate metrics for this model-prompt combo
-            combo_key = (model, prompt_name)
-            for metric_key, metric_value in result.metrics.items():
-                model_prompt_metrics[combo_key][metric_key].append(metric_value)
-
-        # Sort metric keys for consistent column ordering
-        metric_keys = sorted(metric_keys)
-
-        # Build fieldnames: base fields + metric fields
-        fieldnames = ["question", "answer", "response"] + metric_keys
-
-        with open(csv_path, "w", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(
-                f,
-                fieldnames=fieldnames,
-                quoting=csv.QUOTE_ALL,
+            exp = Experiment(
+                llm_responses=responses,
+                reference_answer=ground_truth,
             )
-            writer.writeheader()
+            results_df = exp.compare(plot=False)
 
-            for result in results:
-                for response in result.responses:
-                    row = {
-                        "question": result.prompt,
-                        "answer": result.ground_truth,
-                        "response": response,
-                    }
-                    # Add all metrics to the row
-                    for metric_key in metric_keys:
-                        row[metric_key] = result.metrics.get(metric_key, "")
+            # Append to master df
+            master_df = pd.concat([master_df, results_df], ignore_index=True)
 
-                    writer.writerow(row)
-
-    # Save average metrics for each model-prompt combo
-    for (model, prompt_name), metrics_dict in model_prompt_metrics.items():
-        summary_path = os.path.join(
-            model, "results", prompt_name, "metrics_summary.csv"
+        # Split model_name to extract the original id and response index
+        master_df[["original_id", "response_idx"]] = master_df["model_name"].str.split(
+            DELIMITER,
+            expand=True,
         )
-        os.makedirs(os.path.dirname(summary_path), exist_ok=True)
 
-        # Calculate averages
-        metric_averages = {}
-        for metric_key, values in metrics_dict.items():
-            if values:
-                metric_averages[metric_key] = sum(values) / len(values)
+        # Group by original_id and metric_name, then aggregate scores (average)
+        aggregated = (
+            master_df.groupby(["original_id", "metric_name"])["score"]
+            .mean()
+            .reset_index()
+        )
 
-        # Write summary file
-        with open(summary_path, "w", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f, quoting=csv.QUOTE_ALL)
-            writer.writerow(["metric", "average"])
-            for metric_key in sorted(metric_averages.keys()):
-                writer.writerow([metric_key, metric_averages[metric_key]])
+        # Build output list and write summary files
+        for original_id in aggregated["original_id"].unique():
+            # Get metrics for this path
+            metrics_subset = aggregated[aggregated["original_id"] == original_id]
+
+            # Build metrics_dict
+            metric_averages = {}
+            for _, row in metrics_subset.iterrows():
+                metric_averages[row["metric_name"]] = row["score"]
+
+            # Write summary file - original_id is already the full path
+            summary_path = original_id
+            os.makedirs(os.path.dirname(summary_path), exist_ok=True)
+
+            with open(summary_path, "w", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f, quoting=csv.QUOTE_ALL)
+                writer.writerow(["metric", "average"])
+                for metric_key in sorted(metric_averages.keys()):
+                    writer.writerow([metric_key, metric_averages[metric_key]])

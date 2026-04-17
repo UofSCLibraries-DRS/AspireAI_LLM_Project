@@ -1,0 +1,30 @@
+[
+    {
+        "model": {
+            "start": "Llama-3.1-8B",
+            "train_steps": [
+                "ft/steps/llama/lora/lora64_cpt.json"
+            ],
+            "output": "M11"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "base_p1.yaml",
+                    "base_p2.yaml",
+                    "base_p3.yaml",
+                    "base_p4.yaml",
+                    "base_p5.yaml",
+                    "icl_test/icl_p6.yaml",
+                    "icl_test/icl_p7.yaml",
+                    "icl_test/icl_p8.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    }
+]

@@ -1,0 +1,228 @@
+[
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/gemma/full_gemm_mcc.json"
+            ],
+            "output": "M10"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "base_p1.yaml",
+                    "base_p2.yaml",
+                    "base_p3.yaml",
+                    "base_p4.yaml",
+                    "base_p5.yaml",
+                    "icl_test/icl_p6.yaml",
+                    "icl_test/icl_p7.yaml",
+                    "icl_test/icl_p8.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/gemma/full_gemm_mcc.json",
+                "ft/steps/gemma/NQ_sft_1k.01.json"
+            ],
+            "output": "M10.NQ1k.01"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/gemma/full_gemm_mcc.json",
+                "ft/steps/gemma/NQ_sft_1k.02.json"
+            ],
+            "output": "M10.NQ1k.02"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/gemma/full_gemm_mcc.json",
+                "ft/steps/gemma/NQ_sft_1k.03.json"
+            ],
+            "output": "M10.NQ1k.03"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/gemma/full_gemm_mcc.json",
+                "ft/steps/gemma/NQ_sft_2k.01.json"
+            ],
+            "output": "M10.NQ2k.01"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/gemma/full_gemm_mcc.json",
+                "ft/steps/gemma/NQ_sft_2k.02.json"
+            ],
+            "output": "M10.NQ2k.02"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/gemma/full_gemm_mcc.json",
+                "ft/steps/gemma/NQ_sft_2k.03.json"
+            ],
+            "output": "M10.NQ2k.03"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/gemma/full_gemm_mcc.json",
+                "ft/steps/gemma/NQ_sft_4k.01.json"
+            ],
+            "output": "M10.NQ4k.01"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/gemma/full_gemm_mcc.json",
+                "ft/steps/gemma/NQ_sft_4k.02.json"
+            ],
+            "output": "M10.NQ4k.02"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [
+                "ft/steps/gemma/full_gemm_mcc.json",
+                "ft/steps/gemma/NQ_sft_4k.03.json"
+            ],
+            "output": "M10.NQ4k.03"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    }
+]

@@ -1,9 +1,0 @@
-# Trying to remove pandas
-datasets
-transformers
-torch
-peft
-python-dotenv
-jsonschema
-matplotlib
-# accelerate # Shouldn't need to explicitly install this

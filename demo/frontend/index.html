@@ -216,6 +216,7 @@
       border-radius: 10px;
       line-height: 1.5;
       word-wrap: break-word;
+      white-space: pre-wrap;
     }
 
     .message.user {
@@ -239,6 +240,23 @@
 
     .message-wrapper.user .message-info {
       text-align: right;
+    }
+
+    .message-sources {
+      font-size: 0.75em;
+      margin-top: 4px;
+      padding: 0 5px;
+      color: var(--text-secondary);
+    }
+
+    .message-sources a {
+      color: var(--primary-red);
+      text-decoration: none;
+      margin: 0 2px;
+    }
+
+    .message-sources a:hover {
+      text-decoration: underline;
     }
 
     /* System Messages */
@@ -450,6 +468,22 @@
       background: var(--primary-red-dark);
     }
 
+    .modal-content ul {
+      padding-left: 25px;
+      /* Creates the "tabbed" indentation */
+      margin-bottom: 15px;
+      /* Adds space after the list */
+    }
+
+    .modal-content li {
+      margin-bottom: 8px;
+      /* Adds breathing room between each bullet point */
+      color: var(--text-primary);
+      /* Ensures text color matches your theme */
+      list-style-type: disc;
+      /* Force-restores the circle bullet shape */
+    }
+
     /* Welcome Screen */
     #welcomeScreen {
       display: flex;
@@ -570,10 +604,11 @@
     <!-- Sidebar -->
     <div id="sidebar">
       <h2>About the Chatbot</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-        pariatur.</p>
+      <p>This chatbot is designed to provide enhanced access to the University of South Carolina’s civil rights
+        collections through the use of artificial intelligence. Drawing on materials from the John H. McCray Digital
+        Collection, the system helps users explore historical figures, organizations, and events connected to South
+        Carolina’s civil rights history. The goal of this project is to support research, learning, and public
+        engagement by making archival content easier to discover and understand</p>
 
       <h3>Sample Questions</h3>
       <p>The system can answer various types of questions. Here are some suggestions to get started:</p>
@@ -603,8 +638,8 @@
         <li>Medical or legal advice</li>
       </ul> -->
 
-      <button class="sidebar-button" onclick="openModal('policyModal')">View Privacy Policy</button>
       <button class="sidebar-button" onclick="window.location.href='learn.html'">Learn More About This Project</button>
+      <button class="sidebar-button" onclick="openModal('policyModal')">View Privacy Policy</button>
     </div>
 
     <!-- Chat Container -->
@@ -657,34 +692,31 @@
     <div class="modal-content">
       <button class="close-modal" onclick="closeModal('policyModal')">×</button>
       <h3>Privacy Policy</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat.</p>
-
       <h4>Data Collection and Usage:</h4>
-      <p>We collect:</p>
+      <p>To improve our services, we collect:</p>
       <ul>
-        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-          dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-          commodo consequat.</li>
+        <li>All chatbot interactions and conversations.</li>
+        <li>User feedback and ratings.</li>
+        <li>General usage statistics (e.g., frequency of use, feature engagement).</li>
       </ul>
+
       <p>We do <strong>NOT</strong> collect:</p>
       <ul>
-        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-          dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-          commodo consequat.
+        <li>
+          Any personally identifying information <strong>unless explicitly provided</strong> by you through
+          chatbot interactions or submitted forms.
         </li>
       </ul>
 
-      <p>By using this chatbot, you agree Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-        nisi ut aliquip ex ea commodo consequat.</p>
+      <p>By using this chatbot, you agree to the collection of the data mentioned above for the purposes of service
+        improvement and troubleshooting.</p>
     </div>
   </div>
 
   <script>
     // Model Configuration - Easy to add/remove models
     const AVAILABLE_MODELS = [
+      { name: 'Llama-3.1-8B, Fine-tuned', apiValue: 'M9' },
       { name: 'Gemma-3-270m, Fine-tuned', apiValue: 'M8' },
       { name: 'SafeChat', apiValue: 'SC' },
     ];
@@ -695,7 +727,7 @@
     const welcomeScreen = document.getElementById('welcomeScreen');
     const modelSelector = document.getElementById('modelSelector');
 
-    const GENERATE_API = "https://54.162.34.113/api/generate";
+    const GENERATE_API = "https://lighthouse.chat.library.sc.edu/api/generate";
 
     // Initialize model selector
     function initializeModelSelector() {
@@ -743,7 +775,7 @@
       document.getElementById(modalId).style.display = 'none';
     }
 
-    function addMessage(text, type, info = '') {
+    function addMessage(text, type, info = '', sources = []) {
       if (welcomeScreen && welcomeScreen.parentNode) {
         welcomeScreen.remove();
       }
@@ -756,6 +788,15 @@
       message.textContent = text;
 
       wrapper.appendChild(message);
+
+      if (sources && sources.length > 0) {
+        const sourcesDiv = document.createElement('div');
+        sourcesDiv.className = 'message-sources';
+        sourcesDiv.innerHTML = 'Sources: ' + sources.map((url, i) =>
+          `<a href="${url}" target="_blank" rel="noopener noreferrer">[${i + 1}]</a>`
+        ).join(' ');
+        wrapper.appendChild(sourcesDiv);
+      }
 
       if (info) {
         const infoDiv = document.createElement('div');
@@ -814,8 +855,9 @@
 
         const data = await response.json();
         const botText = data?.text || "No response received";
+        const sources = data?.sources || [];
 
-        addMessage(botText, 'bot', modelDisplayName);
+        addMessage(botText, 'bot', modelDisplayName, sources);
 
       } catch (error) {
         console.error('Error:', error);

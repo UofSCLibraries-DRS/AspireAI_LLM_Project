@@ -18,7 +18,12 @@ class InferenceJob:
     model: str
     prompt_template: str  # Path to .yaml file containing the prompt template
     prompt: str
-    ground_truth: str
+    ground_truth_short: str
+    ground_truth_ideal: str
+    ground_truth_short_agg: str
+    ground_truth_ideal_agg: str
+    dataset: str
+    subset: str
     stop_sequences: List[str] = field(
         default_factory=list
     )  # Internal logic will fill this field from the prompt template
@@ -94,6 +99,11 @@ def _batched_inference(
         tokenizer = AutoTokenizer.from_pretrained(
             model_path, use_fast=True, padding_side="left"
         )
+
+        if tokenizer.pad_token is None:
+            tokenizer.pad_token = tokenizer.eos_token
+            tokenizer.pad_token_id = tokenizer.eos_token_id
+
         tokenizer.model_max_length = max_prompt_length
 
         model = AutoModelForCausalLM.from_pretrained(
@@ -233,17 +243,26 @@ def save_inference_results(inference_results: List[InferenceResult]):
     # Group by model and output file
     grouped = defaultdict(list)
     for result in inference_results:
-        key = (result.model, result.output_file, result.prompt_template)
+        key = (result.model, result.prompt_template)
         grouped[key].append(result)
 
     # Append each response to the corresponding csv
-    for (model, output_file, prompt_template), results in grouped.items():
+    for (model, prompt_template), results in grouped.items():
         prompt_name = os.path.basename(prompt_template).removesuffix(".yaml")
-        csv_path = os.path.join(model, "results", prompt_name, output_file)
+        csv_path = os.path.join(model, "results", prompt_name, "inference_results.csv")
 
         os.makedirs(os.path.dirname(csv_path), exist_ok=True)
 
-        fieldnames = ["question", "answer", "response"]
+        fieldnames = [
+            "question",
+            "response",
+            "ground_truth_short",
+            "ground_truth_ideal",
+            "ground_truth_short_agg",
+            "ground_truth_ideal_agg",
+            "dataset",
+            "subset",
+        ]
 
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(
@@ -258,7 +277,12 @@ def save_inference_results(inference_results: List[InferenceResult]):
                     writer.writerow(
                         {
                             "question": result.prompt,
-                            "answer": result.ground_truth,
                             "response": response,
+                            "ground_truth_short": result.ground_truth_short,
+                            "ground_truth_ideal": result.ground_truth_ideal,
+                            "ground_truth_short_agg": result.ground_truth_short_agg,
+                            "ground_truth_ideal_agg": result.ground_truth_ideal_agg,
+                            "dataset": result.dataset,
+                            "subset": result.subset,
                         }
                     )

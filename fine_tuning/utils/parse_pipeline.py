@@ -142,7 +142,12 @@ def build_pipeline(
                     reader = csv.DictReader(f)
                     for row in reader:
                         q: str = row["question"]
-                        a: str = row["answer"]
+                        gt_short: str = row["answer_short"]
+                        gt_ideal: str = row["answer_ideal"]
+                        gt_short_agg: str = row.get("answer_short_agg", "")
+                        gt_ideal_agg: str = row.get("answer_ideal_agg", "")
+                        dataset: str = row["dataset"]
+                        subset: str = row["subset"]
 
                         for prompt_format in inf["prompt_formats"]:
                             inf_job = InferenceJob(
@@ -155,7 +160,12 @@ def build_pipeline(
                                     PROMPT_FOLDER, prompt_format
                                 ),
                                 prompt=q,
-                                ground_truth=a,
+                                ground_truth_short=gt_short,
+                                ground_truth_ideal=gt_ideal,
+                                ground_truth_short_agg=gt_short_agg,
+                                ground_truth_ideal_agg=gt_ideal_agg,
+                                dataset=dataset,
+                                subset=subset,
                             )
 
                             master_pipeline.inference_jobs.append(inf_job)

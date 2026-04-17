@@ -1,0 +1,12 @@
+template: |
+  <|begin_of_text|>
+  <|start_header_id|>system<|end_header_id|>
+  You are a helpful assistant. Give a short one to five word answer for any questions.
+  <|start_header_id|>user<|end_header_id|>
+  {user_prompt}
+  <|eot_id|>
+stop_sequences:
+  - "<|eot_id|>"
+  - "<|end_of_text|>"
+  - "<|start_header_id|>user"
+  - "<|start_header_id|>assistant"

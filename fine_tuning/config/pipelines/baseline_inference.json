@@ -1,0 +1,94 @@
+[
+    {
+        "model": {
+            "start": "Llama-3.1-8B",
+            "train_steps": [],
+            "output": "Llama-3.1-8B"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "base_p1.yaml",
+                    "base_p2.yaml",
+                    "base_p3.yaml",
+                    "base_p4.yaml",
+                    "base_p5.yaml",
+                    "icl_test/icl_p6.yaml",
+                    "icl_test/icl_p7.yaml",
+                    "icl_test/icl_p8.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "Llama-3.1-8B-Instruct",
+            "train_steps": [],
+            "output": "Llama-3.1-8B-Instruct"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "llama-it/base.yaml",
+                    "llama-it/short_response.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m",
+            "train_steps": [],
+            "output": "gemma-3-270m"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "base_p1.yaml",
+                    "base_p2.yaml",
+                    "base_p3.yaml",
+                    "base_p4.yaml",
+                    "base_p5.yaml",
+                    "icl_test/icl_p6.yaml",
+                    "icl_test/icl_p7.yaml",
+                    "icl_test/icl_p8.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "gemma-3-270m-it",
+            "train_steps": [],
+            "output": "gemma-3-270m-it"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "gemma-it/base.yaml",
+                    "gemma-it/short_response.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    }
+]

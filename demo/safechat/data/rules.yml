@@ -32,30 +32,60 @@ rules:
   - intent: Do not answer
   - action: utter_Do not answer
     
-- rule: Answer naacp_publish_magazine
+- rule: Answer john_mccray_journalist
   steps:
-  - intent: naacp_publish_magazine
-  - action: utter_naacp_publish_magazine
+  - intent: john_mccray_journalist
+  - action: utter_john_mccray_journalist
     
-- rule: Answer white_member_naacp
+- rule: Answer way_newspaper_column
   steps:
-  - intent: white_member_naacp
-  - action: utter_white_member_naacp
+  - intent: way_newspaper_column
+  - action: utter_way_newspaper_column
     
-- rule: Answer benjamin_ben_hook_secretary
+- rule: Answer black_newspaper_published_columbia
   steps:
-  - intent: benjamin_ben_hook_secretary
-  - action: utter_benjamin_ben_hook_secretary
+  - intent: black_newspaper_published_columbia
+  - action: utter_black_newspaper_published_columbia
     
-- rule: Answer relationship_like_sc_state
+- rule: Answer john_mccray_edit_lighthouse
   steps:
-  - intent: relationship_like_sc_state
-  - action: utter_relationship_like_sc_state
+  - intent: john_mccray_edit_lighthouse
+  - action: utter_john_mccray_edit_lighthouse
     
-- rule: Answer naacp_established_religious_organization
+- rule: Answer lighthouse_informer_black_newspaper
   steps:
-  - intent: naacp_established_religious_organization
-  - action: utter_naacp_established_religious_organization
+  - intent: lighthouse_informer_black_newspaper
+  - action: utter_lighthouse_informer_black_newspaper
+    
+- rule: Answer operational_challenge_black_newspaper
+  steps:
+  - intent: operational_challenge_black_newspaper
+  - action: utter_operational_challenge_black_newspaper
+    
+- rule: Answer thurgood_marshall_naacp_lawyer
+  steps:
+  - intent: thurgood_marshall_naacp_lawyer
+  - action: utter_thurgood_marshall_naacp_lawyer
+    
+- rule: Answer george_elmore_plantiff_south
+  steps:
+  - intent: george_elmore_plantiff_south
+  - action: utter_george_elmore_plantiff_south
+    
+- rule: Answer james_hinton_write_letter
+  steps:
+  - intent: james_hinton_write_letter
+  - action: utter_james_hinton_write_letter
+    
+- rule: Answer is_leevy_run_congress
+  steps:
+  - intent: is_leevy_run_congress
+  - action: utter_is_leevy_run_congress
+    
+- rule: Answer modjeska_simkins_testify_wronful
+  steps:
+  - intent: modjeska_simkins_testify_wronful
+  - action: utter_modjeska_simkins_testify_wronful
     
 - rule: Answer lighthouse_informer_published
   steps:
@@ -77,15 +107,60 @@ rules:
   - intent: much_sixmonth_subscription_lighthouse
   - action: utter_much_sixmonth_subscription_lighthouse
     
-- rule: Answer much_yearlong_subscription_lighthouse
-  steps:
-  - intent: much_yearlong_subscription_lighthouse
-  - action: utter_much_yearlong_subscription_lighthouse
-    
 - rule: Answer lighthouse_informer_cease_publication
   steps:
   - intent: lighthouse_informer_cease_publication
   - action: utter_lighthouse_informer_cease_publication
+    
+- rule: Answer john_mccrays_position_progressive
+  steps:
+  - intent: john_mccrays_position_progressive
+  - action: utter_john_mccrays_position_progressive
+    
+- rule: Answer john_mccray_receive_w
+  steps:
+  - intent: john_mccray_receive_w
+  - action: utter_john_mccray_receive_w
+    
+- rule: Answer john_mccray_write_john
+  steps:
+  - intent: john_mccray_write_john
+  - action: utter_john_mccray_write_john
+    
+- rule: Answer john_mccray_apply_work
+  steps:
+  - intent: john_mccray_apply_work
+  - action: utter_john_mccray_apply_work
+    
+- rule: Answer year_john_mccray_resign
+  steps:
+  - intent: year_john_mccray_resign
+  - action: utter_year_john_mccray_resign
+    
+- rule: Answer naacp_founded
+  steps:
+  - intent: naacp_founded
+  - action: utter_naacp_founded
+    
+- rule: Answer naacp_organized
+  steps:
+  - intent: naacp_organized
+  - action: utter_naacp_organized
+    
+- rule: Answer naacp_publish_magazine
+  steps:
+  - intent: naacp_publish_magazine
+  - action: utter_naacp_publish_magazine
+    
+- rule: Answer white_member_naacp
+  steps:
+  - intent: white_member_naacp
+  - action: utter_white_member_naacp
+    
+- rule: Answer benjamin_ben_hook_secretary
+  steps:
+  - intent: benjamin_ben_hook_secretary
+  - action: utter_benjamin_ben_hook_secretary
     
 - rule: Answer acronym_pdp_stand_for
   steps:
@@ -112,6 +187,31 @@ rules:
   - intent: john_mccray_republican
   - action: utter_john_mccray_republican
     
+- rule: Answer allen_university_qualified_train
+  steps:
+  - intent: allen_university_qualified_train
+  - action: utter_allen_university_qualified_train
+    
+- rule: Answer john_mccray_give_address
+  steps:
+  - intent: john_mccray_give_address
+  - action: utter_john_mccray_give_address
+    
+- rule: Answer many_white_student_transported
+  steps:
+  - intent: many_white_student_transported
+  - action: utter_many_white_student_transported
+    
+- rule: Answer many_black_student_transported
+  steps:
+  - intent: many_black_student_transported
+  - action: utter_many_black_student_transported
+    
+- rule: Answer 1950s_south_carolina_spend
+  steps:
+  - intent: 1950s_south_carolina_spend
+  - action: utter_1950s_south_carolina_spend
+    
 - rule: Answer john_mccray_write_report
   steps:
   - intent: john_mccray_write_report
@@ -137,28 +237,58 @@ rules:
   - intent: black_voter_keep_record
   - action: utter_black_voter_keep_record
     
-- rule: Answer allen_university_qualified_train
+- rule: Answer address_called_need_changing
   steps:
-  - intent: allen_university_qualified_train
-  - action: utter_allen_university_qualified_train
+  - intent: address_called_need_changing
+  - action: utter_address_called_need_changing
     
-- rule: Answer john_mccray_give_address
+- rule: Answer address_segregation_john_mccray
   steps:
-  - intent: john_mccray_give_address
-  - action: utter_john_mccray_give_address
+  - intent: address_segregation_john_mccray
+  - action: utter_address_segregation_john_mccray
     
-- rule: Answer many_white_student_transported
+- rule: Answer court_ruling_established_seperate
   steps:
-  - intent: many_white_student_transported
-  - action: utter_many_white_student_transported
+  - intent: court_ruling_established_seperate
+  - action: utter_court_ruling_established_seperate
     
-- rule: Answer many_black_student_transported
+- rule: Answer james_hinton_write_john
   steps:
-  - intent: many_black_student_transported
-  - action: utter_many_black_student_transported
+  - intent: james_hinton_write_john
+  - action: utter_james_hinton_write_john
     
-- rule: Answer 1950s_south_carolina_spend
+- rule: Answer july_1947_ocean_front
   steps:
-  - intent: 1950s_south_carolina_spend
-  - action: utter_1950s_south_carolina_spend
+  - intent: july_1947_ocean_front
+  - action: utter_july_1947_ocean_front
+    
+- rule: Answer john_mccrays_address_segregation
+  steps:
+  - intent: john_mccrays_address_segregation
+  - action: utter_john_mccrays_address_segregation
+    
+- rule: Answer national_bar_association_make
+  steps:
+  - intent: national_bar_association_make
+  - action: utter_national_bar_association_make
+    
+- rule: Answer journalist_featured_interview_prominent
+  steps:
+  - intent: journalist_featured_interview_prominent
+  - action: utter_journalist_featured_interview_prominent
+    
+- rule: Answer sc_progressive_democrat_release
+  steps:
+  - intent: sc_progressive_democrat_release
+  - action: utter_sc_progressive_democrat_release
+    
+- rule: Answer 1963_columbia_south_carolina
+  steps:
+  - intent: 1963_columbia_south_carolina
+  - action: utter_1963_columbia_south_carolina
+    
+- rule: Answer black_life_columbia_improved
+  steps:
+  - intent: black_life_columbia_improved
+  - action: utter_black_life_columbia_improved
     

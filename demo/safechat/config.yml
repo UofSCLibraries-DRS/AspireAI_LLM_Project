@@ -49,4 +49,4 @@ policies: null
 
 action_endpoint:
   url: "http://localhost:5005/webhook"
-assistant_id: 20251209-130717-chill-surf
+assistant_id: 20260227-112821-savory-particle

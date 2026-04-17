@@ -70,15 +70,14 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
         # Load local model
         model = AutoModelForCausalLM.from_pretrained(
             self.start_model,
-            torch_dtype="auto",
-            device_map="cuda",
+            dtype="auto",
         )
-
-        print(next(model.parameters()).device)
 
         # Apply Lora cfg
         lora_config = LoraConfig(**lora_cfg)
         model = get_peft_model(model, lora_config)
+
+        model.enable_input_require_grads()
 
         # Add training args
         training_args = TrainingArguments(
@@ -87,6 +86,8 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
             logging_dir=LOG_DIR,
             fp16=not torch.cuda.is_bf16_supported(),
             bf16=torch.cuda.is_bf16_supported(),
+            gradient_checkpointing=True,
+            gradient_checkpointing_kwargs={"use_reentrant": False},
         )
 
         data_collator = DataCollatorForLanguageModeling(tokenizer, mlm=False)

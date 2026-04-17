@@ -36,26 +36,68 @@ stories:
   - action: action_session_id
 
 
-- story: sc_state_conference_naacp path
+- story: black_newspaper_published_south path
   steps:
-  - intent: sc_state_conference_naacp
-  - action: utter_summary_sc_state_conference_naacp
+  - intent: black_newspaper_published_south
+  - action: utter_summary_black_newspaper_published_south
   - intent: full_answer
-  - action: utter_sc_state_conference_naacp
+  - action: utter_black_newspaper_published_south
     
-- story: sarah_mae_flemmings_city path
+- story: john_mccrays_career_journalist path
   steps:
-  - intent: sarah_mae_flemmings_city
-  - action: utter_summary_sarah_mae_flemmings_city
+  - intent: john_mccrays_career_journalist
+  - action: utter_summary_john_mccrays_career_journalist
   - intent: full_answer
-  - action: utter_sarah_mae_flemmings_city
+  - action: utter_john_mccrays_career_journalist
     
-- story: challenge_naacp_chapter_face path
+- story: black_newspaper_write_about path
   steps:
-  - intent: challenge_naacp_chapter_face
-  - action: utter_summary_challenge_naacp_chapter_face
+  - intent: black_newspaper_write_about
+  - action: utter_summary_black_newspaper_write_about
   - intent: full_answer
-  - action: utter_challenge_naacp_chapter_face
+  - action: utter_black_newspaper_write_about
+    
+- story: journalism_empower_black_south path
+  steps:
+  - intent: journalism_empower_black_south
+  - action: utter_summary_journalism_empower_black_south
+  - intent: full_answer
+  - action: utter_journalism_empower_black_south
+    
+- story: james_hinton_ea_adam path
+  steps:
+  - intent: james_hinton_ea_adam
+  - action: utter_summary_james_hinton_ea_adam
+  - intent: full_answer
+  - action: utter_james_hinton_ea_adam
+    
+- story: relationship_like_george_elmore path
+  steps:
+  - intent: relationship_like_george_elmore
+  - action: utter_summary_relationship_like_george_elmore
+  - intent: full_answer
+  - action: utter_relationship_like_george_elmore
+    
+- story: is_leevy_support_presidency path
+  steps:
+  - intent: is_leevy_support_presidency
+  - action: utter_summary_is_leevy_support_presidency
+  - intent: full_answer
+  - action: utter_is_leevy_support_presidency
+    
+- story: osceola_mckaine path
+  steps:
+  - intent: osceola_mckaine
+  - action: utter_summary_osceola_mckaine
+  - intent: full_answer
+  - action: utter_osceola_mckaine
+    
+- story: modjeska_simkins_testify_polling path
+  steps:
+  - intent: modjeska_simkins_testify_polling
+  - action: utter_summary_modjeska_simkins_testify_polling
+  - intent: full_answer
+  - action: utter_modjeska_simkins_testify_polling
     
 - story: lighthouse_informer_established path
   steps:
@@ -92,6 +134,76 @@ stories:
   - intent: full_answer
   - action: utter_lighthouse_informer_important
     
+- story: necessary_john_mccray_organize path
+  steps:
+  - intent: necessary_john_mccray_organize
+  - action: utter_summary_necessary_john_mccray_organize
+  - intent: full_answer
+  - action: utter_necessary_john_mccray_organize
+    
+- story: richard_j_foster_endorse path
+  steps:
+  - intent: richard_j_foster_endorse
+  - action: utter_summary_richard_j_foster_endorse
+  - intent: full_answer
+  - action: utter_richard_j_foster_endorse
+    
+- story: john_mccray_enjoy_working path
+  steps:
+  - intent: john_mccray_enjoy_working
+  - action: utter_summary_john_mccray_enjoy_working
+  - intent: full_answer
+  - action: utter_john_mccray_enjoy_working
+    
+- story: john_mccray_enemy path
+  steps:
+  - intent: john_mccray_enemy
+  - action: utter_summary_john_mccray_enemy
+  - intent: full_answer
+  - action: utter_john_mccray_enemy
+    
+- story: according_john_mccray_black path
+  steps:
+  - intent: according_john_mccray_black
+  - action: utter_summary_according_john_mccray_black
+  - intent: full_answer
+  - action: utter_according_john_mccray_black
+    
+- story: relationship_like_sc_state path
+  steps:
+  - intent: relationship_like_sc_state
+  - action: utter_summary_relationship_like_sc_state
+  - intent: full_answer
+  - action: utter_relationship_like_sc_state
+    
+- story: sc_state_conference_naacp path
+  steps:
+  - intent: sc_state_conference_naacp
+  - action: utter_summary_sc_state_conference_naacp
+  - intent: full_answer
+  - action: utter_sc_state_conference_naacp
+    
+- story: sarah_mae_flemmings_city path
+  steps:
+  - intent: sarah_mae_flemmings_city
+  - action: utter_summary_sarah_mae_flemmings_city
+  - intent: full_answer
+  - action: utter_sarah_mae_flemmings_city
+    
+- story: challenge_naacp_chapter_face path
+  steps:
+  - intent: challenge_naacp_chapter_face
+  - action: utter_summary_challenge_naacp_chapter_face
+  - intent: full_answer
+  - action: utter_challenge_naacp_chapter_face
+    
+- story: naacp_established_religious_organization path
+  steps:
+  - intent: naacp_established_religious_organization
+  - action: utter_summary_naacp_established_religious_organization
+  - intent: full_answer
+  - action: utter_naacp_established_religious_organization
+    
 - story: john_mccray_help_recruit path
   steps:
   - intent: john_mccray_help_recruit
@@ -127,41 +239,6 @@ stories:
   - intent: full_answer
   - action: utter_progressive_democratic_party_improve
     
-- story: mccray_use_political_cartoon path
-  steps:
-  - intent: mccray_use_political_cartoon
-  - action: utter_summary_mccray_use_political_cartoon
-  - intent: full_answer
-  - action: utter_mccray_use_political_cartoon
-    
-- story: john_mccray_report_black path
-  steps:
-  - intent: john_mccray_report_black
-  - action: utter_summary_john_mccray_report_black
-  - intent: full_answer
-  - action: utter_john_mccray_report_black
-    
-- story: factor_helped_increase_rate path
-  steps:
-  - intent: factor_helped_increase_rate
-  - action: utter_summary_factor_helped_increase_rate
-  - intent: full_answer
-  - action: utter_factor_helped_increase_rate
-    
-- story: john_mccray_believe_march path
-  steps:
-  - intent: john_mccray_believe_march
-  - action: utter_summary_john_mccray_believe_march
-  - intent: full_answer
-  - action: utter_john_mccray_believe_march
-    
-- story: southern_democratic_conference_support path
-  steps:
-  - intent: southern_democratic_conference_support
-  - action: utter_summary_southern_democratic_conference_support
-  - intent: full_answer
-  - action: utter_southern_democratic_conference_support
-    
 - story: allen_university_recieve_approval path
   steps:
   - intent: allen_university_recieve_approval
@@ -196,4 +273,102 @@ stories:
   - action: utter_summary_concern_people_placing_black
   - intent: full_answer
   - action: utter_concern_people_placing_black
+    
+- story: mccray_use_political_cartoon path
+  steps:
+  - intent: mccray_use_political_cartoon
+  - action: utter_summary_mccray_use_political_cartoon
+  - intent: full_answer
+  - action: utter_mccray_use_political_cartoon
+    
+- story: john_mccray_report_black path
+  steps:
+  - intent: john_mccray_report_black
+  - action: utter_summary_john_mccray_report_black
+  - intent: full_answer
+  - action: utter_john_mccray_report_black
+    
+- story: john_mccray_believed_many path
+  steps:
+  - intent: john_mccray_believed_many
+  - action: utter_summary_john_mccray_believed_many
+  - intent: full_answer
+  - action: utter_john_mccray_believed_many
+    
+- story: john_mccray_believe_march path
+  steps:
+  - intent: john_mccray_believe_march
+  - action: utter_summary_john_mccray_believe_march
+  - intent: full_answer
+  - action: utter_john_mccray_believe_march
+    
+- story: southern_democratic_conference_support path
+  steps:
+  - intent: southern_democratic_conference_support
+  - action: utter_summary_southern_democratic_conference_support
+  - intent: full_answer
+  - action: utter_southern_democratic_conference_support
+    
+- story: black_people_help_dismantle path
+  steps:
+  - intent: black_people_help_dismantle
+  - action: utter_summary_black_people_help_dismantle
+  - intent: full_answer
+  - action: utter_black_people_help_dismantle
+    
+- story: according_john_mccray_south path
+  steps:
+  - intent: according_john_mccray_south
+  - action: utter_summary_according_john_mccray_south
+  - intent: full_answer
+  - action: utter_according_john_mccray_south
+    
+- story: significance_clarendon_county_school path
+  steps:
+  - intent: significance_clarendon_county_school
+  - action: utter_summary_significance_clarendon_county_school
+  - intent: full_answer
+  - action: utter_significance_clarendon_county_school
+    
+- story: serving_millitary_protect_black path
+  steps:
+  - intent: serving_millitary_protect_black
+  - action: utter_summary_serving_millitary_protect_black
+  - intent: full_answer
+  - action: utter_serving_millitary_protect_black
+    
+- story: member_naacp_junior_branch path
+  steps:
+  - intent: member_naacp_junior_branch
+  - action: utter_summary_member_naacp_junior_branch
+  - intent: full_answer
+  - action: utter_member_naacp_junior_branch
+    
+- story: racial_segregation_education_impede path
+  steps:
+  - intent: racial_segregation_education_impede
+  - action: utter_summary_racial_segregation_education_impede
+  - intent: full_answer
+  - action: utter_racial_segregation_education_impede
+    
+- story: national_bar_association_produce path
+  steps:
+  - intent: national_bar_association_produce
+  - action: utter_summary_national_bar_association_produce
+  - intent: full_answer
+  - action: utter_national_bar_association_produce
+    
+- story: john_mccray_believe_journalism path
+  steps:
+  - intent: john_mccray_believe_journalism
+  - action: utter_summary_john_mccray_believe_journalism
+  - intent: full_answer
+  - action: utter_john_mccray_believe_journalism
+    
+- story: black_voter_registration_increased path
+  steps:
+  - intent: black_voter_registration_increased
+  - action: utter_summary_black_voter_registration_increased
+  - intent: full_answer
+  - action: utter_black_voter_registration_increased
     
