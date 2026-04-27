@@ -1,0 +1,140 @@
+import csv
+import os
+from pathlib import Path
+
+from chatbots.factory import create_chatbot
+from utils.cache import get_embedding_cache_path
+from utils.config import ChatbotSpec, ExperimentConfig
+from utils.embeddings import precompute_embedding_cache
+from utils.faiss_index import ensure_faiss_index
+from utils.rag import RESULT_COLUMNS, build_rag_prompts, load_questions_csv
+
+
+RESULT_FILENAME = "results.csv"
+DATA_FOLDER_ENV_VAR = "DATA_FOLDER"
+
+
+def run_experiment(config: ExperimentConfig) -> Path:
+    data_path = _resolve_data_path(config.data)
+    questions_path = _resolve_data_path(config.questions)
+
+    cache_path = _ensure_embedding_cache(config, data_path)
+    retriever = ensure_faiss_index(cache_path)
+    question_rows, question_fieldnames = load_questions_csv(
+        questions_path=questions_path,
+        question_column=config.rag_config.question_column,
+    )
+    prompts = build_rag_prompts(
+        question_rows=question_rows,
+        retriever=retriever,
+        rag_config=config.rag_config,
+    )
+
+    out_dir = Path(config.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    result_path = out_dir / RESULT_FILENAME
+
+    with result_path.open("w", encoding="utf-8", newline="") as result_file:
+        writer = csv.DictWriter(
+            result_file,
+            fieldnames=[*question_fieldnames, *RESULT_COLUMNS],
+        )
+        writer.writeheader()
+
+        for chatbot_spec in config.chatbots:
+            _run_chatbot(
+                chatbot_spec=chatbot_spec,
+                question_rows=question_rows,
+                prompts=prompts,
+                writer=writer,
+            )
+
+    return result_path
+
+
+def _ensure_embedding_cache(config: ExperimentConfig, data_path: Path) -> Path:
+    """
+    Checks for a pre-computed embedding based on the data and embedding model defined in experiment config
+    """
+    cache_path = get_embedding_cache_path(
+        data=config.data,
+        embedding_model=config.rag_config.embedding_model,
+    )
+
+    if cache_path.exists():
+        print(f"Embedding cache already exists: {cache_path}")
+        return cache_path
+
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    precompute_embedding_cache(
+        data_path=data_path,
+        embedding_model=config.rag_config.embedding_model,
+        cache_path=cache_path,
+    )
+    print(f"Saved embedding cache: {cache_path}")
+    return cache_path
+
+
+def _resolve_data_path(path: str) -> Path:
+    configured_path = Path(path).expanduser()
+    if configured_path.is_absolute():
+        return configured_path
+
+    data_folder = Path(os.getenv(DATA_FOLDER_ENV_VAR, ".")).expanduser()
+    return data_folder / configured_path
+
+
+def _run_chatbot(
+    chatbot_spec: ChatbotSpec,
+    question_rows: list[dict[str, str]],
+    prompts: list[str],
+    writer: csv.DictWriter,
+) -> None:
+    """ """
+    try:
+        chatbot = create_chatbot(chatbot_spec)
+    except Exception as exc:
+        _write_error_rows(
+            chatbot_id=chatbot_spec.id,
+            question_rows=question_rows,
+            error=f"Failed to initialize chatbot: {exc}",
+            writer=writer,
+        )
+        return
+
+    for question_row, prompt in zip(question_rows, prompts, strict=True):
+        try:
+            generation = chatbot.generate(prompt=prompt, max_new_tokens=None)
+            response = (
+                generation[0] if isinstance(generation, tuple) else str(generation)
+            )
+            error = ""
+        except Exception as exc:
+            response = ""
+            error = str(exc)
+
+        writer.writerow(
+            {
+                **question_row,
+                "chatbot_id": chatbot_spec.id,
+                "response": response,
+                "error": error,
+            }
+        )
+
+
+def _write_error_rows(
+    chatbot_id: str,
+    question_rows: list[dict[str, str]],
+    error: str,
+    writer: csv.DictWriter,
+) -> None:
+    for question_row in question_rows:
+        writer.writerow(
+            {
+                **question_row,
+                "chatbot_id": chatbot_id,
+                "response": "",
+                "error": error,
+            }
+        )

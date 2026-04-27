@@ -1,0 +1,4 @@
+# model_path: "/home/john/Research/library/gemma_test/high_cpt_then_sft/model" # Local testing
+model_path: M10.NQ2k.01
+model_temperature: 0.5
+chat_template_path: configs/templates/chats/m9.yaml

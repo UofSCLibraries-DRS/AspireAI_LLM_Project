@@ -1,0 +1,4 @@
+model_id: "arn:aws:bedrock:us-east-1:777384741382:imported-model/1a7xtypu9p6v"
+model_temperature: 0.5
+region_name: us-east-1
+chat_template_path: configs/templates/chats/m9.yaml

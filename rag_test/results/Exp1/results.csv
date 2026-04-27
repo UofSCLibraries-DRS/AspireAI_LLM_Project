@@ -1,0 +1,10 @@
+scenario_id,question,expected_topic,chatbot_id,response,error
+q-1,When is the research library open on weekdays?,Library hours,Dummy,Local test response from Dummy: Use the provided texts to answer the question. Texts: <item> The campus research library is open from 8 AM to 10 PM Monday through Friday and from 10 AM to 6 PM on weekends. </item> <item> The library offers citation hel,
+q-2,How long do interlibrary loan books usually take to arrive?,Interlibrary loan,Dummy,"Local test response from Dummy: Use the provided texts to answer the question. Texts: <item> Interlibrary loan requests can be submitted online. Articles usually arrive within two business days, while books may take one to two weeks. </item> <item> Gra",
+q-3,Can graduate students reserve study rooms?,Study rooms,Dummy,Local test response from Dummy: Use the provided texts to answer the question. Texts: <item> Graduate students can reserve study rooms for up to three hours per day using the library booking portal. </item> <item> The campus research library is open fr,
+q-1,When is the research library open on weekdays?,Library hours,GPT-4.1,The research library is open from 8 AM to 10 PM on weekdays (Monday through Friday).,
+q-2,How long do interlibrary loan books usually take to arrive?,Interlibrary loan,GPT-4.1,Interlibrary loan books usually take one to two weeks to arrive.,
+q-3,Can graduate students reserve study rooms?,Study rooms,GPT-4.1,"Yes, graduate students can reserve study rooms for up to three hours per day using the library booking portal.",
+q-1,When is the research library open on weekdays?,Library hours,GPT-4.1-Nano,The research library is open on weekdays from 8 AM to 10 PM.,
+q-2,How long do interlibrary loan books usually take to arrive?,Interlibrary loan,GPT-4.1-Nano,Interlibrary loan books usually take one to two weeks to arrive.,
+q-3,Can graduate students reserve study rooms?,Study rooms,GPT-4.1-Nano,"Yes, graduate students can reserve study rooms for up to three hours per day using the library booking portal.",

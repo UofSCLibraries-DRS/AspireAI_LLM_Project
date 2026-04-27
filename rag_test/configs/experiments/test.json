@@ -1,0 +1,40 @@
+{
+    "out": "results/Exp1",
+    "questions": "eval/scenarios.csv",
+    "data": "raw/combined.csv",
+    "RAG_config": {
+        "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+        "top_k": 3,
+        "question_column": "question",
+        "prompt_template_path": "configs/templates/prompt/p1.yaml",
+        "retrieved_item_template_path": "configs/templates/retrieved_items/c1.yaml"
+    },
+    "chatbots": [
+        {
+            "id": "Dummy",
+            "backend": "DummyChatbot",
+            "config": {
+                "prefix": "Local test response",
+                "preview_chars": 220
+            }
+        },
+        {
+            "id": "GPT-4.1",
+            "backend": "OpenAIChatbot",
+            "config": {
+                "model_id": "gpt-4.1",
+                "base_url": "https://api.openai.com/v1",
+                "temperature": 0.5
+            }
+        },
+        {
+            "id": "GPT-4.1-Nano",
+            "backend": "OpenAIChatbot",
+            "config": {
+                "model_id": "gpt-4.1-nano",
+                "base_url": "https://api.openai.com/v1",
+                "temperature": 0.5
+            }
+        }
+    ]
+}
