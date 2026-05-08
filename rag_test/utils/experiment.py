@@ -7,7 +7,7 @@ from utils.cache import get_embedding_cache_path
 from utils.config import ChatbotSpec, ExperimentConfig
 from utils.embeddings import precompute_embedding_cache
 from utils.faiss_index import ensure_faiss_index
-from utils.rag import RESULT_COLUMNS, build_rag_prompts, load_questions_csv
+from utils.rag import RESULT_COLUMNS, build_rag_prompts, load_eval_data_csv
 
 
 RESULT_FILENAME = "results.csv"
@@ -16,18 +16,19 @@ DATA_FOLDER_ENV_VAR = "DATA_FOLDER"
 
 def run_experiment(config: ExperimentConfig) -> Path:
     data_path = _resolve_data_path(config.data)
-    questions_path = _resolve_data_path(config.questions)
+    eval_data_path = _resolve_data_path(config.eval_data.path)
 
     cache_path = _ensure_embedding_cache(config, data_path)
     retriever = ensure_faiss_index(cache_path)
-    question_rows, question_fieldnames = load_questions_csv(
-        questions_path=questions_path,
-        question_column=config.rag_config.question_column,
+    eval_rows, eval_fieldnames = load_eval_data_csv(
+        eval_data_path=eval_data_path,
+        question_column=config.eval_data.question_column,
     )
     prompts = build_rag_prompts(
-        question_rows=question_rows,
+        eval_rows=eval_rows,
         retriever=retriever,
         rag_config=config.rag_config,
+        question_column=config.eval_data.question_column,
     )
 
     out_dir = Path(config.out)
@@ -37,14 +38,14 @@ def run_experiment(config: ExperimentConfig) -> Path:
     with result_path.open("w", encoding="utf-8", newline="") as result_file:
         writer = csv.DictWriter(
             result_file,
-            fieldnames=[*question_fieldnames, *RESULT_COLUMNS],
+            fieldnames=[*eval_fieldnames, *RESULT_COLUMNS],
         )
         writer.writeheader()
 
         for chatbot_spec in config.chatbots:
             _run_chatbot(
                 chatbot_spec=chatbot_spec,
-                question_rows=question_rows,
+                eval_rows=eval_rows,
                 prompts=prompts,
                 writer=writer,
             )
@@ -86,7 +87,7 @@ def _resolve_data_path(path: str) -> Path:
 
 def _run_chatbot(
     chatbot_spec: ChatbotSpec,
-    question_rows: list[dict[str, str]],
+    eval_rows: list[dict[str, str]],
     prompts: list[str],
     writer: csv.DictWriter,
 ) -> None:
@@ -96,13 +97,13 @@ def _run_chatbot(
     except Exception as exc:
         _write_error_rows(
             chatbot_id=chatbot_spec.id,
-            question_rows=question_rows,
+            eval_rows=eval_rows,
             error=f"Failed to initialize chatbot: {exc}",
             writer=writer,
         )
         return
 
-    for question_row, prompt in zip(question_rows, prompts, strict=True):
+    for eval_row, prompt in zip(eval_rows, prompts, strict=True):
         try:
             generation = chatbot.generate(prompt=prompt, max_new_tokens=None)
             response = (
@@ -115,7 +116,7 @@ def _run_chatbot(
 
         writer.writerow(
             {
-                **question_row,
+                **eval_row,
                 "chatbot_id": chatbot_spec.id,
                 "response": response,
                 "error": error,
@@ -125,14 +126,14 @@ def _run_chatbot(
 
 def _write_error_rows(
     chatbot_id: str,
-    question_rows: list[dict[str, str]],
+    eval_rows: list[dict[str, str]],
     error: str,
     writer: csv.DictWriter,
 ) -> None:
-    for question_row in question_rows:
+    for eval_row in eval_rows:
         writer.writerow(
             {
-                **question_row,
+                **eval_row,
                 "chatbot_id": chatbot_id,
                 "response": "",
                 "error": error,

@@ -1,5 +1,5 @@
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -13,9 +13,15 @@ DEFAULT_QUESTION_COLUMN = "question"
 class RagConfig:
     embedding_model: str
     top_k: int
-    question_column: str = DEFAULT_QUESTION_COLUMN
     prompt_template_path: str = DEFAULT_PROMPT_TEMPLATE_PATH
     retrieved_item_template_path: str = DEFAULT_RETRIEVED_ITEM_TEMPLATE_PATH
+
+
+@dataclass(frozen=True)
+class EvalDataConfig:
+    path: str
+    question_column: str = DEFAULT_QUESTION_COLUMN
+    ground_truth_columns: list[str] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -28,7 +34,7 @@ class ChatbotSpec:
 @dataclass(frozen=True)
 class ExperimentConfig:
     out: str
-    questions: str
+    eval_data: EvalDataConfig
     data: str
     rag_config: RagConfig
     chatbots: list[ChatbotSpec]
@@ -49,7 +55,10 @@ def load_experiment_config(path: str | Path) -> ExperimentConfig:
         raise ValueError(f"Experiment config at {config_path} must be a JSON object")
 
     out = _required_string(config, "out", config_path)
-    questions = _required_string(config, "questions", config_path)
+    eval_data = config.get("eval_data")
+    if not isinstance(eval_data, dict):
+        raise ValueError(f"Missing required object `eval_data` in {config_path}")
+
     data = _required_string(config, "data", config_path)
     rag_config = config.get("RAG_config")
     if not isinstance(rag_config, dict):
@@ -57,10 +66,28 @@ def load_experiment_config(path: str | Path) -> ExperimentConfig:
 
     return ExperimentConfig(
         out=out,
-        questions=questions,
+        eval_data=_load_eval_data_config(eval_data, config_path),
         data=data,
         rag_config=_load_rag_config(rag_config, config_path),
         chatbots=_load_chatbots(config.get("chatbots"), config_path),
+    )
+
+
+def _load_eval_data_config(config: dict[str, Any], config_path: Path) -> EvalDataConfig:
+    location = f"{config_path} `eval_data`"
+    return EvalDataConfig(
+        path=_required_string(config, "path", location),
+        question_column=_optional_string(
+            config,
+            "question_column",
+            DEFAULT_QUESTION_COLUMN,
+            location,
+        ),
+        ground_truth_columns=_required_string_list(
+            config,
+            "ground_truth_columns",
+            location,
+        ),
     )
 
 
@@ -69,12 +96,6 @@ def _load_rag_config(config: dict[str, Any], config_path: Path) -> RagConfig:
     return RagConfig(
         embedding_model=_required_string(config, "embedding_model", location),
         top_k=_required_positive_int(config, "top_k", location),
-        question_column=_optional_string(
-            config,
-            "question_column",
-            DEFAULT_QUESTION_COLUMN,
-            location,
-        ),
         prompt_template_path=_optional_string(
             config,
             "prompt_template_path",
@@ -138,3 +159,22 @@ def _required_positive_int(config: dict[str, Any], key: str, location: object) -
     if not isinstance(value, int) or isinstance(value, bool) or value < 1:
         raise ValueError(f"Missing required positive integer `{key}` in {location}")
     return value
+
+
+def _required_string_list(
+    config: dict[str, Any],
+    key: str,
+    location: object,
+) -> list[str]:
+    value = config.get(key)
+    if not isinstance(value, list):
+        raise ValueError(f"Missing required list `{key}` in {location}")
+
+    items = []
+    for index, item in enumerate(value):
+        if not isinstance(item, str) or not item.strip():
+            raise ValueError(
+                f"`{key}[{index}]` in {location} must be a non-empty string"
+            )
+        items.append(item)
+    return items

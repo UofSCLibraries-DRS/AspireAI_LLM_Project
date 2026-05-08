@@ -20,32 +20,32 @@ class Retriever(Protocol):
         pass
 
 
-def load_questions_csv(
-    questions_path: Path,
+def load_eval_data_csv(
+    eval_data_path: Path,
     question_column: str,
 ) -> tuple[list[dict[str, str]], list[str]]:
     """
-    Loads questions csv with checks for missing values
+    Loads eval data csv with checks for missing values
     """
-    if not questions_path.exists():
-        raise FileNotFoundError(f"Questions CSV not found: {questions_path}")
+    if not eval_data_path.exists():
+        raise FileNotFoundError(f"Eval data CSV not found: {eval_data_path}")
 
     try:
-        with questions_path.open("r", encoding="utf-8", newline="") as questions_file:
-            reader = csv.DictReader(questions_file, strict=True)
+        with eval_data_path.open("r", encoding="utf-8", newline="") as eval_data_file:
+            reader = csv.DictReader(eval_data_file, strict=True)
             fieldnames = reader.fieldnames
             if fieldnames is None:
-                raise ValueError(f"Questions CSV is empty: {questions_path}")
+                raise ValueError(f"Eval data CSV is empty: {eval_data_path}")
             if question_column not in fieldnames:
                 raise ValueError(
-                    f"Questions CSV must contain a `{question_column}` column: "
-                    f"{questions_path}"
+                    f"Eval data CSV must contain a `{question_column}` column: "
+                    f"{eval_data_path}"
                 )
 
             overlapping_columns = set(fieldnames) & set(RESULT_COLUMNS)
             if overlapping_columns:
                 raise ValueError(
-                    f"Questions CSV cannot contain reserved result columns: "
+                    f"Eval data CSV cannot contain reserved result columns: "
                     f"{sorted(overlapping_columns)}"
                 )
 
@@ -53,24 +53,25 @@ def load_questions_csv(
             for line_number, row in enumerate(reader, start=2):
                 if None in row:
                     raise ValueError(
-                        f"Malformed CSV at {questions_path}: row {line_number} has "
+                        f"Malformed CSV at {eval_data_path}: row {line_number} has "
                         "more fields than the header"
                     )
                 if row[question_column] is None:
                     raise ValueError(
-                        f"Malformed CSV at {questions_path}: row {line_number} is "
+                        f"Malformed CSV at {eval_data_path}: row {line_number} is "
                         f"missing a `{question_column}` value"
                     )
                 rows.append(row)
             return rows, fieldnames
     except csv.Error as exc:
-        raise ValueError(f"Malformed CSV at {questions_path}: {exc}") from exc
+        raise ValueError(f"Malformed CSV at {eval_data_path}: {exc}") from exc
 
 
 def build_rag_prompts(
-    question_rows: list[dict[str, str]],
+    eval_rows: list[dict[str, str]],
     retriever: Retriever,
     rag_config: RagConfig,
+    question_column: str,
 ) -> list[str]:
     """
     Builds prompts from config/templates
@@ -79,19 +80,19 @@ def build_rag_prompts(
     retrieved_item_template = _load_template(
         Path(rag_config.retrieved_item_template_path)
     )
-    question_embeddings = encode_texts(
-        texts=[row[rag_config.question_column] for row in question_rows],
+    eval_embeddings = encode_texts(
+        texts=[row[question_column] for row in eval_rows],
         embedding_model=rag_config.embedding_model,
     )
 
     prompts = []
-    for question_row, question_embedding in zip(
-        question_rows,
-        question_embeddings,
+    for eval_row, eval_embedding in zip(
+        eval_rows,
+        eval_embeddings,
         strict=True,
     ):
         retrieved_rows = retriever.search(
-            query_embedding=question_embedding,
+            query_embedding=eval_embedding,
             top_k=rag_config.top_k,
         )
         retrieved_context = "\n".join(
@@ -101,7 +102,7 @@ def build_rag_prompts(
             _format_template(
                 prompt_template,
                 {
-                    "query": question_row[rag_config.question_column],
+                    "query": eval_row[question_column],
                     "retrieved_context": retrieved_context,
                 },
             )

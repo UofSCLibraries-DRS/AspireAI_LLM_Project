@@ -1,11 +1,16 @@
 {
     "out": "results/Exp1",
-    "questions": "eval/scenarios.csv",
+    "eval_data": {
+        "path": "eval/scenarios.csv",
+        "question_column": "question",
+        "ground_truth_columns": [
+            "answer"
+        ]
+    },
     "data": "raw/combined.csv",
     "RAG_config": {
         "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
         "top_k": 3,
-        "question_column": "question",
         "prompt_template_path": "configs/templates/prompt/p1.yaml",
         "retrieved_item_template_path": "configs/templates/retrieved_items/c1.yaml"
     },

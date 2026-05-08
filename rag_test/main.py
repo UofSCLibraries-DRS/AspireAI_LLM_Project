@@ -18,17 +18,18 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def load_environment() -> None:
-    load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env")
-
-
 def main() -> int:
     args = parse_args()
-    load_environment()
+    load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env")
 
     try:
+        # Load exp config
         experiment_config = load_experiment_config(args.experiment_json)
+
+        # Run exp
         result_path = run_experiment(experiment_config)
+
+        # Gaico eval
         print(f"Saved experiment results: {result_path}")
         return 0
     except (FileNotFoundError, RuntimeError, ValueError) as exc:
