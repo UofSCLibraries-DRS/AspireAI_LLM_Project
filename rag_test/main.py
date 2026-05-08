@@ -5,6 +5,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 from utils.config import load_experiment_config
 from utils.experiment import run_experiment
+from utils.gaico import run_gaico
+from utils.visualize import run_visualize
 
 
 def parse_args() -> argparse.Namespace:
@@ -30,7 +32,13 @@ def main() -> int:
         result_path = run_experiment(experiment_config)
 
         # Gaico eval
+        gaico_paths = run_gaico(experiment_config)
         print(f"Saved experiment results: {result_path}")
+        for gaico_path in gaico_paths:
+            print(f"Saved Gaico results: {gaico_path}")
+        figure_paths = run_visualize(experiment_config)
+        for figure_path in figure_paths:
+            print(f"Saved figure: {figure_path}")
         return 0
     except (FileNotFoundError, RuntimeError, ValueError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
