@@ -4,7 +4,10 @@
         "path": "eval/scenarios.csv",
         "question_column": "question",
         "ground_truth_columns": [
-            "answer"
+            "answer_short",
+            "answer_ideal",
+            "answer_short_agg",
+            "answer_ideal_agg"
         ]
     },
     "data": "raw/combined.csv",
@@ -15,23 +18,6 @@
         "retrieved_item_template_path": "configs/templates/retrieved_items/c1.yaml"
     },
     "chatbots": [
-        {
-            "id": "Dummy",
-            "backend": "DummyChatbot",
-            "config": {
-                "prefix": "Local test response",
-                "preview_chars": 220
-            }
-        },
-        {
-            "id": "GPT-4.1",
-            "backend": "OpenAIChatbot",
-            "config": {
-                "model_id": "gpt-4.1",
-                "base_url": "https://api.openai.com/v1",
-                "temperature": 0.5
-            }
-        },
         {
             "id": "GPT-4.1-Nano",
             "backend": "OpenAIChatbot",

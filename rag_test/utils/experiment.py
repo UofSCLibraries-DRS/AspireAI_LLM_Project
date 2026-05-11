@@ -2,6 +2,8 @@ import csv
 import os
 from pathlib import Path
 
+from tqdm import tqdm
+
 from chatbots.factory import create_chatbot
 from utils.cache import get_embedding_cache_path
 from utils.config import ChatbotSpec, ExperimentConfig
@@ -14,7 +16,10 @@ RESULT_FILENAME = "results.csv"
 DATA_FOLDER_ENV_VAR = "DATA_FOLDER"
 
 
-def run_experiment(config: ExperimentConfig) -> Path:
+def run_experiment(config: ExperimentConfig, k: int = 1) -> Path:
+    if k < 1:
+        raise ValueError("`k` must be a positive integer")
+
     data_path = _resolve_data_path(config.data)
     eval_data_path = _resolve_data_path(config.eval_data.path)
 
@@ -42,13 +47,21 @@ def run_experiment(config: ExperimentConfig) -> Path:
         )
         writer.writeheader()
 
-        for chatbot_spec in config.chatbots:
-            _run_chatbot(
-                chatbot_spec=chatbot_spec,
-                eval_rows=eval_rows,
-                prompts=prompts,
-                writer=writer,
-            )
+        progress_total = len(config.chatbots) * len(eval_rows) * k
+        with tqdm(
+            total=progress_total,
+            desc="Generating responses",
+            unit="call",
+        ) as progress:
+            for chatbot_spec in config.chatbots:
+                _run_chatbot(
+                    chatbot_spec=chatbot_spec,
+                    eval_rows=eval_rows,
+                    prompts=prompts,
+                    writer=writer,
+                    k=k,
+                    progress=progress,
+                )
 
     return result_path
 
@@ -90,6 +103,8 @@ def _run_chatbot(
     eval_rows: list[dict[str, str]],
     prompts: list[str],
     writer: csv.DictWriter,
+    k: int,
+    progress: tqdm,
 ) -> None:
     """ """
     try:
@@ -100,28 +115,32 @@ def _run_chatbot(
             eval_rows=eval_rows,
             error=f"Failed to initialize chatbot: {exc}",
             writer=writer,
+            k=k,
+            progress=progress,
         )
         return
 
     for eval_row, prompt in zip(eval_rows, prompts, strict=True):
-        try:
-            generation = chatbot.generate(prompt=prompt, max_new_tokens=None)
-            response = (
-                generation[0] if isinstance(generation, tuple) else str(generation)
-            )
-            error = ""
-        except Exception as exc:
-            response = ""
-            error = str(exc)
+        for _ in range(k):
+            try:
+                generation = chatbot.generate(prompt=prompt, max_new_tokens=None)
+                response = (
+                    generation[0] if isinstance(generation, tuple) else str(generation)
+                )
+                error = ""
+            except Exception as exc:
+                response = ""
+                error = str(exc)
 
-        writer.writerow(
-            {
-                **eval_row,
-                "chatbot_id": chatbot_spec.id,
-                "response": response,
-                "error": error,
-            }
-        )
+            writer.writerow(
+                {
+                    **eval_row,
+                    "chatbot_id": chatbot_spec.id,
+                    "response": response,
+                    "error": error,
+                }
+            )
+            progress.update()
 
 
 def _write_error_rows(
@@ -129,13 +148,17 @@ def _write_error_rows(
     eval_rows: list[dict[str, str]],
     error: str,
     writer: csv.DictWriter,
+    k: int,
+    progress: tqdm,
 ) -> None:
     for eval_row in eval_rows:
-        writer.writerow(
-            {
-                **eval_row,
-                "chatbot_id": chatbot_id,
-                "response": "",
-                "error": error,
-            }
-        )
+        for _ in range(k):
+            writer.writerow(
+                {
+                    **eval_row,
+                    "chatbot_id": chatbot_id,
+                    "response": "",
+                    "error": error,
+                }
+            )
+            progress.update()

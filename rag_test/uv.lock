@@ -1304,6 +1304,7 @@ dependencies = [
     { name = "pyyaml" },
     { name = "sentence-transformers" },
     { name = "torch" },
+    { name = "tqdm" },
     { name = "transformers" },
 ]
 
@@ -1319,6 +1320,7 @@ requires-dist = [
     { name = "pyyaml" },
     { name = "sentence-transformers" },
     { name = "torch" },
+    { name = "tqdm" },
     { name = "transformers" },
 ]
 
