@@ -1,5 +1,6 @@
 {
     "out": "results/Exp1",
+    "include_non_rag": true,
     "eval_data": {
         "path": "eval/scenarios.csv",
         "question_column": "question",
@@ -19,12 +20,22 @@
     },
     "chatbots": [
         {
-            "id": "GPT-4.1-Nano",
-            "backend": "OpenAIChatbot",
+            "id": "meta-llama/Llama-3.2-1B-Instruct",
+            "backend": "VLLMChatbot",
+            "batch_size": 2,
             "config": {
-                "model_id": "gpt-4.1-nano",
-                "base_url": "https://api.openai.com/v1",
-                "temperature": 0.5
+                "model_path": "meta-llama/Llama-3.2-1B-Instruct",
+                "temperature": 0.5,
+                "max_tokens": 128,
+                "top_p": 1.0,
+                "llm_kwargs": {
+                    "dtype": "auto",
+                    "enforce_eager": true,
+                    "gpu_memory_utilization": 0.8,
+                    "hf_token": true,
+                    "max_model_len": 4096,
+                    "tensor_parallel_size": 1
+                }
             }
         }
     ]

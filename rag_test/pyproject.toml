@@ -17,4 +17,5 @@ dependencies = [
     "torch",
     "tqdm",
     "transformers",
+    "vllm",
 ]

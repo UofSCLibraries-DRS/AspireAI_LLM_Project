@@ -8,7 +8,7 @@ from utils.config import RagConfig
 from utils.embeddings import encode_texts
 
 
-RESULT_COLUMNS = ["chatbot_id", "response", "error"]
+RESULT_COLUMNS = ["chatbot_id", "input_prompt", "response", "error"]
 
 
 class Retriever(Protocol):
@@ -108,6 +108,27 @@ def build_rag_prompts(
             )
         )
     return prompts
+
+
+def build_non_rag_prompts(
+    eval_rows: list[dict[str, str]],
+    rag_config: RagConfig,
+    question_column: str,
+) -> list[str]:
+    """
+    Builds baseline prompts from the RAG prompt template with no retrieved context.
+    """
+    prompt_template = _load_template(Path(rag_config.prompt_template_path))
+    return [
+        _format_template(
+            prompt_template,
+            {
+                "query": eval_row[question_column],
+                "retrieved_context": "",
+            },
+        )
+        for eval_row in eval_rows
+    ]
 
 
 def _load_template(path: Path) -> str:

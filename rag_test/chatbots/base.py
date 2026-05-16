@@ -1,5 +1,5 @@
-from typing import Optional
 from abc import ABC, abstractmethod
+from typing import Optional
 
 
 class Chatbot(ABC):
@@ -19,3 +19,16 @@ class Chatbot(ABC):
         Returns response and list of sources.
         """
         pass
+
+    def generate_batch(
+        self,
+        prompts: list[str],
+        max_new_tokens: Optional[int],
+    ) -> list[tuple[str, list[str]]]:
+        """
+        Returns one response/source tuple per prompt.
+        """
+        return [
+            self.generate(prompt=prompt, max_new_tokens=max_new_tokens)
+            for prompt in prompts
+        ]

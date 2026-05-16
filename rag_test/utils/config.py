@@ -29,6 +29,7 @@ class ChatbotSpec:
     id: str
     backend: str
     config: dict[str, Any]
+    batch_size: int = 1
 
 
 @dataclass(frozen=True)
@@ -38,6 +39,7 @@ class ExperimentConfig:
     data: str
     rag_config: RagConfig
     chatbots: list[ChatbotSpec]
+    include_non_rag: bool = False
 
 
 def load_experiment_config(path: str | Path) -> ExperimentConfig:
@@ -70,6 +72,7 @@ def load_experiment_config(path: str | Path) -> ExperimentConfig:
         data=data,
         rag_config=_load_rag_config(rag_config, config_path),
         chatbots=_load_chatbots(config.get("chatbots"), config_path),
+        include_non_rag=_optional_bool(config, "include_non_rag", False, config_path),
     )
 
 
@@ -130,6 +133,7 @@ def _load_chatbots(value: Any, config_path: Path) -> list[ChatbotSpec]:
                 id=_required_string(item, "id", location),
                 backend=_required_string(item, "backend", location),
                 config=chatbot_config,
+                batch_size=_optional_positive_int(item, "batch_size", 1, location),
             )
         )
     return chatbots
@@ -158,6 +162,30 @@ def _required_positive_int(config: dict[str, Any], key: str, location: object) -
     value = config.get(key)
     if not isinstance(value, int) or isinstance(value, bool) or value < 1:
         raise ValueError(f"Missing required positive integer `{key}` in {location}")
+    return value
+
+
+def _optional_positive_int(
+    config: dict[str, Any],
+    key: str,
+    default: int,
+    location: object,
+) -> int:
+    value = config.get(key, default)
+    if not isinstance(value, int) or isinstance(value, bool) or value < 1:
+        raise ValueError(f"`{key}` in {location} must be a positive integer")
+    return value
+
+
+def _optional_bool(
+    config: dict[str, Any],
+    key: str,
+    default: bool,
+    location: object,
+) -> bool:
+    value = config.get(key, default)
+    if not isinstance(value, bool):
+        raise ValueError(f"`{key}` in {location} must be a boolean")
     return value
 
 

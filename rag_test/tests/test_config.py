@@ -21,6 +21,24 @@ class LoadExperimentConfigTests(unittest.TestCase):
         self.assertEqual(config.eval_data.ground_truth_columns, ["answer"])
         self.assertEqual(config.rag_config.embedding_model, "embedding-model")
         self.assertEqual(config.rag_config.top_k, 3)
+        self.assertEqual(config.chatbots[0].batch_size, 1)
+        self.assertFalse(config.include_non_rag)
+
+    def test_loads_include_non_rag(self) -> None:
+        payload = _base_config()
+        payload["include_non_rag"] = True
+
+        config = load_experiment_config(self._write_config(payload))
+
+        self.assertTrue(config.include_non_rag)
+
+    def test_loads_chatbot_batch_size(self) -> None:
+        payload = _base_config()
+        payload["chatbots"][0]["batch_size"] = 4
+
+        config = load_experiment_config(self._write_config(payload))
+
+        self.assertEqual(config.chatbots[0].batch_size, 4)
 
     def test_eval_data_question_column_defaults_to_question(self) -> None:
         payload = _base_config()
@@ -54,6 +72,24 @@ class LoadExperimentConfigTests(unittest.TestCase):
                     ValueError,
                     "ground_truth_columns",
                 ):
+                    load_experiment_config(self._write_config(payload))
+
+    def test_rejects_invalid_chatbot_batch_size(self) -> None:
+        for invalid_value in (0, -1, True, "4"):
+            with self.subTest(invalid_value=invalid_value):
+                payload = _base_config()
+                payload["chatbots"][0]["batch_size"] = invalid_value
+
+                with self.assertRaisesRegex(ValueError, "batch_size"):
+                    load_experiment_config(self._write_config(payload))
+
+    def test_rejects_invalid_include_non_rag(self) -> None:
+        for invalid_value in ("true", 1, None):
+            with self.subTest(invalid_value=invalid_value):
+                payload = _base_config()
+                payload["include_non_rag"] = invalid_value
+
+                with self.assertRaisesRegex(ValueError, "include_non_rag"):
                     load_experiment_config(self._write_config(payload))
 
     def test_rejects_legacy_questions_without_eval_data(self) -> None:

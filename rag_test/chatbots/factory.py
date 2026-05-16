@@ -2,6 +2,7 @@ from chatbots.bedrock import BedrockCompletionChatbot
 from chatbots.dummy import DummyChatbot
 from chatbots.huggingface import HuggingFaceChatbot
 from chatbots.openai import OpenAIChatbot
+from chatbots.vllm import VLLMChatbot
 from utils.config import ChatbotSpec
 
 
@@ -11,6 +12,7 @@ CHATBOT_BACKENDS = {
     "DummyChatbot": DummyChatbot,
     "HuggingFaceChatbot": HuggingFaceChatbot,
     "OpenAIChatbot": OpenAIChatbot,
+    "VLLMChatbot": VLLMChatbot,
 }
 
 

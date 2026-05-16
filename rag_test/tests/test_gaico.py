@@ -1,7 +1,10 @@
 import csv
+import io
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+from contextlib import redirect_stderr, redirect_stdout
 from unittest.mock import patch
 
 from utils.config import ChatbotSpec, EvalDataConfig, ExperimentConfig, RagConfig
@@ -15,6 +18,7 @@ class RunGaicoTests(unittest.TestCase):
         self.out_dir = Path(self.temp_dir.name) / "Exp1"
         self.out_dir.mkdir()
         FakeExperiment.calls = []
+        FakeTqdm.instances = []
 
     def test_writes_per_result_scores_and_zero_scores_for_failed_rows(self) -> None:
         self._write_results(
@@ -126,6 +130,108 @@ class RunGaicoTests(unittest.TestCase):
         )
         self.assertEqual(FakeExperiment.calls, [])
 
+    def test_progress_tracks_scored_reference_groups(self) -> None:
+        self._write_results(
+            [
+                {
+                    "scenario_id": "q-1",
+                    "question": "Question one?",
+                    "answer": "Answer one",
+                    "answer_extra": "Extra one",
+                    "chatbot_id": "bot-a",
+                    "response": "Response one",
+                    "error": "",
+                },
+                {
+                    "scenario_id": "q-2",
+                    "question": "Question two?",
+                    "answer": "Answer one",
+                    "answer_extra": "Extra two",
+                    "chatbot_id": "bot-b",
+                    "response": "Response two",
+                    "error": "",
+                },
+                {
+                    "scenario_id": "q-3",
+                    "question": "Question three?",
+                    "answer": "Answer three",
+                    "answer_extra": "Extra three",
+                    "chatbot_id": "bot-c",
+                    "response": "",
+                    "error": "failed",
+                },
+            ],
+            extra_fieldnames=["answer_extra"],
+        )
+
+        with (
+            patch("utils.gaico.Experiment", FakeExperiment),
+            patch("utils.gaico.tqdm", FakeTqdm),
+        ):
+            run_gaico(self._config(["answer", "answer_extra"]))
+
+        self.assertEqual(len(FakeTqdm.instances), 1)
+        progress = FakeTqdm.instances[0]
+        self.assertEqual(progress.total, 3)
+        self.assertEqual(progress.desc, "Running Gaico")
+        self.assertEqual(progress.unit, "group")
+        self.assertFalse(progress.disable)
+        self.assertEqual(progress.updates, [1, 1, 1])
+
+    def test_skips_progress_bar_when_no_successful_rows_exist(self) -> None:
+        self._write_results(
+            [
+                {
+                    "scenario_id": "q-1",
+                    "question": "Question one?",
+                    "answer": "Answer one",
+                    "chatbot_id": "bot-a",
+                    "response": "",
+                    "error": "failed",
+                }
+            ]
+        )
+
+        with (
+            patch("utils.gaico.Experiment", FakeExperiment),
+            patch("utils.gaico.tqdm", FakeTqdm),
+        ):
+            run_gaico(self._config(["answer"]))
+
+        self.assertEqual(len(FakeTqdm.instances), 1)
+        progress = FakeTqdm.instances[0]
+        self.assertEqual(progress.total, 0)
+        self.assertTrue(progress.disable)
+        self.assertEqual(progress.updates, [])
+        self.assertEqual(FakeExperiment.calls, [])
+
+    def test_suppresses_metric_stdout_and_stderr_noise(self) -> None:
+        self._write_results(
+            [
+                {
+                    "scenario_id": "q-1",
+                    "question": "Question one?",
+                    "answer": "Answer one",
+                    "chatbot_id": "bot-a",
+                    "response": "Response one",
+                    "error": "",
+                }
+            ]
+        )
+
+        stdout = io.StringIO()
+        stderr = io.StringIO()
+        with (
+            patch("utils.gaico.Experiment", NoisyFakeExperiment),
+            patch("utils.gaico.tqdm", FakeTqdm),
+            redirect_stdout(stdout),
+            redirect_stderr(stderr),
+        ):
+            run_gaico(self._config(["answer"]))
+
+        self.assertEqual(stdout.getvalue(), "")
+        self.assertEqual(stderr.getvalue(), "")
+
     def test_raises_when_ground_truth_column_is_missing(self) -> None:
         self._write_results(
             [
@@ -165,7 +271,12 @@ class RunGaicoTests(unittest.TestCase):
             ],
         )
 
-    def _write_results(self, rows: list[dict[str, str]]) -> None:
+    def _write_results(
+        self,
+        rows: list[dict[str, str]],
+        extra_fieldnames: list[str] | None = None,
+    ) -> None:
+        extra_fieldnames = extra_fieldnames or []
         with (self.out_dir / "results.csv").open(
             "w",
             encoding="utf-8",
@@ -177,6 +288,7 @@ class RunGaicoTests(unittest.TestCase):
                     "scenario_id",
                     "question",
                     "answer",
+                    *extra_fieldnames,
                     "chatbot_id",
                     "response",
                     "error",
@@ -227,6 +339,18 @@ class FakeExperiment:
         return FakeComparisonDataFrame(records)
 
 
+class NoisyFakeExperiment(FakeExperiment):
+    def compare(self, plot: bool) -> "FakeComparisonDataFrame":
+        from transformers.utils import logging as transformers_logging
+
+        print("noisy stdout")
+        print("noisy stderr", file=sys.stderr)
+        transformers_logging.get_logger("transformers.utils.loading_report").warning(
+            "noisy transformers warning"
+        )
+        return super().compare(plot=plot)
+
+
 class FakeComparisonDataFrame:
     def __init__(self, records: list[dict]) -> None:
         self.records = records
@@ -235,6 +359,33 @@ class FakeComparisonDataFrame:
         if orient != "records":
             raise ValueError(f"Unsupported orient: {orient}")
         return self.records
+
+
+class FakeTqdm:
+    instances: list["FakeTqdm"] = []
+
+    def __init__(
+        self,
+        total: int,
+        desc: str,
+        unit: str,
+        disable: bool,
+    ) -> None:
+        self.total = total
+        self.desc = desc
+        self.unit = unit
+        self.disable = disable
+        self.updates: list[int] = []
+        FakeTqdm.instances.append(self)
+
+    def __enter__(self) -> "FakeTqdm":
+        return self
+
+    def __exit__(self, *args: object) -> None:
+        return None
+
+    def update(self, n: int = 1) -> None:
+        self.updates.append(n)
 
 
 if __name__ == "__main__":
