@@ -31,7 +31,26 @@
                 "llm_kwargs": {
                     "dtype": "auto",
                     "enforce_eager": true,
-                    "gpu_memory_utilization": 0.8,
+                    "gpu_memory_utilization": 0.9,
+                    "hf_token": true,
+                    "max_model_len": 4096,
+                    "tensor_parallel_size": 1
+                }
+            }
+        },
+        {
+            "id": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+            "backend": "VLLMChatbot",
+            "batch_size": 2,
+            "config": {
+                "model_path": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+                "temperature": 0.5,
+                "max_tokens": 128,
+                "top_p": 1.0,
+                "llm_kwargs": {
+                    "dtype": "auto",
+                    "enforce_eager": true,
+                    "gpu_memory_utilization": 0.9,
                     "hf_token": true,
                     "max_model_len": 4096,
                     "tensor_parallel_size": 1
