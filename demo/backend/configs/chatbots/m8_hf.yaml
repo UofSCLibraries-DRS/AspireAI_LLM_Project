@@ -1,4 +1,4 @@
 # model_path: "/home/john/Research/library/gemma_test/high_cpt_then_sft/model" # Local testing
 model_path: /home/jaaydin/M10.NQ2k.01
 model_temperature: 0.01
-prompt_template_path: configs/prompt_templates/m9.yaml 
+prompt_template_path: configs/prompt_templates/m9.yamls

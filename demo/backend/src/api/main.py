@@ -16,7 +16,7 @@ app = FastAPI(title="AspireAI Chatbot API", version="1.0.0")
 # Request/Response Models
 class GenerateRequest(BaseModel):
     prompt: str = Field(..., description="The user's prompt/question")
-    model: Literal["M8", "M9", "SC"] = Field(
+    model: Literal["M8", "M9", "LLAMA", "SC"] = Field(
         ..., description="Model to use for generation"
     )
     max_new_tokens: Optional[int] = Field(
@@ -55,6 +55,9 @@ async def startup_event():
     try:
         chatbots["M9"] = BedrockChatbot(
             id="M9", config_path="configs/chatbots/m9_bedrock.yaml"
+        )
+        chatbots["LLAMA"] = BedrockChatbot(
+            id="LLAMA", config_path="configs/chatbots/llama_bedrock.yaml"
         )
         print("M9 (Bedrock) initialized")
     except Exception as e:
