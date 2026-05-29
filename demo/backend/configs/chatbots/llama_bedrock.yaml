@@ -1,4 +1,4 @@
-model_id: "meta.llama3-1-8b-instruct-v1:0"
+model_id: "us.meta.llama3-1-8b-instruct-v1:0"
 model_temperature: 0.0
 prompt_template_path: configs/prompt_templates/llama_3.1_8b.yaml
 region_name: us-east-1
