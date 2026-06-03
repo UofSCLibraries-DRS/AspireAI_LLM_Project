@@ -1,0 +1,23 @@
+[
+    {
+        "model": {
+            "start": "Llama-3.1-8B",
+            "train_steps": [
+                "ft/steps/llama/lora/NQ_sft_2k.01.r8.json"
+            ],
+            "output": "M9_baseline"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    }
+]
