@@ -7,7 +7,7 @@
 #SBATCH --time=48:00:00
 #SBATCH --output logs/M9_baseline_%j.out
 #SBATCH --error logs/M9_baseline_%j.err
-#SBATCH -p gpu-H200
+#SBATCH -p gpu-A100
 #SBATCH --mail-user=jaaydin@email.sc.edu
 #SBATCH --mail-type=BEGIN,END,FAIL,TIME_LIMIT
 
