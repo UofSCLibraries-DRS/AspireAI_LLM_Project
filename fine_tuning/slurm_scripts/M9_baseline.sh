@@ -3,7 +3,6 @@
 #SBATCH -N 1
 #SBATCH -n 16
 #SBATCH --gres=gpu:1
-#SBATCH --exclusive
 #SBATCH --time=48:00:00
 #SBATCH --output logs/M9_baseline_%j.out
 #SBATCH --error logs/M9_baseline_%j.err
