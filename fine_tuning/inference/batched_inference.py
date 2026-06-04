@@ -29,9 +29,10 @@ class InferenceJob:
     )  # Internal logic will fill this field from the prompt template
     repeat_param: int = 5
     max_tokens: int = 200
+    do_sample: bool = True
     temperature: float = 1.0
     top_p: float = 1.0
-    top_k: float = 50
+    top_k: int = 50
 
 
 @dataclass
@@ -79,7 +80,7 @@ def _batched_inference(
     # Build groups: map key -> list[item]
     def group_key(item: Dict[str, Any]) -> Tuple:
         j: InferenceJob = item["job"]
-        return (j.model, j.max_tokens, j.temperature, j.top_p, j.top_k)
+        return (j.model, j.max_tokens, j.do_sample, j.temperature, j.top_p, j.top_k)
 
     groups: Dict[Tuple, List[Dict[str, Any]]] = {}
     for item in prepared:
@@ -93,7 +94,7 @@ def _batched_inference(
 
     for key, items in groups.items():
         # Unwrap inference params from key
-        model_path, max_new_tokens, temperature, top_p, top_k = key
+        model_path, max_new_tokens, do_sample, temperature, top_p, top_k = key
 
         # Load model & tokenizer
         tokenizer = AutoTokenizer.from_pretrained(
@@ -162,21 +163,29 @@ def _batched_inference(
                 batch_job_refs = expanded_job_refs
                 batch_original_idxs = expanded_original_idxs
 
-                # Generate
-                generated_ids = model.generate(
-                    input_ids=input_ids,
-                    attention_mask=attention_mask,
-                    max_new_tokens=max_new_tokens,
-                    do_sample=True,
-                    temperature=temperature,
-                    top_p=top_p,
-                    top_k=top_k,
-                    eos_token_id=tokenizer.eos_token_id,
-                    pad_token_id=tokenizer.pad_token_id
+                generate_kwargs = {
+                    "input_ids": input_ids,
+                    "attention_mask": attention_mask,
+                    "max_new_tokens": max_new_tokens,
+                    "do_sample": do_sample,
+                    "num_beams": 1,
+                    "eos_token_id": tokenizer.eos_token_id,
+                    "pad_token_id": tokenizer.pad_token_id
                     if tokenizer.pad_token_id is not None
                     else tokenizer.eos_token_id,
-                    use_cache=True,
-                )
+                    "use_cache": True,
+                }
+                if do_sample:
+                    generate_kwargs.update(
+                        {
+                            "temperature": temperature,
+                            "top_p": top_p,
+                            "top_k": top_k,
+                        }
+                    )
+
+                # Generate
+                generated_ids = model.generate(**generate_kwargs)
 
                 # The returned `generated_ids` is usually concatenation of input + generated.
                 # We slice off the input portion using input lengths per example.

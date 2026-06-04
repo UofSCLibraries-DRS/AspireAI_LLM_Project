@@ -1,7 +1,8 @@
 {
-    "repeat_param": 50,
+    "repeat_param": 1,
     "max_tokens": 200,
-    "temperature": 1.0,
+    "do_sample": false,
+    "temperature": 0.0,
     "top_p": 1.0,
     "top_k": 50
 }
