@@ -1,0 +1,7 @@
+{
+    "repeat_param": 50,
+    "max_tokens": 200,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "top_k": 50
+}

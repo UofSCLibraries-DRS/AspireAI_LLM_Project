@@ -1,0 +1,40 @@
+[
+    {
+        "model": {
+            "start": "M9.NQ2k.01.r8",
+            "train_steps": [],
+            "output": "M9.NQ2k.01.r8"
+        },
+        "inference": [
+            {
+                "config": "inference/repeat_50.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    },
+    {
+        "model": {
+            "start": "M9_baseline",
+            "train_steps": [],
+            "output": "M9_baseline"
+        },
+        "inference": [
+            {
+                "config": "inference/repeat_50.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "sft_xml.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    }
+]
