@@ -84,8 +84,6 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
             **training_cfg,
             output_dir=SCRATCH,
             logging_dir=LOG_DIR,
-            fp16=not torch.cuda.is_bf16_supported(),
-            bf16=torch.cuda.is_bf16_supported(),
             gradient_checkpointing=True,
             gradient_checkpointing_kwargs={"use_reentrant": False},
         )
