@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=M9_full_greedy
+#SBATCH --job-name=M12_full_greedy
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --gres=gpu:1
 #SBATCH --time=48:00:00
-#SBATCH --output logs/M9_full_greedy_%j.out
-#SBATCH --error logs/M9_full_greedy_%j.err
+#SBATCH --output logs/M12_full_greedy_%j.out
+#SBATCH --error logs/M12_full_greedy_%j.err
 #SBATCH -p gpu-A100
 #SBATCH --mail-user=jaaydin@email.sc.edu
 #SBATCH --mail-type=BEGIN,END,FAIL,TIME_LIMIT
@@ -23,5 +23,5 @@ module load cuda/12.1
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 python -u -m fine_tuning.main \
-    --pipeline-path /work/jaaydin/AspireAI_LLM_Project/fine_tuning/config/pipelines/llama/M9_full.json \
+    --pipeline-path /work/jaaydin/AspireAI_LLM_Project/fine_tuning/config/pipelines/llama/M12_full.json \
     --env .env.rci
