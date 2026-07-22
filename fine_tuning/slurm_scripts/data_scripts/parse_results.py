@@ -24,6 +24,7 @@ METADATA_FIELDS = [
     "model_path",
     "model_folder",
     "model_name",
+    "uses_metadata",
     "epochs",
     "sft_size",
     "training_cfg",
@@ -60,6 +61,7 @@ def parse_model_folder(folder_name: str) -> dict[str, str]:
     attrs = {
         "model_folder": folder_name,
         "model_name": parts[0],
+        "uses_metadata": "false",
         "epochs": "",
         "sft_size": "",
         "training_cfg": "",
@@ -67,6 +69,10 @@ def parse_model_folder(folder_name: str) -> dict[str, str]:
     }
 
     remaining = parts[1:]
+    if "meta" in remaining:
+        attrs["uses_metadata"] = "true"
+        remaining = [part for part in remaining if part != "meta"]
+
     if remaining and re.fullmatch(r"E\d+", remaining[0]):
         attrs["epochs"] = remaining.pop(0)
 
