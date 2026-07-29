@@ -3,7 +3,11 @@
         "model": {
             "start": "Llama-3.1-8B",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json"
+                {
+                    "trainer": "LoRAUnsupervisedTrainer",
+                    "data": "raw/combined.csv",
+                    "config": "ft/training/lora_unsupervised_D_mcc_h2.json"
+                }
             ],
             "output": "M12"
         },
@@ -29,10 +33,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_1k.01.r8.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_1000.csv",
+                    "config": "ft/training/llama/lora_sft.01.r8.json"
+                }
             ],
             "output": "M12.NQ1k.01.r8"
         },
@@ -51,10 +58,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_1k.01.r16.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_1000.csv",
+                    "config": "ft/training/llama/lora_sft.01.r16.json"
+                }
             ],
             "output": "M12.NQ1k.01.r16"
         },
@@ -73,10 +83,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_1k.02.r8.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_1000.csv",
+                    "config": "ft/training/llama/lora_sft.02.r8.json"
+                }
             ],
             "output": "M12.NQ1k.02.r8"
         },
@@ -95,10 +108,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_1k.02.r16.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_1000.csv",
+                    "config": "ft/training/llama/lora_sft.02.r16.json"
+                }
             ],
             "output": "M12.NQ1k.02.r16"
         },
@@ -117,10 +133,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_1k.03.r8.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_1000.csv",
+                    "config": "ft/training/llama/lora_sft.03.r8.json"
+                }
             ],
             "output": "M12.NQ1k.03.r8"
         },
@@ -139,10 +158,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_1k.03.r16.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_1000.csv",
+                    "config": "ft/training/llama/lora_sft.03.r16.json"
+                }
             ],
             "output": "M12.NQ1k.03.r16"
         },
@@ -161,10 +183,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_2k.01.r8.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_2000.csv",
+                    "config": "ft/training/llama/lora_sft.01.r8.json"
+                }
             ],
             "output": "M12.NQ2k.01.r8"
         },
@@ -183,10 +208,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_2k.01.r16.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_2000.csv",
+                    "config": "ft/training/llama/lora_sft.01.r16.json"
+                }
             ],
             "output": "M12.NQ2k.01.r16"
         },
@@ -205,10 +233,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_2k.02.r8.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_2000.csv",
+                    "config": "ft/training/llama/lora_sft.02.r8.json"
+                }
             ],
             "output": "M12.NQ2k.02.r8"
         },
@@ -227,10 +258,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_2k.02.r16.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_2000.csv",
+                    "config": "ft/training/llama/lora_sft.02.r16.json"
+                }
             ],
             "output": "M12.NQ2k.02.r16"
         },
@@ -249,10 +283,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_2k.03.r8.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_2000.csv",
+                    "config": "ft/training/llama/lora_sft.03.r8.json"
+                }
             ],
             "output": "M12.NQ2k.03.r8"
         },
@@ -271,10 +308,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_2k.03.r16.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_2000.csv",
+                    "config": "ft/training/llama/lora_sft.03.r16.json"
+                }
             ],
             "output": "M12.NQ2k.03.r16"
         },
@@ -293,10 +333,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_4k.01.r8.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_4000.csv",
+                    "config": "ft/training/llama/lora_sft.01.r8.json"
+                }
             ],
             "output": "M12.NQ4k.01.r8"
         },
@@ -315,10 +358,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_4k.01.r16.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_4000.csv",
+                    "config": "ft/training/llama/lora_sft.01.r16.json"
+                }
             ],
             "output": "M12.NQ4k.01.r16"
         },
@@ -337,10 +383,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_4k.02.r8.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_4000.csv",
+                    "config": "ft/training/llama/lora_sft.02.r8.json"
+                }
             ],
             "output": "M12.NQ4k.02.r8"
         },
@@ -359,10 +408,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_4k.02.r16.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_4000.csv",
+                    "config": "ft/training/llama/lora_sft.02.r16.json"
+                }
             ],
             "output": "M12.NQ4k.02.r16"
         },
@@ -381,10 +433,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_4k.03.r8.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_4000.csv",
+                    "config": "ft/training/llama/lora_sft.03.r8.json"
+                }
             ],
             "output": "M12.NQ4k.03.r8"
         },
@@ -403,10 +458,13 @@
     },
     {
         "model": {
-            "start": "Llama-3.1-8B",
+            "start": "M12",
             "train_steps": [
-                "ft/steps/llama/lora/lora_unsupervised_combined.json",
-                "ft/steps/llama/lora/NQ_sft_4k.03.r16.json"
+                {
+                    "trainer": "LoRASFTTrainer",
+                    "data": "sft/NQ_4000.csv",
+                    "config": "ft/training/llama/lora_sft.03.r16.json"
+                }
             ],
             "output": "M12.NQ4k.03.r16"
         },
