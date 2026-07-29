@@ -1,5 +1,0 @@
-{
-    "trainer": "FullUnsupervisedTrainer",
-    "data": "raw/100_transcript.csv",
-    "config": "ft/training/unsupervised_gemma.json"
-}

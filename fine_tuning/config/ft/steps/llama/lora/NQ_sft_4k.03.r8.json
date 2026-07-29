@@ -1,5 +1,0 @@
-{
-    "trainer": "LoRASFTTrainer",
-    "data": "sft/NQ_4000.csv",
-    "config": "ft/training/llama/lora_sft.03.r8.json"
-}

@@ -1,5 +1,0 @@
-{
-    "trainer": "FullUnsupervisedTrainer",
-    "data": "raw/D_mcc_h2_clean_xml.csv",
-    "config": "ft/training/gemma/full_unsupervised_gemma.json"
-}

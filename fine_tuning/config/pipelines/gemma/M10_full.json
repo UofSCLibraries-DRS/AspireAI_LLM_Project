@@ -6,7 +6,7 @@
                 {
                     "trainer": "FullUnsupervisedTrainer",
                     "data": "raw/D_mcc_h2_clean_xml.csv",
-                    "config": "ft/training/gemma/full_unsupervised_gemma.json"
+                    "config": "fine-tuning/gemma/full_unsupervised_gemma.json"
                 }
             ],
             "output": "M10"
@@ -38,7 +38,7 @@
                 {
                     "trainer": "FullSFTTrainer",
                     "data": "sft/NQ_1000.csv",
-                    "config": "ft/training/gemma/full_sft.01.json"
+                    "config": "fine-tuning/gemma/full_sft.01.json"
                 }
             ],
             "output": "M10.NQ1k.01"
@@ -63,7 +63,7 @@
                 {
                     "trainer": "FullSFTTrainer",
                     "data": "sft/NQ_1000.csv",
-                    "config": "ft/training/gemma/full_sft.02.json"
+                    "config": "fine-tuning/gemma/full_sft.02.json"
                 }
             ],
             "output": "M10.NQ1k.02"
@@ -88,7 +88,7 @@
                 {
                     "trainer": "FullSFTTrainer",
                     "data": "sft/NQ_1000.csv",
-                    "config": "ft/training/gemma/full_sft.01.json"
+                    "config": "fine-tuning/gemma/full_sft.01.json"
                 }
             ],
             "output": "M10.NQ1k.03"
@@ -113,7 +113,7 @@
                 {
                     "trainer": "FullSFTTrainer",
                     "data": "sft/NQ_2000.csv",
-                    "config": "ft/training/gemma/full_sft.01.json"
+                    "config": "fine-tuning/gemma/full_sft.01.json"
                 }
             ],
             "output": "M10.NQ2k.01"
@@ -138,7 +138,7 @@
                 {
                     "trainer": "FullSFTTrainer",
                     "data": "sft/NQ_2000.csv",
-                    "config": "ft/training/gemma/full_sft.02.json"
+                    "config": "fine-tuning/gemma/full_sft.02.json"
                 }
             ],
             "output": "M10.NQ2k.02"
@@ -163,7 +163,7 @@
                 {
                     "trainer": "FullSFTTrainer",
                     "data": "sft/NQ_2000.csv",
-                    "config": "ft/training/gemma/full_sft.03.json"
+                    "config": "fine-tuning/gemma/full_sft.03.json"
                 }
             ],
             "output": "M10.NQ2k.03"
@@ -188,7 +188,7 @@
                 {
                     "trainer": "FullSFTTrainer",
                     "data": "sft/NQ_4000.csv",
-                    "config": "ft/training/gemma/full_sft.01.json"
+                    "config": "fine-tuning/gemma/full_sft.01.json"
                 }
             ],
             "output": "M10.NQ4k.01"
@@ -213,7 +213,7 @@
                 {
                     "trainer": "FullSFTTrainer",
                     "data": "sft/NQ_4000.csv",
-                    "config": "ft/training/gemma/full_sft.02.json"
+                    "config": "fine-tuning/gemma/full_sft.02.json"
                 }
             ],
             "output": "M10.NQ4k.02"
@@ -238,7 +238,7 @@
                 {
                     "trainer": "FullSFTTrainer",
                     "data": "sft/NQ_4000.csv",
-                    "config": "ft/training/gemma/full_sft.03.json"
+                    "config": "fine-tuning/gemma/full_sft.03.json"
                 }
             ],
             "output": "M10.NQ4k.03"

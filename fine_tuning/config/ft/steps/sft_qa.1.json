@@ -1,5 +1,0 @@
-{
-    "trainer": "FullSFTTrainer",
-    "data": "sft/qa_125.csv",
-    "config": "ft/training/sft_gemma.json"
-}

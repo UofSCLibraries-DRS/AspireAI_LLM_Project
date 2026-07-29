@@ -1,5 +1,0 @@
-{
-    "trainer": "LoRAUnsupervisedTrainer",
-    "data": "raw/combined.csv",
-    "config": "ft/training/lora_unsupervised_D_mcc_h2.json"
-}
