@@ -1,11 +1,12 @@
-from fine_tuning.evaluation import gaico_accuracy
-from dotenv import load_dotenv, find_dotenv
-import os
 import argparse
+import os
 from pathlib import Path
 
-from fine_tuning.utils.parse_pipeline import build_pipeline
+from dotenv import find_dotenv, load_dotenv
+
+from fine_tuning.evaluation import gaico_accuracy
 from fine_tuning.inference import batched_inference, save_inference_results
+from fine_tuning.utils.parse_pipeline import build_pipeline
 
 
 def main():

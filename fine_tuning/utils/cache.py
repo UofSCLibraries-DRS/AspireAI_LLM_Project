@@ -30,5 +30,7 @@ class TrainingCache:
                 with open(self.path, "r") as f:
                     cache = json.load(f)
                 print(f"Loaded {len(cache)} entries into cache from {self.path}.")
-            except Exception as e:
-                print(f"Error loading cache from {self.path}: {e}")
+            except FileNotFoundError:
+                print(f"File not found: {self.path}")
+            except json.JSONDecodeError:
+                print(f"Invalid JSON: {self.path}")

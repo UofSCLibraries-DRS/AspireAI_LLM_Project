@@ -1,4 +1,3 @@
-from typing import List
 import os
 import time
 from datetime import timedelta
@@ -11,7 +10,7 @@ class AbstractTrainer:
         output_dir: str,
         data: str,
         config: str,
-        model_trace: List[str] | None = None,
+        model_trace: list[str] | None = None,
         force_retrain: bool = False,
     ):
         self.start_model = start_model
@@ -69,5 +68,4 @@ class AbstractTrainer:
         # Write model trace to a file in the output_dir
         trace_path = os.path.join(self.output_dir, "model_trace.txt")
         with open(trace_path, "w", encoding="utf-8") as f:
-            for line in self.model_trace:
-                f.write(line + "\n")
+            f.writelines(line + "\n" for line in self.model_trace)
