@@ -3,7 +3,11 @@
         "model": {
             "start": "gemma-3-270m",
             "train_steps": [
-                "ft/steps/gemma/full_gemm_mcc.json"
+                {
+                    "trainer": "FullUnsupervisedTrainer",
+                    "data": "raw/D_mcc_h2_clean_xml.csv",
+                    "config": "ft/training/gemma/full_unsupervised_gemma.json"
+                }
             ],
             "output": "M10"
         },
@@ -29,10 +33,13 @@
     },
     {
         "model": {
-            "start": "gemma-3-270m",
+            "start": "M10",
             "train_steps": [
-                "ft/steps/gemma/full_gemm_mcc.json",
-                "ft/steps/gemma/NQ_sft_1k.01.json"
+                {
+                    "trainer": "FullSFTTrainer",
+                    "data": "sft/NQ_1000.csv",
+                    "config": "ft/training/gemma/full_sft.01.json"
+                }
             ],
             "output": "M10.NQ1k.01"
         },
@@ -51,10 +58,13 @@
     },
     {
         "model": {
-            "start": "gemma-3-270m",
+            "start": "M10",
             "train_steps": [
-                "ft/steps/gemma/full_gemm_mcc.json",
-                "ft/steps/gemma/NQ_sft_1k.02.json"
+                {
+                    "trainer": "FullSFTTrainer",
+                    "data": "sft/NQ_1000.csv",
+                    "config": "ft/training/gemma/full_sft.02.json"
+                }
             ],
             "output": "M10.NQ1k.02"
         },
@@ -73,10 +83,13 @@
     },
     {
         "model": {
-            "start": "gemma-3-270m",
+            "start": "M10",
             "train_steps": [
-                "ft/steps/gemma/full_gemm_mcc.json",
-                "ft/steps/gemma/NQ_sft_1k.03.json"
+                {
+                    "trainer": "FullSFTTrainer",
+                    "data": "sft/NQ_1000.csv",
+                    "config": "ft/training/gemma/full_sft.01.json"
+                }
             ],
             "output": "M10.NQ1k.03"
         },
@@ -95,10 +108,13 @@
     },
     {
         "model": {
-            "start": "gemma-3-270m",
+            "start": "M10",
             "train_steps": [
-                "ft/steps/gemma/full_gemm_mcc.json",
-                "ft/steps/gemma/NQ_sft_2k.01.json"
+                {
+                    "trainer": "FullSFTTrainer",
+                    "data": "sft/NQ_2000.csv",
+                    "config": "ft/training/gemma/full_sft.01.json"
+                }
             ],
             "output": "M10.NQ2k.01"
         },
@@ -117,10 +133,13 @@
     },
     {
         "model": {
-            "start": "gemma-3-270m",
+            "start": "M10",
             "train_steps": [
-                "ft/steps/gemma/full_gemm_mcc.json",
-                "ft/steps/gemma/NQ_sft_2k.02.json"
+                {
+                    "trainer": "FullSFTTrainer",
+                    "data": "sft/NQ_2000.csv",
+                    "config": "ft/training/gemma/full_sft.02.json"
+                }
             ],
             "output": "M10.NQ2k.02"
         },
@@ -139,10 +158,13 @@
     },
     {
         "model": {
-            "start": "gemma-3-270m",
+            "start": "M10",
             "train_steps": [
-                "ft/steps/gemma/full_gemm_mcc.json",
-                "ft/steps/gemma/NQ_sft_2k.03.json"
+                {
+                    "trainer": "FullSFTTrainer",
+                    "data": "sft/NQ_2000.csv",
+                    "config": "ft/training/gemma/full_sft.03.json"
+                }
             ],
             "output": "M10.NQ2k.03"
         },
@@ -161,10 +183,13 @@
     },
     {
         "model": {
-            "start": "gemma-3-270m",
+            "start": "M10",
             "train_steps": [
-                "ft/steps/gemma/full_gemm_mcc.json",
-                "ft/steps/gemma/NQ_sft_4k.01.json"
+                {
+                    "trainer": "FullSFTTrainer",
+                    "data": "sft/NQ_4000.csv",
+                    "config": "ft/training/gemma/full_sft.01.json"
+                }
             ],
             "output": "M10.NQ4k.01"
         },
@@ -183,10 +208,13 @@
     },
     {
         "model": {
-            "start": "gemma-3-270m",
+            "start": "M10",
             "train_steps": [
-                "ft/steps/gemma/full_gemm_mcc.json",
-                "ft/steps/gemma/NQ_sft_4k.02.json"
+                {
+                    "trainer": "FullSFTTrainer",
+                    "data": "sft/NQ_4000.csv",
+                    "config": "ft/training/gemma/full_sft.02.json"
+                }
             ],
             "output": "M10.NQ4k.02"
         },
@@ -205,10 +233,13 @@
     },
     {
         "model": {
-            "start": "gemma-3-270m",
+            "start": "M10",
             "train_steps": [
-                "ft/steps/gemma/full_gemm_mcc.json",
-                "ft/steps/gemma/NQ_sft_4k.03.json"
+                {
+                    "trainer": "FullSFTTrainer",
+                    "data": "sft/NQ_4000.csv",
+                    "config": "ft/training/gemma/full_sft.03.json"
+                }
             ],
             "output": "M10.NQ4k.03"
         },
