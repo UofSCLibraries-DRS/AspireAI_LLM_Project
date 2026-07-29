@@ -1,19 +1,17 @@
-from typing import Dict
 import csv
-from dataclasses import dataclass
 import json
 import os
-from typing import List
+from dataclasses import dataclass
+from typing import Any
 
-from fine_tuning.utils.environment import get_env_or_raise
-from fine_tuning.trainers import AbstractTrainer
 from fine_tuning.inference import InferenceJob
+from fine_tuning.trainers import AbstractTrainer
 from fine_tuning.utils.cache.hash import list_hash
+from fine_tuning.utils.environment import get_env_or_raise
 from fine_tuning.utils.validation import (
     validate_pipeline_json,
     validate_training_step_json,
 )
-
 
 # TODO: Ensure model / data folders exist / correct format (Maybe implement on trainer class)
 #           Additionally, track model / data folders that will exist
@@ -21,9 +19,9 @@ from fine_tuning.utils.validation import (
 
 @dataclass
 class MasterPipeline:
-    train_steps: List[AbstractTrainer]
-    inference_jobs: List[InferenceJob]
-    evaluation_steps: List[str]
+    train_steps: list[AbstractTrainer]
+    inference_jobs: list[InferenceJob]
+    evaluation_steps: list[str]
 
 
 def build_pipeline(
@@ -49,16 +47,34 @@ def build_pipeline(
         evaluation_steps=[],
     )
 
+    def load_training_step(training_step: Any) -> dict:
+        """Return an inline step, loading legacy path-based steps when needed."""
+        if isinstance(training_step, dict):
+            return training_step
+
+        with open(os.path.join(CONFIG_FOLDER, training_step), "r") as f:
+            return json.load(f)
+
+    # Normalize steps once so hashing and trainer construction use the same data.
+    normalized_models = []
+    for pipeline in pipelines:
+        model = pipeline["model"]
+        normalized_steps = [
+            load_training_step(training_step)
+            for training_step in model.get("train_steps", [])
+        ]
+        for training_step in normalized_steps:
+            validate_training_step_json(training_step)
+        normalized_models.append((model, normalized_steps))
+
     hash_master = {}
 
     # Initial loop:
     #   Creates hashes of all final output models (models that are given a name by the user)
     #   Prevents duplicate training steps.
     print("Gathering output models ...")
-    for pipeline in pipelines:
+    for model, training_steps in normalized_models:
         # Parse model training
-        model: dict = pipeline.get("model")
-
         # Get start and output and ensure they exist
         start = os.path.join(MODEL_FOLDER, model.get("start"))
         output = os.path.join(MODEL_FOLDER, model.get("output"))
@@ -68,7 +84,7 @@ def build_pipeline(
         os.makedirs(output, exist_ok=True)
 
         # Create a hash of the model being trained
-        model_hash = list_hash([start] + model.get("train_steps"))
+        model_hash = list_hash([start, *training_steps])
 
         if model_hash in hash_master:
             raise ValueError("duplicate training pipelines")
@@ -77,22 +93,22 @@ def build_pipeline(
     # Track seen models to avoid doubled training steps
     print("Building pipelines ...")
     seen_models = set()
-    for pipeline in pipelines:
+    for pipeline, (model, training_steps) in zip(pipelines, normalized_models):
         ##########################
         ## Parse model training ##
         ##########################
-        model = pipeline.get("model")
-
         # Get only the start path (The output is already saved in the hash table)
         start = os.path.join(MODEL_FOLDER, model.get("start"))
 
         prev_model = start
-        trace = [start]  # Store a trace of initial model and training steps
+        state = [start]
+        trace = [start]  # Human-readable trace written by the trainer
 
-        for training_step_path in model.get("train_steps"):
-            trace += [training_step_path]
+        for training_step in training_steps:
+            state.append(training_step)
+            trace.append(json.dumps(training_step, sort_keys=True))
 
-            state_hash = list_hash(trace)  # Get hash of model
+            state_hash = list_hash(state)
 
             named_output = hash_master.get(state_hash, None)
             if named_output:  # If there is a named output for this series of steps
@@ -106,12 +122,6 @@ def build_pipeline(
                 prev_model = out_dir
                 continue
             seen_models.add(state_hash)
-
-            with open(os.path.join(CONFIG_FOLDER, training_step_path), "r") as f:
-                training_step: dict = json.load(f)
-
-            # Validate training step json
-            validate_training_step_json(training_step)
 
             trainer = AbstractTrainer.subclass_by_name(
                 subclass_name=training_step.get("trainer"),
@@ -135,7 +145,7 @@ def build_pipeline(
 
         for inf in inference_list:
             with open(os.path.join(CONFIG_FOLDER, inf["config"]), "r") as f:
-                inf_cfg: Dict = json.load(f)
+                inf_cfg: dict = json.load(f)
             # Create inference jobs from data
             for _data in inf["data"]:
                 with open(os.path.join(DATA_FOLDER, _data), newline="") as f:
@@ -170,90 +180,3 @@ def build_pipeline(
 
                             master_pipeline.inference_jobs.append(inf_job)
     return master_pipeline
-
-    # for pipeline in pipelines:
-    #     model = pipeline.get("model", None)
-    #     evals = pipeline.get("eval", None)
-
-    #     assert model, "❌ Pipeline defined with no model information"
-    #     assert "start" in model, "❌ Pipeline defined with no start model"
-
-    #     starting_models.append(model["start"])
-
-    #     for step in model.get("steps", []):
-    #         assert len(step) == 2, (
-    #             "❌ Fine-tuning step defined without a clear action and data pair"
-    #         )
-    #         ft_actions.append(step[0])
-    #         ft_data.append(step[1])
-
-    #     for eval_section in eval:
-    #         eval_data.extend(evals.get(eval_section, []))
-
-    #     prompts.extend(pipeline.get("prompts"))
-
-    #     # TODO: Ensure prompt - model validity
-
-    #     # TODO: Ensure data - ft validity
-
-    #     # TODO: Ensure
-
-    # # Ensure models exist
-    # unique_models = list(set(starting_models))
-    # for model in unique_models:
-    #     model_cfg_path = f"config/models/{model}"
-    #     with open(model_cfg_path, "r") as f:
-    #         model_cfg = json.load(f)
-
-    #     model_path = model_cfg.get("path", None)
-    #     assert model_path, f"❌ Model defined with no path: {model_cfg_path}"
-
-    #     if not Path(model_path).is_dir():
-    #         raise FileNotFoundError(f"Model not found: {model_path}")
-
-    # # TODO: Ensure fine-tuning actions
-
-    # # Ensure fine-tuning data exists
-    # unique_ft_data = list(set(ft_data))
-    # for ft_data in unique_ft_data:
-    #     ft_data_cfg_path = f"config/training_data/{ft_data}"
-    #     with open(ft_data_cfg_path, "r") as f:
-    #         ft_data_cfg = json.load(f)
-
-    #     ft_data_path = ft_data_cfg.get("path", None)
-    #     assert ft_data_path, (
-    #         f"❌ Training data defined with no path: {ft_data_cfg_path}"
-    #     )
-
-    #     if not Path(ft_data_path).is_file():
-    #         raise FileNotFoundError(f"Training data not found: {ft_data_path}")
-
-    # # Ensure prompt files exist and are in the correct format
-    # unique_prompts = list(set(prompts))
-    # for prompt in unique_prompts:
-    #     prompt_path = Path(prompt)
-    #     if not prompt_path.is_file():
-    #         raise FileNotFoundError(f"❌ Prompt file not found: {prompt_path}")
-
-    #     with open(prompt_path, "r") as f:
-    #         prompt_cfg = yaml.safe_load(f)
-
-    #     template = prompt_cfg.get("template", None)
-    #     assert template, (
-    #         f"❌ Prompt file missing required field 'template': {prompt_path}"
-    #     )
-
-    # # Ensure eval data exists
-    # unique_eval_data = list(set(eval_data))
-    # for eval_data in unique_eval_data:
-    #     eval_data_cfg_path = f"config/eval_data/{eval_data}"
-    #     with open(eval_data_cfg_path, "r") as f:
-    #         eval_data_cfg = json.load(f)
-
-    #     eval_data_path = eval_data_cfg.get("path", None)
-    #     assert eval_data_path, (
-    #         f"❌ Evalutation data defined with no path: {eval_data_cfg_path}"
-    #     )
-
-    #     if not Path(eval_data_path).is_file():
-    #         raise FileNotFoundError(f"Evalutation data not found: {eval_data_path}")

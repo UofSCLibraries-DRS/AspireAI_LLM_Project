@@ -11,7 +11,20 @@ PIPELINE_SCHEMA = {
                     "start": {"type": "string"},
                     "train_steps": {
                         "type": "array",
-                        "items": {"type": "string"},
+                        "items": {
+                            "oneOf": [
+                                {"type": "string"},
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "trainer": {"type": "string"},
+                                        "data": {"type": "string"},
+                                        "config": {"type": "string"},
+                                    },
+                                    "required": ["trainer", "data", "config"],
+                                },
+                            ]
+                        },
                     },
                     "output": {"type": "string"},
                 },
@@ -35,6 +48,7 @@ TRAINING_STEP_SCHEMA = {
         "data": {"type": "string"},
         "config": {"type": "string"},
     },
+    "required": ["trainer", "data", "config"],
 }
 
 
