@@ -1,0 +1,26 @@
+{
+    "model": {
+        "start": "Llama-3.1-8B-Instruct",
+        "train_steps": [
+            {
+                "trainer": "LoRAUnsupervisedTrainer",
+                "data": "raw/combined_all_metadata_tulu_llama_5000chars_25000.csv",
+                "config": "fine-tuning/unsupervised_sft_mix.json"
+            }
+        ],
+        "output": "M13"
+    },
+    "inference": [
+        {
+            "config": "inference/default.json",
+            "data": [
+                "eval/scenarios.csv"
+            ],
+            "prompt_formats": [
+                "llama-it/base.yaml",
+                "llama-it/short_response.yaml"
+            ]
+        }
+    ],
+    "evaluation": {}
+}
