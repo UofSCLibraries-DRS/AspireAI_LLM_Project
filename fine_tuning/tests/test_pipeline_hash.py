@@ -9,8 +9,13 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
+from jsonschema import ValidationError
+
 from fine_tuning.utils.cache.hash import list_hash
-from fine_tuning.utils.validation import validate_pipeline_json
+from fine_tuning.utils.validation import (
+    validate_pipeline_json,
+    validate_training_step_json,
+)
 
 
 class PipelineHashTest(unittest.TestCase):
@@ -23,25 +28,57 @@ class PipelineHashTest(unittest.TestCase):
     def test_hash_distinguishes_sequence_boundaries(self):
         self.assertNotEqual(list_hash(["ab", "c"]), list_hash(["a", "bc"]))
 
-    def test_pipeline_schema_accepts_inline_and_legacy_steps(self):
-        validate_pipeline_json(
-            [
-                {
-                    "model": {
-                        "start": "base",
-                        "train_steps": [
-                            {
-                                "trainer": "Trainer",
-                                "data": "data.csv",
-                                "config": "config.json",
-                            },
-                            "legacy-step.json",
-                        ],
-                        "output": "trained",
-                    }
+    def test_pipeline_schema_accepts_inline_steps(self):
+        step = {
+            "trainer": "Trainer",
+            "data": "data.csv",
+            "config": "config.json",
+        }
+        pipeline = [
+            {
+                "model": {
+                    "start": "base",
+                    "train_steps": [step],
+                    "output": "trained",
                 }
-            ]
-        )
+            }
+        ]
+
+        validate_pipeline_json(pipeline)
+        validate_training_step_json(step)
+
+    def test_pipeline_schema_rejects_legacy_string_steps(self):
+        pipeline = [
+            {
+                "model": {
+                    "start": "base",
+                    "train_steps": ["legacy-step.json"],
+                    "output": "trained",
+                }
+            }
+        ]
+
+        with self.assertRaises(ValidationError):
+            validate_pipeline_json(pipeline)
+
+    def test_training_step_schema_requires_all_fields(self):
+        incomplete_step = {
+            "trainer": "Trainer",
+            "data": "data.csv",
+        }
+
+        with self.assertRaises(ValidationError):
+            validate_training_step_json(incomplete_step)
+
+    def test_reference_pipeline_files_pass_validation(self):
+        pipeline_dir = Path(__file__).parents[1] / "config" / "pipelines" / "llama"
+
+        for filename in ("M13.json", "M12_full.json"):
+            with self.subTest(filename=filename):
+                pipeline = json.loads(
+                    (pipeline_dir / filename).read_text(encoding="utf-8")
+                )
+                validate_pipeline_json(pipeline)
 
     def test_build_pipeline_reuses_a_shared_inline_training_prefix(self):
         step_a = {

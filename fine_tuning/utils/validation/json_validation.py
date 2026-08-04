@@ -1,5 +1,15 @@
 from jsonschema import validate
 
+TRAINING_STEP_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "trainer": {"type": "string"},
+        "data": {"type": "string"},
+        "config": {"type": "string"},
+    },
+    "required": ["trainer", "data", "config"],
+}
+
 PIPELINE_SCHEMA = {
     "type": "array",  # Outer array
     "items": {
@@ -11,20 +21,7 @@ PIPELINE_SCHEMA = {
                     "start": {"type": "string"},
                     "train_steps": {
                         "type": "array",
-                        "items": {
-                            "oneOf": [
-                                {"type": "string"},
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "trainer": {"type": "string"},
-                                        "data": {"type": "string"},
-                                        "config": {"type": "string"},
-                                    },
-                                    "required": ["trainer", "data", "config"],
-                                },
-                            ]
-                        },
+                        "items": TRAINING_STEP_SCHEMA,
                     },
                     "output": {"type": "string"},
                 },
@@ -39,16 +36,6 @@ PIPELINE_SCHEMA = {
         "required": ["model"],
     },
     "minItems": 1,
-}
-
-TRAINING_STEP_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "trainer": {"type": "string"},
-        "data": {"type": "string"},
-        "config": {"type": "string"},
-    },
-    "required": ["trainer", "data", "config"],
 }
 
 

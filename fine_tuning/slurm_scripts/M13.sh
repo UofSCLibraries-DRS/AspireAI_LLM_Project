@@ -4,8 +4,8 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --gres=gpu:1
 #SBATCH --time=48:00:00
-#SBATCH --output logs/M12_full_greedy_%j.out
-#SBATCH --error logs/M12_full_greedy_%j.err
+#SBATCH --output logs/M13_%j.out
+#SBATCH --error logs/M13_%j.err
 #SBATCH -p gpu-A100
 #SBATCH --mail-user=jaaydin@email.sc.edu
 #SBATCH --mail-type=BEGIN,END,FAIL,TIME_LIMIT
