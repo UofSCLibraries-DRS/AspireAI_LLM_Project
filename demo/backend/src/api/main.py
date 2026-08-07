@@ -1,8 +1,8 @@
-from fastapi import FastAPI, Body, HTTPException
-from pydantic import BaseModel, Field
-from typing import Optional, Literal
-from dotenv import load_dotenv
+from typing import Literal, Optional
 
+from dotenv import load_dotenv
+from fastapi import Body, FastAPI, HTTPException
+from pydantic import BaseModel, Field
 from src.api.chatbots.bedrock import BedrockChatbot
 from src.api.chatbots.huggingface import HuggingFaceChatbot
 from src.api.chatbots.safechat import SafeChat
@@ -19,7 +19,7 @@ class GenerateRequest(BaseModel):
     model: Literal["M8", "M9", "LLAMA", "SC"] = Field(
         ..., description="Model to use for generation"
     )
-    max_new_tokens: Optional[int] = Field(
+    max_new_tokens: int | None = Field(
         None,
         description="Maximum tokens to generate (uses model default if not provided)",
     )
@@ -30,7 +30,7 @@ class GenerateResponse(BaseModel):
     prompt: str
     text: str
     sources: list[str]
-    max_new_tokens: Optional[int]
+    max_new_tokens: int | None
 
 
 # Initialize all chatbots at startup
@@ -127,9 +127,7 @@ async def generate(req: GenerateRequest = Body(...)):
 
     except Exception as e:
         print(str(e))
-        raise HTTPException(
-            status_code=500, detail=f"Error generating response: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"Error generating response: {e!s}")
 
 
 if __name__ == "__main__":

@@ -1,6 +1,12 @@
 import os
+import re
+import shutil
 import time
 from datetime import timedelta
+from pathlib import Path
+
+
+CHECKPOINT_DIRECTORY = re.compile(r"^checkpoint-(\d+)$")
 
 
 class AbstractTrainer:
@@ -27,10 +33,50 @@ class AbstractTrainer:
                 return sc(*args, **kwargs)
         raise ValueError(f"No such subclass of AbstractTrainer: {subclass_name}")
 
-    def _train(self):
+    def _train(self, resume_from_checkpoint: str | None = None):
         # To be overriden by base classes.
         # Does not handle trace logic
         pass
+
+    def _checkpoint_directories(self) -> list[tuple[int, Path]]:
+        """Return recognized Hugging Face checkpoints and their step numbers."""
+        scratch_dir = Path(self.output_dir) / "scratch"
+        if not scratch_dir.is_dir():
+            return []
+
+        checkpoints = []
+        for path in scratch_dir.iterdir():
+            match = CHECKPOINT_DIRECTORY.fullmatch(path.name)
+            if match and path.is_dir():
+                checkpoints.append((int(match.group(1)), path))
+        return checkpoints
+
+    def _prepare_checkpoint(self) -> str | None:
+        """Select a resume checkpoint, or clear checkpoints for a forced run."""
+        checkpoints = self._checkpoint_directories()
+
+        if self.force_retrain:
+            for _, checkpoint_path in checkpoints:
+                if checkpoint_path.is_symlink():
+                    checkpoint_path.unlink()
+                else:
+                    shutil.rmtree(checkpoint_path)
+            if checkpoints:
+                print(
+                    f"Removed {len(checkpoints)} checkpoint(s) for forced "
+                    "retraining."
+                )
+            print("Starting training from scratch.")
+            return None
+
+        if not checkpoints:
+            print("No checkpoint found; starting training from scratch.")
+            return None
+
+        _, checkpoint_path = max(checkpoints, key=lambda item: item[0])
+        checkpoint = str(checkpoint_path)
+        print(f"Resuming training from checkpoint: {checkpoint}")
+        return checkpoint
 
     def _model_exists(self):
         """Check if model exists by looking for HuggingFace files."""
@@ -51,8 +97,10 @@ class AbstractTrainer:
             return
         os.makedirs(self.output_dir, exist_ok=True)
 
+        resume_from_checkpoint = self._prepare_checkpoint()
+
         start = time.time()
-        self._train()
+        self._train(resume_from_checkpoint=resume_from_checkpoint)
         end = time.time()
 
         duration = timedelta(seconds=end - start)

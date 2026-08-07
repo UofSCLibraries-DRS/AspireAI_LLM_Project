@@ -1,10 +1,10 @@
-from typing import Optional
-from dataclasses import dataclass
 import json
-import yaml
+from dataclasses import dataclass
+
 import boto3
-from botocore.exceptions import ClientError
+import yaml
 from botocore.config import Config as BotoConfig
+from botocore.exceptions import ClientError
 
 from .base import Chatbot
 
@@ -28,7 +28,7 @@ class BedrockChatbotConfig:
             data = yaml.safe_load(f)
 
         if not isinstance(data, dict):
-            raise ValueError("YAML file must contain a mapping at the top level")
+            raise TypeError("YAML file must contain a mapping at the top level")
 
         required_fields = {"model_id", "model_temperature", "prompt_template_path"}
         missing = required_fields - data.keys()
@@ -91,8 +91,8 @@ class BedrockChatbot(Chatbot):
         return text
 
     def generate(
-        self, prompt: str, max_new_tokens: Optional[int] = None
-    ) -> (str, list[str]):
+        self, prompt: str, max_new_tokens: int | None = None
+    ) -> tuple[str, list[str]]:
         """
         Generate a response using AWS Bedrock InvokeModel API.
 
@@ -139,10 +139,10 @@ class BedrockChatbot(Chatbot):
             return f"Bedrock API error [{error_code}]: {error_message}", []
 
         except KeyError as e:
-            return f"Bedrock response parsing error: missing key {str(e)}", []
+            return f"Bedrock response parsing error: missing key {e!s}", []
 
         except json.JSONDecodeError as e:
-            return f"Bedrock JSON parsing error: {str(e)}", []
+            return f"Bedrock JSON parsing error: {e!s}", []
 
         except Exception as e:
-            return f"Bedrock error: {str(e)}", []
+            return f"Bedrock error: {e!s}", []

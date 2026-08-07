@@ -1,12 +1,10 @@
+import re
 from dataclasses import dataclass
+
 import requests
 import yaml
-import re
-from .base import Chatbot
 
-# TODO:
-#   Refactor to just use the same process.
-#   Should be able to use rasa.core.agent
+from .base import Chatbot
 
 
 @dataclass
@@ -21,7 +19,7 @@ class SafeChatConfig:
             data = yaml.safe_load(f)
 
         if not isinstance(data, dict):
-            raise ValueError("YAML file must contain a mapping at the top level")
+            raise TypeError("YAML file must contain a mapping at the top level")
 
         required_fields = {f.name for f in cls.__dataclass_fields__.values()}
         missing = required_fields - data.keys()
@@ -64,7 +62,7 @@ class SafeChat(Chatbot):
         parts = re.split(r"\s+(?=\+)", text)
         return "\n".join(part.strip() for part in parts)
 
-    def generate(self, prompt: str, max_new_tokens=None) -> (str, list[str]):
+    def generate(self, prompt: str, max_new_tokens=None) -> tuple[str, list[str]]:
         try:
             response = requests.post(
                 f"{self.config.url}/webhooks/rest/webhook",
@@ -99,4 +97,4 @@ class SafeChat(Chatbot):
             return "Could not connect to SafeChat service", []
 
         except Exception as e:
-            return f"SafeChat error: {str(e)}", []
+            return f"SafeChat error: {e!s}", []

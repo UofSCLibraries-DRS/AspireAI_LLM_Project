@@ -68,7 +68,7 @@ def prepare_example(example, tokenizer, max_length, prompt_cfg):
 
 
 class LoRASFTTrainer(AbstractTrainer):
-    def _train(self):
+    def _train(self, resume_from_checkpoint: str | None = None):
         with open(self.config, "r") as f:
             cfg = json.load(f)
 
@@ -146,7 +146,7 @@ class LoRASFTTrainer(AbstractTrainer):
         )
 
         # Train and save
-        trainer.train()
+        trainer.train(resume_from_checkpoint=resume_from_checkpoint)
 
         # Save LoRA adapters
         adapter_dir = os.path.join(self.output_dir, "adapters")

@@ -20,7 +20,7 @@ from .training_base import AbstractTrainer
 
 
 class LoRAUnsupervisedTrainer(AbstractTrainer):
-    def _train(self):
+    def _train(self, resume_from_checkpoint: str | None = None):
         # Set up folders
         LOG_DIR = os.path.join(self.output_dir, "logs")
         SCRATCH = os.path.join(self.output_dir, "scratch")
@@ -100,7 +100,7 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
         )
 
         # Traing and save
-        trainer.train()
+        trainer.train(resume_from_checkpoint=resume_from_checkpoint)
 
         # Save LoRA adapters
         model.save_pretrained(ADAPTER_DIR)

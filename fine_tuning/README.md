@@ -98,6 +98,20 @@ scancel <JOB ID>
 
 For more information, on commands to manage jobs, refer to the [SLURM docs](https://slurm.schedmd.com/quickstart.html#commands).
 
+## Resuming interrupted training
+
+Each training step stores Hugging Face checkpoints in its model output's
+`scratch/` directory. If the final model has not been saved yet, rerunning the
+pipeline automatically resumes from the numerically highest
+`scratch/checkpoint-<step>` directory. Unrelated files and directories in
+`scratch/` are ignored.
+
+Constructing a trainer with `force_retrain=True` starts a fresh run. Before
+training, it deletes only directories matching `scratch/checkpoint-<step>` so
+that checkpoints from the old run cannot be selected on a later restart.
+Invalid or incompatible checkpoints are reported by Hugging Face rather than
+silently skipped.
+
 # Misc Info
 
 Model weights should be stored in `/work/<USERNAME>/models/`

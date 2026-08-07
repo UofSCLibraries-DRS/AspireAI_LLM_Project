@@ -1,7 +1,6 @@
 from dotenv import load_dotenv
 from src.api.chatbots.bedrock import BedrockChatbot
 
-
 ########################################################################
 ###                                                                  ###
 ### Run from backend root with `uv run python -m tests.test_bedrock` ###

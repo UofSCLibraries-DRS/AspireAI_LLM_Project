@@ -1,8 +1,8 @@
-from typing import Optional
 from dataclasses import dataclass
-import yaml
+
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM
+import yaml
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from .base import Chatbot
 
@@ -19,7 +19,7 @@ class HuggingFaceChatbotConfig:
             data = yaml.safe_load(f)
 
         if not isinstance(data, dict):
-            raise ValueError("YAML file must contain a mapping at the top level")
+            raise TypeError("YAML file must contain a mapping at the top level")
 
         required_fields = {f.name for f in cls.__dataclass_fields__.values()}
         missing = required_fields - data.keys()
@@ -77,8 +77,8 @@ class HuggingFaceChatbot(Chatbot):
         return text
 
     def generate(
-        self, prompt: str, max_new_tokens: Optional[int] = 128
-    ) -> (str, list[str]):
+        self, prompt: str, max_new_tokens: int | None = 128
+    ) -> tuple[str, list[str]]:
         templated_prompt = self.prompt_template.format(user_prompt=prompt)
 
         # Tokenize and generate

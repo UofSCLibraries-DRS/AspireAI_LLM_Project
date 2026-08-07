@@ -17,7 +17,7 @@ from .training_base import AbstractTrainer
 
 
 class FullUnsupervisedTrainer(AbstractTrainer):
-    def _train(self):
+    def _train(self, resume_from_checkpoint: str | None = None):
         with open(self.config, "r") as f:
             cfg = json.load(f)
 
@@ -92,7 +92,7 @@ class FullUnsupervisedTrainer(AbstractTrainer):
         )
 
         # Traing and save
-        trainer.train()
+        trainer.train(resume_from_checkpoint=resume_from_checkpoint)
 
         trainer.save_model(f"{self.output_dir}")
         tokenizer.save_pretrained(f"{self.output_dir}")

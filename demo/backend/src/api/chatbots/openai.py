@@ -1,9 +1,8 @@
 import os
-from typing import Optional
+from dataclasses import dataclass
 
 import yaml
 from openai import OpenAI
-from dataclasses import dataclass
 
 from .base import Chatbot
 
@@ -20,7 +19,7 @@ class OpenAIChatbotConfig:
             data = yaml.safe_load(f)
 
         if not isinstance(data, dict):
-            raise ValueError("YAML file must contain a mapping at the top level")
+            raise TypeError("YAML file must contain a mapping at the top level")
 
         required_fields = {f.name for f in cls.__dataclass_fields__.values()}
         missing = required_fields - data.keys()
@@ -51,7 +50,9 @@ class OpenAIChatbot(Chatbot):
             base_url=self.config.base_url,
         )
 
-    def generate(self, prompt: str, max_new_tokens: Optional[int]) -> (str, list[str]):
+    def generate(
+        self, prompt: str, max_new_tokens: int | None
+    ) -> tuple[str, list[str]]:
         response = self.client.chat.completions.create(
             model=self.model,
             messages=[
