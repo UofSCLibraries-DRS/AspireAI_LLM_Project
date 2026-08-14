@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Unified Metrics Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Unified metrics summaries</p>
+        <h1>Results Explorer</h1>
+      </div>
+      <div class="header-actions">
+        <button class="icon-button" id="resetButton" type="button" title="Reset filters" aria-label="Reset filters">
+          <span aria-hidden="true">↺</span>
+        </button>
+        <button class="primary-button" id="exportButton" type="button">Export CSV</button>
+      </div>
+    </header>
+
+    <main class="shell">
+      <nav class="dataset-tabs" id="datasetTabs" aria-label="Datasets"></nav>
+
+      <section class="control-band" aria-label="Explorer controls">
+        <div class="search-control">
+          <label for="searchInput">Search</label>
+          <input id="searchInput" type="search" placeholder="Model, prompt, config">
+        </div>
+        <div class="control-grid">
+          <label>
+            Model
+            <select id="modelFilter" data-filter="model_name"></select>
+          </label>
+          <label>
+            Metadata
+            <select id="metadataFilter" data-filter="uses_metadata"></select>
+          </label>
+          <label>
+            Prompt
+            <select id="promptFilter" data-filter="prompt"></select>
+          </label>
+          <label>
+            Epochs
+            <select id="epochsFilter" data-filter="epochs"></select>
+          </label>
+          <label>
+            SFT size
+            <select id="sftFilter" data-filter="sft_size"></select>
+          </label>
+          <label>
+            Config
+            <select id="cfgFilter" data-filter="training_cfg"></select>
+          </label>
+          <label>
+            LoRA rank
+            <select id="rankFilter" data-filter="lora_rank"></select>
+          </label>
+          <label>
+            Run type
+            <select id="runTypeFilter">
+              <option value="all">All rows</option>
+              <option value="baseline">Baseline</option>
+              <option value="trained">Trained</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <section class="summary-grid" id="summaryGrid" aria-label="Summary"></section>
+
+      <section class="visual-grid" aria-label="Plots">
+        <article class="panel wide">
+          <div class="panel-heading">
+            <h2>Top Configurations</h2>
+            <span id="topChartMeta"></span>
+          </div>
+          <div class="chart-wrap" id="topBars"></div>
+        </article>
+
+        <article class="panel wide">
+          <div class="panel-heading">
+            <h2>Prompt Heatmap</h2>
+            <span id="heatmapMeta"></span>
+          </div>
+          <div class="heatmap-wrap" id="heatmap"></div>
+        </article>
+
+      </section>
+
+      <section class="detail-band" aria-label="Selected row details">
+        <div class="panel">
+          <div class="panel-heading">
+            <h2>Selected Row</h2>
+            <span id="selectedMeta"></span>
+          </div>
+          <div class="detail-grid" id="detailPanel"></div>
+        </div>
+      </section>
+
+      <section class="table-section" aria-label="Results table">
+        <div class="table-tools">
+          <div>
+            <h2>Results Table</h2>
+            <p id="tableMeta"></p>
+          </div>
+          <details class="column-picker">
+            <summary>Columns</summary>
+            <div id="columnControls"></div>
+          </details>
+        </div>
+        <div class="table-wrap">
+          <table id="resultsTable"></table>
+        </div>
+      </section>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
