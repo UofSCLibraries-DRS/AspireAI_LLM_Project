@@ -40,6 +40,8 @@ data_handling/*.xlsx
 
 # dev settings
 .vscode
+.agent
+.codex
 
 # IGNORE CSV FILES IN split_data subfolder
 data/mccray/split_data/h1_split/*
@@ -52,3 +54,10 @@ data/*/split_data/h2_split/*
 
 # TEMP - remove in merge conflict later
 /demo/react-frontend/
+
+
+# Data folders
+data/raw
+data/in
+
+demo/backend/db/data

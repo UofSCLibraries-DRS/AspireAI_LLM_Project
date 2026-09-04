@@ -6,7 +6,7 @@
                 {
                     "trainer": "LoRASFTTrainer",
                     "data": "sft/NQ_2000.csv",
-                    "config": "ft/llama/lora_sft.01.r8.json"
+                    "config": "fine-tuning/llama/lora_sft.01.r8.json"
                 }
             ],
             "output": "M9_baseline"
