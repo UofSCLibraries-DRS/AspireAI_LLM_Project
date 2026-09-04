@@ -11,6 +11,10 @@ uv sync
 uv run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
+The `RAG` model uses the local `lighthouse_rag` PostgreSQL database and wraps
+the `LLAMA` Bedrock model. Its optional environment settings are documented in
+`.env.example`; retrieval searches all stored embedding fields by default.
+
 
 
 

@@ -5,6 +5,12 @@ from fastapi import Body, FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from src.api.chatbots.bedrock import BedrockChatbot
 from src.api.chatbots.huggingface import HuggingFaceChatbot
+from src.api.chatbots.rag import (
+    E5QueryEmbedder,
+    PostgresContextRetriever,
+    RAGChatbot,
+    RAGSettings,
+)
 from src.api.chatbots.safechat import SafeChat
 
 # Load environment variables
@@ -16,7 +22,7 @@ app = FastAPI(title="AspireAI Chatbot API", version="1.0.0")
 # Request/Response Models
 class GenerateRequest(BaseModel):
     prompt: str = Field(..., description="The user's prompt/question")
-    model: Literal["M8", "M9", "LLAMA", "SC"] = Field(
+    model: Literal["M8", "M9", "LLAMA", "RAG", "SC"] = Field(
         ..., description="Model to use for generation"
     )
     max_new_tokens: int | None = Field(
@@ -62,6 +68,32 @@ async def startup_event():
         print("M9 (Bedrock) initialized")
     except Exception as e:
         print(f"Failed to initialize M9: {e}")
+
+    # Initialize RAG with the existing Bedrock Llama generator.
+    try:
+        llama = chatbots.get("LLAMA")
+        if not isinstance(llama, BedrockChatbot):
+            raise RuntimeError("LLAMA must initialize before RAG")
+        rag_settings = RAGSettings.from_env()
+        query_embedder = E5QueryEmbedder(device=rag_settings.embedding_device)
+        retriever = PostgresContextRetriever(
+            database_url=rag_settings.database_url,
+            embedder=query_embedder,
+            search_field=rag_settings.search_field,
+        )
+        chatbots["RAG"] = RAGChatbot(
+            id="RAG",
+            chatbot=llama,
+            retriever=retriever,
+            top_k=rag_settings.top_k,
+            max_context_chars=rag_settings.max_context_chars,
+        )
+        print(
+            f"RAG initialized (search_field={rag_settings.search_field}, "
+            f"top_k={rag_settings.top_k})"
+        )
+    except Exception as e:
+        print(f"Failed to initialize RAG: {e}")
 
     # Initialize SafeChat
     try:
