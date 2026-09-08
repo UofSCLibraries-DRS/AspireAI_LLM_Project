@@ -16,5 +16,12 @@ dependencies = [
     "requests>=2.32.5",
     "torch>=2.10.0",
     "transformers>=5.1.0",
+    "types-pyyaml>=6.0.12.20260906",
+    "types-requests>=2.33.0.20260906",
     "uvicorn>=0.40.0",
 ]
+
+[tool.pyrefly]
+# Application modules are imported as `src.api...`, so resolve project imports
+# from this directory rather than applying Pyrefly's default `src/` heuristic.
+search-path = ["."]

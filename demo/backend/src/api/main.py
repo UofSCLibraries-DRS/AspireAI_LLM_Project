@@ -1,8 +1,11 @@
-from typing import Literal, Optional
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+from typing import Literal
 
 from dotenv import load_dotenv
 from fastapi import Body, FastAPI, HTTPException
 from pydantic import BaseModel, Field
+from src.api.chatbots.base import Chatbot
 from src.api.chatbots.bedrock import BedrockChatbot
 from src.api.chatbots.huggingface import HuggingFaceChatbot
 from src.api.chatbots.rag import (
@@ -15,8 +18,6 @@ from src.api.chatbots.safechat import SafeChat
 
 # Load environment variables
 load_dotenv()
-
-app = FastAPI(title="AspireAI Chatbot API", version="1.0.0")
 
 
 # Request/Response Models
@@ -40,11 +41,10 @@ class GenerateResponse(BaseModel):
 
 
 # Initialize all chatbots at startup
-chatbots = {}
+chatbots: dict[str, Chatbot] = {}
 
 
-@app.on_event("startup")
-async def startup_event():
+async def startup_event() -> None:
     """Initialize all chatbots when the API starts."""
     print("Initializing chatbots...")
 
@@ -54,7 +54,7 @@ async def startup_event():
             id="M8", config_path="configs/chatbots/m8_hf.yaml"
         )
         print("M8 (HuggingFace) initialized")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"Failed to initialize M8: {e}")
 
     # Initialize M9 (Bedrock)
@@ -66,14 +66,14 @@ async def startup_event():
             id="LLAMA", config_path="configs/chatbots/llama_bedrock.yaml"
         )
         print("M9 (Bedrock) initialized")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"Failed to initialize M9: {e}")
 
     # Initialize RAG with the existing Bedrock Llama generator.
     try:
         llama = chatbots.get("LLAMA")
         if not isinstance(llama, BedrockChatbot):
-            raise RuntimeError("LLAMA must initialize before RAG")
+            raise RuntimeError("LLAMA must initialize before RAG")  # noqa: TRY004
         rag_settings = RAGSettings.from_env()
         query_embedder = E5QueryEmbedder(device=rag_settings.embedding_device)
         retriever = PostgresContextRetriever(
@@ -92,15 +92,25 @@ async def startup_event():
             f"RAG initialized (search_field={rag_settings.search_field}, "
             f"top_k={rag_settings.top_k})"
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"Failed to initialize RAG: {e}")
 
     # Initialize SafeChat
     try:
         chatbots["SC"] = SafeChat(id="SC", config_path="configs/chatbots/safechat.yaml")
         print("SafeChat initialized")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"Failed to initialize SafeChat: {e}")
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
+    """Manage application-wide startup and shutdown behavior."""
+    await startup_event()
+    yield
+
+
+app = FastAPI(title="AspireAI Chatbot API", version="1.0.0", lifespan=lifespan)
 
 
 @app.get("/")
@@ -123,7 +133,7 @@ async def list_models():
 
 
 @app.post("/generate", response_model=GenerateResponse)
-async def generate(req: GenerateRequest = Body(...)):
+async def generate(req: GenerateRequest = Body(...)):  # noqa: B008
     """
     Generate a response from the specified model.
 
@@ -157,7 +167,7 @@ async def generate(req: GenerateRequest = Body(...)):
             max_new_tokens=req.max_new_tokens,
         )
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(str(e))
         raise HTTPException(status_code=500, detail=f"Error generating response: {e!s}")
 

@@ -144,5 +144,5 @@ class BedrockChatbot(Chatbot):
         except json.JSONDecodeError as e:
             return f"Bedrock JSON parsing error: {e!s}", []
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             return f"Bedrock error: {e!s}", []

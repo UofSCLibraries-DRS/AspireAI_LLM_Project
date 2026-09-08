@@ -54,7 +54,7 @@ class OpenAIChatbot(Chatbot):
         self, prompt: str, max_new_tokens: int | None
     ) -> tuple[str, list[str]]:
         response = self.client.chat.completions.create(
-            model=self.model,
+            model=self.config.model_id,
             messages=[
                 {"role": "user", "content": prompt},
             ],
@@ -62,4 +62,4 @@ class OpenAIChatbot(Chatbot):
             temperature=self.config.model_temperature,
         )
 
-        return response.choices[0].message.content, []
+        return response.choices[0].message.content or "", []

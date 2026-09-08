@@ -1,12 +1,9 @@
-#!/usr/bin/env python3
 """Load ``data/embeddings.csv`` into the local lighthouse_rag PostgreSQL database.
 
 The loader uses psql's ``\\copy`` command, so the CSV is read by the machine
 running this script rather than by the PostgreSQL server.  This is important
 for a local database and avoids loading a large embeddings file into Python.
 """
-
-from __future__ import annotations
 
 import argparse
 import csv
@@ -15,7 +12,6 @@ import re
 import subprocess
 import sys
 from pathlib import Path
-
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_CSV = SCRIPT_DIR / "data" / "embeddings.csv"
@@ -59,7 +55,9 @@ def inspect_csv(path: Path) -> int:
             raise ValueError("CSV is missing its header row")
         missing = set(REQUIRED_COLUMNS) - set(reader.fieldnames)
         if missing:
-            raise ValueError(f"CSV is missing required columns: {', '.join(sorted(missing))}")
+            raise ValueError(
+                f"CSV is missing required columns: {', '.join(sorted(missing))}"
+            )
 
         for line_number, row in enumerate(reader, start=2):
             for column in VECTOR_COLUMNS:
@@ -72,9 +70,13 @@ def inspect_csv(path: Path) -> int:
                     raise ValueError(
                         f"Invalid JSON in {column!r} on CSV line {line_number}"
                     ) from exc
-                if not isinstance(vector, list) or not vector or not all(
-                    isinstance(value, (int, float)) and not isinstance(value, bool)
-                    for value in vector
+                if (
+                    not isinstance(vector, list)
+                    or not vector
+                    or not all(
+                        isinstance(value, (int, float)) and not isinstance(value, bool)
+                        for value in vector
+                    )
                 ):
                     raise ValueError(
                         f"{column!r} on CSV line {line_number} is not a numeric vector"
@@ -101,12 +103,20 @@ def psql_path(path: Path) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Load a pgvector RAG database from embeddings.csv.")
-    parser.add_argument("--csv", type=Path, default=DEFAULT_CSV, help="Path to embeddings.csv")
-    parser.add_argument("--database", default="lighthouse_rag", help="PostgreSQL database name")
+    parser = argparse.ArgumentParser(
+        description="Load a pgvector RAG database from embeddings.csv."
+    )
+    parser.add_argument(
+        "--csv", type=Path, default=DEFAULT_CSV, help="Path to embeddings.csv"
+    )
+    parser.add_argument(
+        "--database", default="lighthouse_rag", help="PostgreSQL database name"
+    )
     parser.add_argument("--host", help="PostgreSQL host (defaults to local socket)")
     parser.add_argument("--port", type=int, help="PostgreSQL port")
-    parser.add_argument("--user", help="PostgreSQL role (defaults to libpq's normal behavior)")
+    parser.add_argument(
+        "--user", help="PostgreSQL role (defaults to libpq's normal behavior)"
+    )
     parser.add_argument(
         "--replace",
         action="store_true",
@@ -126,7 +136,10 @@ def main() -> int:
     except (OSError, ValueError) as exc:
         print(f"Cannot import CSV: {exc}", file=sys.stderr)
         return 1
-    print(f"Detected {dimensions}-dimensional vectors; starting streaming import.", flush=True)
+    print(
+        f"Detected {dimensions}-dimensional vectors; starting streaming import.",
+        flush=True,
+    )
 
     truncate = "TRUNCATE documents;" if args.replace else ""
     sql = f"""
@@ -151,7 +164,10 @@ SELECT count(*) AS documents_loaded FROM documents;
     try:
         run_psql(args.database, sql, args)
     except FileNotFoundError:
-        print("psql was not found. Install the PostgreSQL client tools and try again.", file=sys.stderr)
+        print(
+            "psql was not found. Install the PostgreSQL client tools and try again.",
+            file=sys.stderr,
+        )
         return 1
     except subprocess.CalledProcessError as exc:
         print(

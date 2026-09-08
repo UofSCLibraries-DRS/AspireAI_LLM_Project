@@ -55,10 +55,16 @@ class HuggingFaceChatbot(Chatbot):
         self.stop_sequences = prompt_template_cfg.get("stop_sequences", [])
 
         # Initialize tokenizer and model
-        self.tokenizer = AutoTokenizer.from_pretrained(
+        tokenizer = AutoTokenizer.from_pretrained(
             self.config.model_path,
             use_fast=False,
         )
+        if tokenizer is None:
+            raise RuntimeError(
+                f"Failed to load tokenizer from {self.config.model_path!r}"
+            )
+        self.tokenizer = tokenizer
+
         self.model = AutoModelForCausalLM.from_pretrained(
             self.config.model_path,
             torch_dtype="auto",
@@ -95,6 +101,8 @@ class HuggingFaceChatbot(Chatbot):
 
         # Decode output
         full_text = self.tokenizer.decode(out[0], skip_special_tokens=True)
+        if not isinstance(full_text, str):
+            raise RuntimeError("Tokenizer returned multiple decoded sequences")  # noqa: TRY004
 
         # Post-process (trim at stop sequences)
         return self._post_process(full_text, templated_prompt), []

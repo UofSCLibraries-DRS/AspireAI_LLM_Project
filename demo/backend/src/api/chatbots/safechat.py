@@ -75,12 +75,12 @@ class SafeChat(Chatbot):
             )
 
             if response.status_code != 200:
-                return f"SafeChat error: HTTP {response.status_code}"
+                return f"SafeChat error: HTTP {response.status_code}", []
 
             replies = response.json()
 
             if not replies:
-                return "SafeChat returned an empty response"
+                return "SafeChat returned an empty response", []
 
             text = replies[0].get("text", "No response received")
 

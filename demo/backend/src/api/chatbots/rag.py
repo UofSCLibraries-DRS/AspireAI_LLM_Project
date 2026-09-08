@@ -12,7 +12,6 @@ import torch.nn.functional as F
 from .base import Chatbot
 from .bedrock import BedrockChatbot
 
-
 EMBEDDING_MODEL = "intfloat/e5-base-v2"
 EMBEDDING_SIZE = 768
 QUERY_PREFIX = "query: "
@@ -109,6 +108,11 @@ class E5QueryEmbedder:
 
             tokenizer = AutoTokenizer.from_pretrained(model_name)
             model = AutoModel.from_pretrained(model_name)
+
+        if tokenizer is None:
+            raise RuntimeError(f"Failed to load tokenizer from {model_name!r}")
+        if model is None:
+            raise RuntimeError(f"Failed to load embedding model from {model_name!r}")
 
         self.tokenizer = tokenizer
         self.model = model
@@ -221,10 +225,12 @@ class PostgresContextRetriever:
         vector = "[" + ",".join(format(value, ".9g") for value in embedding) + "]"
         sql, parameters = self._query(vector=vector, top_k=top_k)
 
-        with self.connection_factory(self.database_url) as connection:
-            with connection.cursor() as cursor:
-                cursor.execute(sql, parameters)
-                rows = cursor.fetchall()
+        with (
+            self.connection_factory(self.database_url) as connection,
+            connection.cursor() as cursor,
+        ):
+            cursor.execute(sql, parameters)
+            rows = cursor.fetchall()
 
         documents: list[RetrievedDocument] = []
         seen_ids: set[int] = set()
@@ -354,9 +360,7 @@ class RAGChatbot(Chatbot):
             remaining -= len(text)
         return bounded
 
-    def _augment_prompt(
-        self, question: str, documents: list[RetrievedDocument]
-    ) -> str:
+    def _augment_prompt(self, question: str, documents: list[RetrievedDocument]) -> str:
         bounded_documents = self._bounded_documents(documents)
         context = "\n\n".join(
             f"<document>\n{document.text}\n</document>"

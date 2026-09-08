@@ -97,8 +97,15 @@ class E5Embedder:
 
         self.device = device
         self.batch_size = batch_size
-        self.tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-        self.model = AutoModel.from_pretrained(MODEL_NAME)
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+        if tokenizer is None:
+            raise RuntimeError(f"Failed to load tokenizer from {MODEL_NAME!r}")
+        self.tokenizer = tokenizer
+
+        model = AutoModel.from_pretrained(MODEL_NAME)
+        if model is None:
+            raise RuntimeError(f"Failed to load embedding model from {MODEL_NAME!r}")
+        self.model = model
 
         hidden_size = int(self.model.config.hidden_size)
         if hidden_size != self.embedding_size:
@@ -113,8 +120,12 @@ class E5Embedder:
         self.prefix_ids = self.tokenizer.encode(
             PASSAGE_PREFIX, add_special_tokens=False
         )
-        if self.tokenizer.cls_token_id is None or self.tokenizer.sep_token_id is None:
+        cls_token_id = self.tokenizer.cls_token_id
+        sep_token_id = self.tokenizer.sep_token_id
+        if cls_token_id is None or sep_token_id is None:
             raise ValueError(f"{MODEL_NAME} tokenizer is missing BERT special tokens")
+        self.cls_token_id = cls_token_id
+        self.sep_token_id = sep_token_id
         special_token_count = self.tokenizer.num_special_tokens_to_add(pair=False)
         self.max_content_tokens = (
             self.max_length - special_token_count - len(self.prefix_ids)
@@ -134,10 +145,10 @@ class E5Embedder:
         for start in range(0, len(content_ids), self.max_content_tokens):
             content_chunk = content_ids[start : start + self.max_content_tokens]
             yield [
-                self.tokenizer.cls_token_id,
+                self.cls_token_id,
                 *self.prefix_ids,
                 *content_chunk,
-                self.tokenizer.sep_token_id,
+                self.sep_token_id,
             ]
 
     @staticmethod
@@ -347,7 +358,9 @@ def resume_existing_output(
                 f"{reader.fieldnames!r}; expected {list(OUTPUT_COLUMNS)!r}"
             )
         for line_number, saved_row in enumerate(reader, start=2):
-            if None in saved_row or any(column not in saved_row for column in OUTPUT_COLUMNS):
+            if None in saved_row or any(
+                column not in saved_row for column in OUTPUT_COLUMNS
+            ):
                 raise ValueError(
                     f"Cannot resume {output_path}: malformed row near line "
                     f"{line_number}"
@@ -364,7 +377,10 @@ def resume_existing_output(
                 source_row.description,
                 source_row.transcript,
             )
-            if saved_row["collection"] != source_row.collection or saved_source != source_values:
+            if (
+                saved_row["collection"] != source_row.collection
+                or saved_source != source_values
+            ):
                 raise ValueError(
                     f"Cannot resume {output_path}: saved row {completed_rows + 1} "
                     "does not match the current input"
@@ -399,9 +415,7 @@ def generate_embeddings_csv(
     source_rows = iter_metadata_rows(input_dir)
 
     if output_path.exists():
-        total_rows, collection_counts = resume_existing_output(
-            output_path, source_rows
-        )
+        total_rows, collection_counts = resume_existing_output(output_path, source_rows)
         print(
             f"Resuming from {total_rows:,} saved rows in {output_path}",
             file=sys.stderr,
