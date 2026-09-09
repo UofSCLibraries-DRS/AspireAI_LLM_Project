@@ -243,20 +243,63 @@
     }
 
     .message-sources {
-      font-size: 0.75em;
-      margin-top: 4px;
+      font-size: 0.8em;
+      margin-top: 8px;
       padding: 0 5px;
       color: var(--text-secondary);
     }
 
-    .message-sources a {
+    .message-sources a,
+    .source-toggle {
       color: var(--primary-red);
+      background: none;
+      border: 0;
+      font: inherit;
       text-decoration: none;
       margin: 0 2px;
+      padding: 0;
+      cursor: pointer;
     }
 
-    .message-sources a:hover {
+    .message-sources a:hover,
+    .source-toggle:hover,
+    .source-toggle:focus-visible,
+    .source-toggle[aria-expanded="true"] {
       text-decoration: underline;
+    }
+
+    .source-panel {
+      box-sizing: border-box;
+      width: 100%;
+      max-height: 280px;
+      margin-top: 8px;
+      padding: 12px;
+      overflow-y: auto;
+      color: var(--text-primary);
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      text-align: left;
+    }
+
+    .source-panel[hidden] {
+      display: none;
+    }
+
+    .source-field + .source-field {
+      margin-top: 10px;
+    }
+
+    .source-field-label {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .source-field-value {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
     /* System Messages */
@@ -621,7 +664,6 @@
       <ul>
         <li>Use of context from previous questions and responses for follow-up questions</li>
         <li>Access to information outside of the John H. McCray digital collection</li>
-        <li>Citation of sources</li>
       </ul>
 
       <!-- <h3>In-Scope Questions:</h3>
@@ -776,6 +818,98 @@
       document.getElementById(modalId).style.display = 'none';
     }
 
+    let sourcePanelCounter = 0;
+
+    function isTextSource(source) {
+      return source !== null && typeof source === 'object' && !Array.isArray(source);
+    }
+
+    function addSourceField(panel, label, value) {
+      const field = document.createElement('div');
+      field.className = 'source-field';
+
+      const fieldLabel = document.createElement('strong');
+      fieldLabel.className = 'source-field-label';
+      fieldLabel.textContent = `${label}:`;
+
+      const fieldValue = document.createElement('div');
+      fieldValue.className = 'source-field-value';
+      fieldValue.textContent = typeof value === 'string' ? value : '';
+
+      field.append(fieldLabel, fieldValue);
+      panel.appendChild(field);
+    }
+
+    function addSources(wrapper, sources) {
+      if (!Array.isArray(sources) || sources.length === 0) return;
+
+      const sourcesDiv = document.createElement('div');
+      sourcesDiv.className = 'message-sources';
+      sourcesDiv.appendChild(document.createTextNode('Sources: '));
+
+      const panel = document.createElement('div');
+      panel.className = 'source-panel';
+      panel.id = `source-panel-${++sourcePanelCounter}`;
+      panel.hidden = true;
+      let activeButton = null;
+
+      sources.forEach((source, index) => {
+        if (index > 0) {
+          sourcesDiv.appendChild(document.createTextNode(' '));
+        }
+
+        if (isTextSource(source)) {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'source-toggle';
+          button.textContent = `[${index + 1}]`;
+          button.setAttribute('aria-controls', panel.id);
+          button.setAttribute('aria-expanded', 'false');
+
+          button.addEventListener('click', () => {
+            const shouldClose = activeButton === button && !panel.hidden;
+            sourcesDiv.querySelectorAll('.source-toggle').forEach(toggle => {
+              toggle.setAttribute('aria-expanded', 'false');
+            });
+
+            if (shouldClose) {
+              panel.hidden = true;
+              activeButton = null;
+              return;
+            }
+
+            panel.replaceChildren();
+            addSourceField(panel, 'Title', source.title);
+            if (typeof source.description === 'string' && source.description.trim()) {
+              addSourceField(panel, 'Description', source.description);
+            }
+            addSourceField(panel, 'Transcript', source.transcript);
+            panel.hidden = false;
+            button.setAttribute('aria-expanded', 'true');
+            activeButton = button;
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          });
+
+          sourcesDiv.appendChild(button);
+          return;
+        }
+
+        if (typeof source === 'string' && /^https?:\/\//i.test(source)) {
+          const link = document.createElement('a');
+          link.href = source;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.textContent = `[${index + 1}]`;
+          sourcesDiv.appendChild(link);
+        }
+      });
+
+      wrapper.appendChild(sourcesDiv);
+      if (sources.some(isTextSource)) {
+        wrapper.appendChild(panel);
+      }
+    }
+
     function addMessage(text, type, info = '', sources = []) {
       if (welcomeScreen && welcomeScreen.parentNode) {
         welcomeScreen.remove();
@@ -790,21 +924,14 @@
 
       wrapper.appendChild(message);
 
-      if (sources && sources.length > 0) {
-        const sourcesDiv = document.createElement('div');
-        sourcesDiv.className = 'message-sources';
-        sourcesDiv.innerHTML = 'Sources: ' + sources.map((url, i) =>
-          `<a href="${url}" target="_blank" rel="noopener noreferrer">[${i + 1}]</a>`
-        ).join(' ');
-        wrapper.appendChild(sourcesDiv);
-      }
-
       if (info) {
         const infoDiv = document.createElement('div');
         infoDiv.className = 'message-info';
         infoDiv.textContent = info;
         wrapper.appendChild(infoDiv);
       }
+
+      addSources(wrapper, sources);
 
       chatLog.appendChild(wrapper);
       chatLog.scrollTop = chatLog.scrollHeight;
@@ -899,6 +1026,7 @@
         e.target.style.display = 'none';
       }
     });
+
   </script>
 </body>
 

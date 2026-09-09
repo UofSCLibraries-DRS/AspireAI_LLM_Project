@@ -4,7 +4,7 @@ import torch
 import yaml
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from .base import Chatbot
+from .base import Chatbot, ChatbotSource
 
 
 @dataclass
@@ -84,7 +84,7 @@ class HuggingFaceChatbot(Chatbot):
 
     def generate(
         self, prompt: str, max_new_tokens: int | None = 128
-    ) -> tuple[str, list[str]]:
+    ) -> tuple[str, list[ChatbotSource]]:
         templated_prompt = self.prompt_template.format(user_prompt=prompt)
 
         # Tokenize and generate

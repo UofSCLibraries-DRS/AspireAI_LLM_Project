@@ -5,7 +5,7 @@ from typing import Literal
 from dotenv import load_dotenv
 from fastapi import Body, FastAPI, HTTPException
 from pydantic import BaseModel, Field
-from src.api.chatbots.base import Chatbot
+from src.api.chatbots.base import Chatbot, ChatbotSource
 from src.api.chatbots.bedrock import BedrockChatbot
 from src.api.chatbots.huggingface import HuggingFaceChatbot
 from src.api.chatbots.rag import (
@@ -36,7 +36,7 @@ class GenerateResponse(BaseModel):
     model: str
     prompt: str
     text: str
-    sources: list[str]
+    sources: list[ChatbotSource]
     max_new_tokens: int | None
 
 

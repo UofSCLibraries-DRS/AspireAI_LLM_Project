@@ -9,7 +9,7 @@ from typing import Any, Literal, Protocol, cast
 import torch
 import torch.nn.functional as F
 
-from .base import Chatbot
+from .base import Chatbot, ChatbotSource, TextSource
 from .bedrock import BedrockChatbot
 
 EMBEDDING_MODEL = "intfloat/e5-base-v2"
@@ -25,10 +25,10 @@ VECTOR_COLUMNS: dict[str, str] = {
 
 @dataclass(frozen=True)
 class RetrievedDocument:
-    """A context snippet and its optional public source URL."""
+    """A prompt-ready context snippet and its displayable source content."""
 
     text: str
-    source: str | None = None
+    source: TextSource | None = None
 
 
 class ContextRetriever(Protocol):
@@ -246,7 +246,13 @@ class PostgresContextRetriever:
                         title=row[2],
                         description=row[3],
                         transcript=row[4],
-                    )
+                    ),
+                    source=self._text_source(
+                        collection=row[1],
+                        title=row[2],
+                        description=row[3],
+                        transcript=row[4],
+                    ),
                 )
             )
             if len(documents) == top_k:
@@ -315,6 +321,28 @@ LIMIT %s
             sections.append(f"Transcript:\n{transcript.strip()}")
         return "\n".join(sections)
 
+    @staticmethod
+    def _text_source(
+        *,
+        collection: str,
+        title: str | None,
+        description: str | None,
+        transcript: str | None,
+    ) -> TextSource:
+        """Keep the original source fields for display outside the model prompt."""
+        clean_title = title.strip() if title and title.strip() else collection.strip()
+        clean_description = (
+            description.strip() if description and description.strip() else None
+        )
+        clean_transcript = (
+            transcript.strip() if transcript and transcript.strip() else ""
+        )
+        return {
+            "title": clean_title,
+            "description": clean_description,
+            "transcript": clean_transcript,
+        }
+
 
 class RAGChatbot(Chatbot):
     """Add retrieved context to a question before delegating to Bedrock."""
@@ -377,12 +405,14 @@ class RAGChatbot(Chatbot):
 
     def generate(
         self, prompt: str, max_new_tokens: int | None = None
-    ) -> tuple[str, list[str]]:
+    ) -> tuple[str, list[ChatbotSource]]:
         documents = self.retriever.retrieve(prompt, self.top_k)
         augmented_prompt = self._augment_prompt(prompt, documents)
         response, _ = self.chatbot.generate(
             prompt=augmented_prompt,
             max_new_tokens=max_new_tokens,
         )
-        # The current ingestion schema has no trustworthy public URL field.
-        return response, []
+        sources: list[ChatbotSource] = [
+            document.source for document in documents if document.source is not None
+        ]
+        return response, sources

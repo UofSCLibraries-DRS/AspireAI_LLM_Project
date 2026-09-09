@@ -1,4 +1,16 @@
 from abc import ABC, abstractmethod
+from typing import TypeAlias, TypedDict
+
+
+class TextSource(TypedDict):
+    """Source content that can be displayed without a public URL."""
+
+    title: str
+    description: str | None
+    transcript: str
+
+
+ChatbotSource: TypeAlias = str | TextSource
 
 
 class Chatbot(ABC):
@@ -11,7 +23,7 @@ class Chatbot(ABC):
     @abstractmethod
     def generate(
         self, prompt: str, max_new_tokens: int | None
-    ) -> tuple[str, list[str]]:
+    ) -> tuple[str, list[ChatbotSource]]:
         """
-        Returns response and list of sources.
+        Return the response and URL or raw-text sources used to produce it.
         """

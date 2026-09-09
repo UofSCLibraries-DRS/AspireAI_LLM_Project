@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import yaml
 from openai import OpenAI
 
-from .base import Chatbot
+from .base import Chatbot, ChatbotSource
 
 
 @dataclass
@@ -52,7 +52,7 @@ class OpenAIChatbot(Chatbot):
 
     def generate(
         self, prompt: str, max_new_tokens: int | None
-    ) -> tuple[str, list[str]]:
+    ) -> tuple[str, list[ChatbotSource]]:
         response = self.client.chat.completions.create(
             model=self.config.model_id,
             messages=[

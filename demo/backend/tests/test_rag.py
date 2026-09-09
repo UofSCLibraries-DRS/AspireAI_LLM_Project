@@ -9,6 +9,7 @@ import torch
 from pydantic import ValidationError
 
 from src.api import main as api_main
+from src.api.chatbots.base import ChatbotSource, TextSource
 from src.api.chatbots.bedrock import BedrockChatbot
 from src.api.chatbots.rag import (
     E5QueryEmbedder,
@@ -25,7 +26,7 @@ class RecordingChatbot:
 
     def generate(
         self, prompt: str, max_new_tokens: int | None = None
-    ) -> tuple[str, list[str]]:
+    ) -> tuple[str, list[ChatbotSource]]:
         self.calls.append((prompt, max_new_tokens))
         return "Bedrock response", []
 
@@ -210,10 +211,41 @@ class PostgresContextRetrieverTests(unittest.TestCase):
             [
                 RetrievedDocument(
                     "Collection: collection-a\nTitle: Title\n"
-                    "Description: Description\nTranscript:\nTranscript"
+                    "Description: Description\nTranscript:\nTranscript",
+                    {
+                        "title": "Title",
+                        "description": "Description",
+                        "transcript": "Transcript",
+                    },
                 ),
-                RetrievedDocument("Collection: collection-b"),
+                RetrievedDocument(
+                    "Collection: collection-b",
+                    {
+                        "title": "collection-b",
+                        "description": None,
+                        "transcript": "",
+                    },
+                ),
             ],
+        )
+
+    def test_text_source_omits_blank_description_and_falls_back_to_collection(
+        self,
+    ) -> None:
+        source = PostgresContextRetriever._text_source(
+            collection=" Archive ",
+            title=None,
+            description="   ",
+            transcript=" Raw transcript. ",
+        )
+
+        self.assertEqual(
+            source,
+            {
+                "title": "Archive",
+                "description": None,
+                "transcript": "Raw transcript.",
+            },
         )
 
     def test_rejects_invalid_search_field(self) -> None:
@@ -246,8 +278,22 @@ class RAGChatbotTests(unittest.TestCase):
         bedrock = RecordingChatbot()
         retriever = RecordingRetriever(
             [
-                RetrievedDocument("First relevant passage.", "https://invalid.test"),
-                RetrievedDocument("Second relevant passage."),
+                RetrievedDocument(
+                    "First relevant passage.",
+                    {
+                        "title": "First record",
+                        "description": "A useful description",
+                        "transcript": "First relevant passage.",
+                    },
+                ),
+                RetrievedDocument(
+                    "Second relevant passage.",
+                    {
+                        "title": "Second record",
+                        "description": None,
+                        "transcript": "Second relevant passage.",
+                    },
+                ),
             ]
         )
         chatbot = RAGChatbot(
@@ -268,7 +314,24 @@ class RAGChatbotTests(unittest.TestCase):
         self.assertIn("Second relevant passage.", generated_prompt)
         self.assertIn("Question: What happened?", generated_prompt)
         self.assertEqual(max_tokens, 128)
-        self.assertEqual(result, ("Bedrock response", []))
+        self.assertEqual(
+            result,
+            (
+                "Bedrock response",
+                [
+                    {
+                        "title": "First record",
+                        "description": "A useful description",
+                        "transcript": "First relevant passage.",
+                    },
+                    {
+                        "title": "Second record",
+                        "description": None,
+                        "transcript": "Second relevant passage.",
+                    },
+                ],
+            ),
+        )
 
     def test_context_budget_is_shared_and_marks_truncation(self) -> None:
         chatbot = RAGChatbot(
@@ -284,6 +347,33 @@ class RAGChatbotTests(unittest.TestCase):
         self.assertLessEqual(sum(len(document.text) for document in documents), 80)
         self.assertEqual(len(documents), 2)
         self.assertTrue(all(document.text.endswith("[truncated]") for document in documents))
+
+    def test_source_response_keeps_full_text_when_prompt_context_is_truncated(
+        self,
+    ) -> None:
+        transcript = "Full source transcript that must remain unchanged."
+        chatbot = RAGChatbot(
+            id="rag",
+            chatbot=cast(BedrockChatbot, RecordingChatbot()),
+            retriever=RecordingRetriever(
+                [
+                    RetrievedDocument(
+                        "X" * 100,
+                        {
+                            "title": "Full record",
+                            "description": None,
+                            "transcript": transcript,
+                        },
+                    )
+                ]
+            ),
+            max_context_chars=20,
+        )
+
+        _, sources = chatbot.generate("question")
+
+        source = cast(TextSource, sources[0])
+        self.assertEqual(source["transcript"], transcript)
 
     def test_empty_retrieval_still_delegates_a_grounded_prompt(self) -> None:
         bedrock = RecordingChatbot()
@@ -352,6 +442,32 @@ class RAGAPIIntegrationTests(unittest.TestCase):
 
         with self.assertRaises(ValidationError):
             api_main.GenerateRequest(prompt="question", model="UNKNOWN")
+
+    def test_generate_response_serializes_raw_text_sources(self) -> None:
+        response = api_main.GenerateResponse(
+            model="RAG",
+            prompt="question",
+            text="answer",
+            sources=[
+                {
+                    "title": "Oral history",
+                    "description": None,
+                    "transcript": "The raw transcript.",
+                }
+            ],
+            max_new_tokens=128,
+        )
+
+        self.assertEqual(
+            response.model_dump()["sources"],
+            [
+                {
+                    "title": "Oral history",
+                    "description": None,
+                    "transcript": "The raw transcript.",
+                }
+            ],
+        )
 
     def test_startup_registers_rag_around_llama(self) -> None:
         api_main.chatbots.clear()

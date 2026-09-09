@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import requests
 import yaml
 
-from .base import Chatbot
+from .base import Chatbot, ChatbotSource
 
 
 @dataclass
@@ -62,7 +62,9 @@ class SafeChat(Chatbot):
         parts = re.split(r"\s+(?=\+)", text)
         return "\n".join(part.strip() for part in parts)
 
-    def generate(self, prompt: str, max_new_tokens=None) -> tuple[str, list[str]]:
+    def generate(
+        self, prompt: str, max_new_tokens: int | None = None
+    ) -> tuple[str, list[ChatbotSource]]:
         try:
             response = requests.post(
                 f"{self.config.url}/webhooks/rest/webhook",

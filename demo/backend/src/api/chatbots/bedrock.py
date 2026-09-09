@@ -6,7 +6,7 @@ import yaml
 from botocore.config import Config as BotoConfig
 from botocore.exceptions import ClientError
 
-from .base import Chatbot
+from .base import Chatbot, ChatbotSource
 
 # TODO:
 #   Test cold start issues...
@@ -92,7 +92,7 @@ class BedrockChatbot(Chatbot):
 
     def generate(
         self, prompt: str, max_new_tokens: int | None = None
-    ) -> tuple[str, list[str]]:
+    ) -> tuple[str, list[ChatbotSource]]:
         """
         Generate a response using AWS Bedrock InvokeModel API.
 
