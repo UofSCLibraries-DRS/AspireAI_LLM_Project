@@ -15,6 +15,17 @@ The `RAG` model uses the local `lighthouse_rag` PostgreSQL database and wraps
 the `LLAMA` Bedrock model. Its optional environment settings are documented in
 `.env.example`; retrieval searches all stored embedding fields by default.
 
+### SafeGenChat (SGC)
+
+Run the supplied SafeGenChat service separately on the same host before using
+the `SGC` model. The backend calls `http://127.0.0.1:8001/solve` by default:
+
+```bash
+SGC_PORT=8001 uv run python main.py
+```
+
+Change `configs/chatbots/sgc.yaml` if the SGC service uses another local port.
+
 
 
 

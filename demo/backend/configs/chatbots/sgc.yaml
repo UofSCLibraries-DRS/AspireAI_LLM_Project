@@ -1,0 +1,4 @@
+# SafeGenChat runs locally as a separate service. Port 8001 avoids this API's
+# default port (8000); set SGC_PORT=8001 when launching the SGC service.
+url: "http://127.0.0.1:8001"
+timeout: 30.0

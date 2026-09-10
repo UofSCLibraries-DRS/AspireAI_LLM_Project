@@ -15,6 +15,7 @@ from src.api.chatbots.rag import (
     RAGSettings,
 )
 from src.api.chatbots.safechat import SafeChat
+from src.api.chatbots.sgc import SGCChatbot
 
 # Load environment variables
 load_dotenv()
@@ -23,7 +24,7 @@ load_dotenv()
 # Request/Response Models
 class GenerateRequest(BaseModel):
     prompt: str = Field(..., description="The user's prompt/question")
-    model: Literal["M8", "M9", "LLAMA", "RAG", "SC"] = Field(
+    model: Literal["M8", "M9", "LLAMA", "RAG", "SC", "SGC"] = Field(
         ..., description="Model to use for generation"
     )
     max_new_tokens: int | None = Field(
@@ -101,6 +102,13 @@ async def startup_event() -> None:
         print("SafeChat initialized")
     except Exception as e:  # noqa: BLE001
         print(f"Failed to initialize SafeChat: {e}")
+
+    # Initialize SafeGenChat (a separate local HTTP service).
+    try:
+        chatbots["SGC"] = SGCChatbot(id="SGC", config_path="configs/chatbots/sgc.yaml")
+        print("SGC initialized")
+    except Exception as e:  # noqa: BLE001
+        print(f"Failed to initialize SGC: {e}")
 
 
 @asynccontextmanager
