@@ -42,4 +42,4 @@ fi
 echo "Frontend deployed to ${deploy_dir}."
 if "${privileged[@]}" test -e "${backup_dir}"; then
     echo "Previous deployment saved at ${backup_dir}."
-fi
+fi 
