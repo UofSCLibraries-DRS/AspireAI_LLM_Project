@@ -2,6 +2,7 @@ from collections.abc import Sequence
 from typing import Any
 
 
+LLAMA_BOS_TOKEN = "<|begin_of_text|>"
 LLAMA_EOT_TOKEN = "<|eot_id|>"
 LLAMA_FINETUNE_PAD_TOKEN = "<|finetune_right_pad_id|>"
 LLAMA_HEADER_TOKEN = "<|start_header_id|>"
@@ -29,6 +30,19 @@ def configure_padding_token(tokenizer: Any) -> None:
     tokenizer.pad_token = tokenizer.eos_token
 
 
+def normalize_causal_lm_text(text: str) -> str:
+    """Normalize a pre-rendered Llama chat and ensure it has a terminal EOT."""
+    stripped = text.lstrip()
+    is_llama_chat = stripped.startswith(LLAMA_BOS_TOKEN + LLAMA_HEADER_TOKEN)
+    if not is_llama_chat:
+        return text
+
+    normalized = text.rstrip()
+    if not normalized.endswith(LLAMA_EOT_TOKEN):
+        normalized += LLAMA_EOT_TOKEN
+    return normalized
+
+
 def tokenize_causal_lm_batch(
     tokenizer: Any,
     texts: Sequence[str],
@@ -40,14 +54,7 @@ def tokenize_causal_lm_batch(
     if tokenizer.pad_token_id is None:
         raise ValueError("Tokenizer must have a padding token before tokenization.")
 
-    normalized_texts = [
-        text.rstrip() if LLAMA_HEADER_TOKEN in text else text for text in texts
-    ]
-    for text in normalized_texts:
-        if LLAMA_HEADER_TOKEN in text and not text.endswith(LLAMA_EOT_TOKEN):
-            raise ValueError(
-                "Llama chat-formatted training rows must end with <|eot_id|>."
-            )
+    normalized_texts = [normalize_causal_lm_text(text) for text in texts]
 
     encoded = tokenizer(
         normalized_texts,

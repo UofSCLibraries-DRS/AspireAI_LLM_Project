@@ -1,6 +1,7 @@
 import unittest
 
 from fine_tuning.utils.causal_lm import (
+    LLAMA_BOS_TOKEN,
     LLAMA_EOT_TOKEN,
     LLAMA_FINETUNE_PAD_TOKEN,
     configure_padding_token,
@@ -66,7 +67,7 @@ class CausalLMTokenizationTest(unittest.TestCase):
         self.assertEqual(batch["labels"][0], [1, 10, 2, -100, -100])
 
     def test_preserves_terminal_eot_when_a_chat_is_truncated(self):
-        text = "<|start_header_id|>user chat<|eot_id|>"
+        text = f"{LLAMA_BOS_TOKEN}<|start_header_id|>user chat<|eot_id|>"
         tokenizer = FakeTokenizer(
             {text: [1, 4, 5, 6, 7, 8, 2]},
             pad_token=LLAMA_FINETUNE_PAD_TOKEN,
@@ -87,7 +88,7 @@ class CausalLMTokenizationTest(unittest.TestCase):
         self.assertEqual(batch["labels"][0], [1, 10, 11, -100])
 
     def test_ignores_whitespace_after_a_chat_terminal_eot(self):
-        text = "<|start_header_id|>assistant reply<|eot_id|>\n"
+        text = f"{LLAMA_BOS_TOKEN}<|start_header_id|>assistant reply<|eot_id|>\n"
         normalized = text.rstrip()
         tokenizer = FakeTokenizer(
             {normalized: [1, 4, 5, 2]}, pad_token=LLAMA_FINETUNE_PAD_TOKEN
@@ -98,12 +99,28 @@ class CausalLMTokenizationTest(unittest.TestCase):
         self.assertEqual(batch["input_ids"][0], [1, 4, 5, 2, 3])
         self.assertEqual(batch["labels"][0], [1, 4, 5, 2, -100])
 
-    def test_rejects_llama_chat_text_without_terminal_eot(self):
-        text = "<|start_header_id|>assistant<|end_header_id|>\n\n"
-        tokenizer = FakeTokenizer({text: [4, 5]}, pad_token=LLAMA_FINETUNE_PAD_TOKEN)
+    def test_adds_terminal_eot_when_a_llama_chat_is_missing_one(self):
+        text = (
+            f"{LLAMA_BOS_TOKEN}<|start_header_id|>assistant"
+            "<|end_header_id|>\n\nreply"
+        )
+        repaired = text + LLAMA_EOT_TOKEN
+        tokenizer = FakeTokenizer(
+            {repaired: [1, 4, 5, 2]}, pad_token=LLAMA_FINETUNE_PAD_TOKEN
+        )
 
-        with self.assertRaisesRegex(ValueError, "must end with <\\|eot_id\\|>"):
-            tokenize_causal_lm_batch(tokenizer, [text], max_length=4)
+        batch = tokenize_causal_lm_batch(tokenizer, [text], max_length=5)
+
+        self.assertEqual(batch["input_ids"][0], [1, 4, 5, 2, 3])
+        self.assertEqual(batch["labels"][0], [1, 4, 5, 2, -100])
+
+    def test_does_not_treat_a_header_token_inside_raw_text_as_a_chat(self):
+        text = "A transcript quotes <|start_header_id|> as literal text."
+        tokenizer = FakeTokenizer({text: [10, 11]}, pad_token=LLAMA_FINETUNE_PAD_TOKEN)
+
+        batch = tokenize_causal_lm_batch(tokenizer, [text], max_length=3)
+
+        self.assertEqual(batch["input_ids"][0], [1, 10, 11])
 
 
 if __name__ == "__main__":

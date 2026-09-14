@@ -3,6 +3,7 @@ import sys
 
 
 MAX_SEQUENCE_LENGTH = 2_048
+NUL_CHARACTER = "\x00"
 
 
 def configure_csv_field_limit() -> None:
@@ -21,7 +22,8 @@ def load_text_column(data_path: str) -> list[str]:
     configure_csv_field_limit()
 
     with open(data_path, newline="", encoding="utf-8") as handle:
-        reader = csv.DictReader(handle)
+        sanitized_lines = (line.replace(NUL_CHARACTER, "") for line in handle)
+        reader = csv.DictReader(sanitized_lines)
         columns = reader.fieldnames
 
         if columns is None or "text" not in columns:

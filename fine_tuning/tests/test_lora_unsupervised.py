@@ -14,7 +14,8 @@ class LoRAUnsupervisedTest(unittest.TestCase):
         self.assertEqual(MAX_SEQUENCE_LENGTH, 2_048)
 
     def test_loads_text_fields_larger_than_the_default_csv_limit(self):
-        long_text = "A" * 150_000 + "\nembedded newline, and comma"
+        long_text = "A" * 150_000 + "\nembedded newline, comma, and \x00NUL"
+        expected_text = long_text.replace("\x00", "")
         original_limit = csv.field_size_limit()
 
         try:
@@ -26,7 +27,7 @@ class LoRAUnsupervisedTest(unittest.TestCase):
                     writer.writeheader()
                     writer.writerow({"text": long_text})
 
-                self.assertEqual(load_text_column(str(csv_path)), [long_text])
+                self.assertEqual(load_text_column(str(csv_path)), [expected_text])
         finally:
             csv.field_size_limit(original_limit)
 
