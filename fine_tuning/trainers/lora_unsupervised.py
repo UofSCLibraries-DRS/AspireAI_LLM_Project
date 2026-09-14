@@ -1,4 +1,3 @@
-import csv
 import gc
 import json
 import os
@@ -11,12 +10,24 @@ from peft import LoraConfig, get_peft_model
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
-    DataCollatorForLanguageModeling,
     Trainer,
     TrainingArguments,
 )
 
 from .training_base import AbstractTrainer
+from fine_tuning.utils.causal_lm import (
+    configure_padding_token,
+    tokenize_causal_lm_batch,
+)
+from fine_tuning.utils.training_data import MAX_SEQUENCE_LENGTH, load_text_column
+
+
+def causal_lm_collator(features: list[dict[str, list[int]]]) -> dict[str, torch.Tensor]:
+    """Stack fixed-length features whose padding labels are already masked."""
+    return {
+        key: torch.tensor([feature[key] for feature in features], dtype=torch.long)
+        for key in ("input_ids", "attention_mask", "labels")
+    }
 
 
 class LoRAUnsupervisedTrainer(AbstractTrainer):
@@ -36,34 +47,19 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
         lora_cfg = cfg["lora_config"]
         training_cfg = cfg["training_args"]
 
-        with open(self.data, newline="", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            columns = reader.fieldnames
-
-            # Check for the "text" column
-            if "text" not in columns:
-                raise ValueError(
-                    f"CSV must contain a 'text' column. Columns found: {columns}"
-                )
-
-            # Collect values
-            text_values = []
-            for row in reader:
-                val = row.get("text")
-                if val is not None:
-                    text_values.append(str(val))
+        text_values = load_text_column(self.data)
 
         # Convert to a Hugging Face dataset
         dataset = Dataset.from_dict({"text": text_values})
 
         tokenizer = AutoTokenizer.from_pretrained(self.start_model)
-
-        if tokenizer.pad_token is None:
-            tokenizer.pad_token = tokenizer.eos_token
+        configure_padding_token(tokenizer)
 
         def tokenize(batch):
-            return tokenizer(  # noqa: F821
-                batch["text"], truncation=True, padding="max_length", max_length=1024
+            return tokenize_causal_lm_batch(
+                tokenizer,
+                batch["text"],
+                max_length=MAX_SEQUENCE_LENGTH,
             )
 
         tokenized_dataset = dataset.map(tokenize, batched=True, remove_columns=["text"])
@@ -89,14 +85,12 @@ class LoRAUnsupervisedTrainer(AbstractTrainer):
             gradient_checkpointing_kwargs={"use_reentrant": False},
         )
 
-        data_collator = DataCollatorForLanguageModeling(tokenizer, mlm=False)
-
         trainer = Trainer(
             model=model,
             args=training_args,
             train_dataset=tokenized_dataset,
-            tokenizer=tokenizer,
-            data_collator=data_collator,
+            processing_class=tokenizer,
+            data_collator=causal_lm_collator,
         )
 
         # Traing and save

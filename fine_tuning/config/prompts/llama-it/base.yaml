@@ -1,10 +1,4 @@
-template: |
-  <|begin_of_text|>
-  <|start_header_id|>system<|end_header_id|>
-  You are a helpful assistant. Be concise and follow instructions.
-  <|start_header_id|>user<|end_header_id|>
-  {user_prompt}
-  <|eot_id|>
+template: "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nYou are a helpful assistant. Be concise and follow instructions.<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n{user_prompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
 stop_sequences:
   - "<|eot_id|>"
   - "<|end_of_text|>"

@@ -9,6 +9,12 @@ from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from collections import defaultdict
 
+from fine_tuning.utils.causal_lm import (
+    LLAMA_EOT_TOKEN,
+    configure_padding_token,
+    known_token_id,
+)
+
 
 # TODOs:
 #   - Optimize KV by sub batching prompt formats
@@ -61,6 +67,53 @@ def _collate_fn(batch: List[Dict[str, Any]]) -> Dict[str, Any]:
     return {"prompts": prompts, "idxs": idxs, "jobs": jobs_batch}
 
 
+def _generation_eos_token_ids(model: Any, tokenizer: Any) -> int | list[int]:
+    """Keep every configured terminator and explicitly include Llama EOT."""
+    configured_ids = getattr(model.generation_config, "eos_token_id", None)
+    if configured_ids is None:
+        configured_ids = getattr(model.config, "eos_token_id", None)
+
+    if isinstance(configured_ids, int):
+        terminators = [configured_ids]
+    else:
+        terminators = list(configured_ids or [])
+
+    for token_id in (
+        tokenizer.eos_token_id,
+        known_token_id(tokenizer, LLAMA_EOT_TOKEN),
+    ):
+        if token_id is not None and token_id not in terminators:
+            terminators.append(token_id)
+
+    if not terminators:
+        raise ValueError("Model and tokenizer do not define a generation terminator.")
+    return terminators[0] if len(terminators) == 1 else terminators
+
+
+def _decode_continuation(
+    tokenizer: Any,
+    token_ids: Any,
+    stop_sequences: List[str],
+) -> str:
+    """Decode generated tokens only, then truncate and remove special tokens."""
+    text = tokenizer.decode(
+        token_ids,
+        skip_special_tokens=False,
+        clean_up_tokenization_spaces=False,
+    )
+    stop_positions = [
+        position
+        for stop_sequence in stop_sequences
+        if (position := text.find(stop_sequence)) >= 0
+    ]
+    if stop_positions:
+        text = text[: min(stop_positions)]
+
+    for special_token in sorted(tokenizer.all_special_tokens, key=len, reverse=True):
+        text = text.replace(special_token, "")
+    return text.strip()
+
+
 def _batched_inference(
     jobs: List[InferenceJob],
     device: str = "cuda",
@@ -101,9 +154,7 @@ def _batched_inference(
             model_path, use_fast=True, padding_side="left"
         )
 
-        if tokenizer.pad_token is None:
-            tokenizer.pad_token = tokenizer.eos_token
-            tokenizer.pad_token_id = tokenizer.eos_token_id
+        configure_padding_token(tokenizer)
 
         tokenizer.model_max_length = max_prompt_length
 
@@ -127,6 +178,7 @@ def _batched_inference(
                 # Tokenize batch (pad to longest)
                 tokenized = tokenizer(
                     prompts,
+                    add_special_tokens=False,
                     return_tensors="pt",
                     padding=True,
                     truncation=True,
@@ -134,9 +186,6 @@ def _batched_inference(
                 )
                 input_ids = tokenized["input_ids"]
                 attention_mask = tokenized["attention_mask"]
-                input_lengths = (
-                    (attention_mask != 0).sum(dim=1).tolist()
-                )  # length per example
 
                 # Move to device
                 if device == "cuda":
@@ -146,7 +195,6 @@ def _batched_inference(
                 # Expand per repeat_param
                 expanded_input_ids = []
                 expanded_attention_mask = []
-                expanded_input_lens = []
                 expanded_job_refs: List[InferenceJob] = []
                 expanded_original_idxs: List[int] = []
                 for i_local, job in enumerate(jobs_batch):
@@ -154,7 +202,6 @@ def _batched_inference(
                     for _ in range(rc):
                         expanded_input_ids.append(input_ids[i_local])
                         expanded_attention_mask.append(attention_mask[i_local])
-                        expanded_input_lens.append(input_lengths[i_local])
                         expanded_job_refs.append(job)
                         expanded_original_idxs.append(idxs[i_local])
 
@@ -162,6 +209,7 @@ def _batched_inference(
                 attention_mask = torch.stack(expanded_attention_mask, dim=0)
                 batch_job_refs = expanded_job_refs
                 batch_original_idxs = expanded_original_idxs
+                input_width = input_ids.shape[1]
 
                 generate_kwargs = {
                     "input_ids": input_ids,
@@ -169,10 +217,12 @@ def _batched_inference(
                     "max_new_tokens": max_new_tokens,
                     "do_sample": do_sample,
                     "num_beams": 1,
-                    "eos_token_id": tokenizer.eos_token_id,
-                    "pad_token_id": tokenizer.pad_token_id
-                    if tokenizer.pad_token_id is not None
-                    else tokenizer.eos_token_id,
+                    "eos_token_id": _generation_eos_token_ids(model, tokenizer),
+                    "pad_token_id": (
+                        tokenizer.pad_token_id
+                        if tokenizer.pad_token_id is not None
+                        else tokenizer.eos_token_id
+                    ),
                     "use_cache": True,
                 }
                 if do_sample:
@@ -187,32 +237,22 @@ def _batched_inference(
                 # Generate
                 generated_ids = model.generate(**generate_kwargs)
 
-                # The returned `generated_ids` is usually concatenation of input + generated.
-                # We slice off the input portion using input lengths per example.
-                # generated_ids shape: (batch_expanded, seq_len_generated_total)
-                # For robustness, we'll compute the slice per-row.
                 decoded_continuations: List[str] = []
                 gen_ids_cpu = generated_ids.cpu()
-                for gen_row in gen_ids_cpu:
-                    text = tokenizer.decode(gen_row, skip_special_tokens=True).strip()
-                    decoded_continuations.append(text)
+                for gen_row, job_ref in zip(gen_ids_cpu, batch_job_refs, strict=True):
+                    decoded_continuations.append(
+                        _decode_continuation(
+                            tokenizer,
+                            gen_row[input_width:],
+                            job_ref.stop_sequences,
+                        )
+                    )
 
                 # Append to results with stop sequence handling
                 for continuation, job_ref, orig_idx in zip(
                     decoded_continuations, batch_job_refs, batch_original_idxs
                 ):
-                    cont = continuation
-
-                    # Remove prompt from output
-                    full_prompt = prepared[orig_idx]["prompt"]
-                    cont = cont.removeprefix(full_prompt)
-
-                    # truncate at stop_sequence if present
-                    for stop_sequence in job_ref.stop_sequences:
-                        if stop_sequence in cont:
-                            cont = cont.split(stop_sequence, 1)[0].strip()
-
-                    all_results[orig_idx].responses.append(cont)
+                    all_results[orig_idx].responses.append(continuation)
 
                 # small cleanup between batches
                 if device == "cuda":

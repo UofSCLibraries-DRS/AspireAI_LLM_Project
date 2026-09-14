@@ -73,7 +73,7 @@ class PipelineHashTest(unittest.TestCase):
     def test_reference_pipeline_files_pass_validation(self):
         pipeline_dir = Path(__file__).parents[1] / "config" / "pipelines" / "llama"
 
-        for filename in ("M13.json", "M12_full.json"):
+        for filename in ("M14.json", "M13.json", "M12_full.json"):
             with self.subTest(filename=filename):
                 pipeline = json.loads(
                     (pipeline_dir / filename).read_text(encoding="utf-8")
