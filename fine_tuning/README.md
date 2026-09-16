@@ -44,13 +44,8 @@ module load cuda/12.3
 Finally, install dependencies
 
 ```bash
-python -m pip install --upgrade "pip<24.1"
-pip install -r requirements.txt
+pip install -U pandas datasets transformers torch peft
 ```
-
-NUBIA downloads its pretrained scoring models the first time an evaluation is
-run, so that first run needs network access and will take longer than later
-runs.
 
 ## Loading Models
 

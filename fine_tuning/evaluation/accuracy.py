@@ -1,4 +1,4 @@
-from typing import Dict, Protocol
+from typing import Dict
 from dataclasses import dataclass, field
 from gaico import Experiment
 from typing import List
@@ -10,11 +10,6 @@ import csv
 from collections import defaultdict
 
 DELIMITER = "__@__"
-NUBIA_METRIC_NAME = "NUBIA"
-
-
-class NubiaScorer(Protocol):
-    def score(self, ref: str, hyp: str) -> float: ...
 
 
 @dataclass
@@ -33,8 +28,6 @@ def _get_id(inference_result: InferenceResult, variant: str) -> str:
 
 def gaico_accuracy(
     results: List[InferenceResult],
-    *,
-    nubia_scorer: NubiaScorer | None = None,
 ) -> None:
     # Define ground truth variants to process
     variants = ["short", "ideal", "short_agg", "ideal_agg"]
@@ -75,27 +68,6 @@ def gaico_accuracy(
                 reference_answer=ground_truth,
             )
             results_df = exp.compare(plot=False)
-
-            if nubia_scorer is None:
-                # Import lazily because importing NUBIA loads its heavyweight NLP
-                # dependencies. One scorer is then reused for every response and
-                # reference variant in this evaluation run.
-                from nubia_score import Nubia
-
-                nubia_scorer = Nubia()
-
-            nubia_rows = [
-                {
-                    "model_name": response_id,
-                    "metric_name": NUBIA_METRIC_NAME,
-                    "score": float(nubia_scorer.score(ground_truth, response)),
-                }
-                for response_id, response in responses.items()
-            ]
-            results_df = pd.concat(
-                [results_df, pd.DataFrame(nubia_rows)],
-                ignore_index=True,
-            )
 
             # Append to master df
             master_df = pd.concat([master_df, results_df], ignore_index=True)
