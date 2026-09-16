@@ -9,6 +9,7 @@ jamspell
 
 matplotlib
 seaborn
+nubia-score==0.1.5
 
 torch
 git+https://github.com/huggingface/transformers.git

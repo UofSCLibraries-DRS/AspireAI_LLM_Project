@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=M14
+#SBATCH --job-name=M14_no_mlp
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --gres=gpu:1
@@ -23,5 +23,5 @@ module load cuda/12.1
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 python -u -m fine_tuning.main \
-    --pipeline-path /work/jaaydin/AspireAI_LLM_Project/fine_tuning/config/pipelines/llama/M14.json \
+    --pipeline-path /work/jaaydin/AspireAI_LLM_Project/fine_tuning/config/pipelines/llama/M14_no_mlp.json \
     --env .env.rci

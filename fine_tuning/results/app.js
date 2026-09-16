@@ -11,6 +11,7 @@
     "JSD",
     "Jaccard",
     "Levenshtein",
+    "NUBIA",
     "ROUGE_rouge1",
     "ROUGE_rouge2",
     "ROUGE_rougeL",
