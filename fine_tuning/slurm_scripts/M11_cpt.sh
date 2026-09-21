@@ -16,7 +16,7 @@ source /work/jaaydin/miniconda3/etc/profile.d/conda.sh
 conda activate lib_train
 
 # Load CUDA module
-module load cuda/12.1
+module load cuda12.4/toolkit/12.4.1
 
 # Force conda's libstdc++ to be used (avoid conflicts)
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH

@@ -13,7 +13,7 @@ cd /work/jaaydin/AspireAI_LLM_Project
 source ~/miniforge3/etc/profile.d/conda.sh
 conda activate lib_train
 
-module load cuda/12.1
+module load cuda12.4/toolkit/12.4.1
 
 # Force conda's libstdc++ to be used
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
