@@ -15,7 +15,7 @@ set -e
 cd /work/jaaydin/AspireAI_LLM_Project
 
 source /work/jaaydin/miniconda3/etc/profile.d/conda.sh
-conda activate lib_train
+conda activate lib_train_torch_fix
 
 module load cuda12.4/toolkit/12.4.1
 
