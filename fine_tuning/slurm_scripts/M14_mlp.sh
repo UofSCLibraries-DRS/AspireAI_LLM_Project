@@ -4,8 +4,8 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --gres=gpu:1
 #SBATCH --time=48:00:00
-#SBATCH --output=logs/M14_%j.out
-#SBATCH --error=logs/M14_%j.err
+#SBATCH --output=logs/M14_mlp_%j.out
+#SBATCH --error=logs/M14_mlp_%j.err
 #SBATCH -p gpu-H200
 #SBATCH --mail-user=jaaydin@email.sc.edu
 #SBATCH --mail-type=BEGIN,END,FAIL,TIME_LIMIT
