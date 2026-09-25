@@ -48,12 +48,15 @@ the ownership command. Confirm that the database exists with:
 sudo -u postgres psql -l
 ```
 
-Install `pgvector` in the database once. This step requires the PostgreSQL
-superuser; the normal loader does not.
+Install `pgvector` and `pg_textsearch` in the database once. This step requires
+the PostgreSQL superuser; the normal loader does not. `pg_textsearch` must also
+be installed on the server, listed in `shared_preload_libraries`, and loaded by
+restarting PostgreSQL before this command is run.
 
 ```bash
-sudo -u postgres psql -d lighthouse_rag -c \
-  'CREATE EXTENSION IF NOT EXISTS vector;'
+sudo -u postgres psql -d lighthouse_rag -v ON_ERROR_STOP=1 \
+  -c 'CREATE EXTENSION IF NOT EXISTS vector;' \
+  -c 'CREATE EXTENSION IF NOT EXISTS pg_textsearch;'
 ```
 
 
@@ -78,8 +81,9 @@ The loader creates the `documents` table when needed, so applying `schema.sql`
 manually is not required. Run it as the matching Linux/PostgreSQL user (for
 example, `jaaydin`), not with `sudo`.
 
-After loading the data, create the HNSW cosine indexes used by the chatbot.
-This is a one-time operation and may take a while on the full dataset:
+After loading the data, create the HNSW cosine indexes and the generated
+`search_text` column with its BM25 index. This is a one-time operation and may
+take a while on the full dataset:
 
 ```bash
 psql -d lighthouse_rag -f db/schema.sql
