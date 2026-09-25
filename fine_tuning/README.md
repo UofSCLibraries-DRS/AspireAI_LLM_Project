@@ -44,7 +44,7 @@ module load cuda/12.3
 Finally, install dependencies
 
 ```bash
-pip install -U pandas datasets transformers torch peft
+pip install -U pandas datasets transformers torch peft bitsandbytes
 ```
 
 ## Loading Models
@@ -111,6 +111,20 @@ training, it deletes only directories matching `scratch/checkpoint-<step>` so
 that checkpoints from the old run cannot be selected on a later restart.
 Invalid or incompatible checkpoints are reported by Hugging Face rather than
 silently skipped.
+
+## QLoRA training
+
+Use `QLoRAUnsupervisedTrainer` in a pipeline training step with a CSV containing
+a `text` column and a config such as
+`config/fine-tuning/qlora_unsupervised_100.json`. It loads the base model in
+4-bit NF4, prepares it for k-bit training, and saves the trained PEFT adapter
+and tokenizer directly to the step's output directory. The output is an adapter
+checkpoint (`adapter_config.json`), not merged model weights; this avoids the
+large memory cost of dequantizing and merging the base model.
+
+QLoRA requires CUDA and the `bitsandbytes` package. `compute_dtype` may be
+`bfloat16`/`bf16` or `float16`/`fp16`; it defaults to BF16 when supported and
+FP16 otherwise.
 
 # Misc Info
 

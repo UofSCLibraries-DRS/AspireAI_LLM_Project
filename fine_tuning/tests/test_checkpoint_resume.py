@@ -119,6 +119,17 @@ class CheckpointResumeTest(unittest.TestCase):
                 trainer.resume_from_checkpoint, str(scratch_dir / "checkpoint-10")
             )
 
+    def test_completed_adapter_skips_checkpoint_handling(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_dir = Path(temp_dir)
+            (output_dir / "adapter_config.json").write_text("{}")
+
+            trainer = RecordingTrainer(temp_dir)
+            output = self.run_trainer(trainer)
+
+            self.assertEqual(trainer.resume_from_checkpoint, "not-called")
+            self.assertEqual(output, "")
+
     def test_force_retrain_removes_only_recognized_checkpoints(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             scratch_dir = Path(temp_dir) / "scratch"
@@ -172,6 +183,7 @@ class TrainerCheckpointIntegrationTest(unittest.TestCase):
         "lora_sft.py": "LoRASFTTrainer",
         "full_unsupervised.py": "FullUnsupervisedTrainer",
         "lora_unsupervised.py": "LoRAUnsupervisedTrainer",
+        "qlora_unsupervised.py": "QLoRAUnsupervisedTrainer",
     }
 
     def test_all_trainers_forward_the_resume_checkpoint(self):

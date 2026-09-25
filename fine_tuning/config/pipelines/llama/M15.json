@@ -1,0 +1,28 @@
+[
+    {
+        "model": {
+            "start": "Llama-3.3-70B-Instruct",
+            "train_steps": [
+                {
+                    "trainer": "QLoRAUnsupervisedTrainer",
+                    "data": "/work/jaaydin/data/raw/M14_meta.csv",
+                    "config": "fine-tuning/llama/M15.e2.no_MLP.r8.json"
+                }
+            ],
+            "output": "M15"
+        },
+        "inference": [
+            {
+                "config": "inference/default.json",
+                "data": [
+                    "eval/scenarios.csv"
+                ],
+                "prompt_formats": [
+                    "llama-it/base.yaml",
+                    "llama-it/short_response.yaml"
+                ]
+            }
+        ],
+        "evaluation": {}
+    }
+]

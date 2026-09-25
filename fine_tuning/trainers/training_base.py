@@ -85,6 +85,8 @@ class AbstractTrainer:
 
         required_files = [
             "config.json",  # Model configuration
+            # QLoRA saves a PEFT adapter rather than merging quantized weights.
+            "adapter_config.json",
         ]
 
         # Check if config exists

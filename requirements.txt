@@ -15,4 +15,5 @@ git+https://github.com/huggingface/transformers.git
 accelerate
 datasets
 peft
+bitsandbytes
 trl
