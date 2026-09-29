@@ -5,7 +5,6 @@
 ```
 AspireAI_LLM_Project/
 ├── data/
-├── data_handling/
 ├── demo/
 ├── evalutation/
 ├── fine_tuning/
