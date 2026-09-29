@@ -2,7 +2,12 @@
     "lora_config": {
         "r": 8,
         "lora_alpha": 16,
-        "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"],
+        "target_modules": [
+            "q_proj",
+            "k_proj",
+            "v_proj",
+            "o_proj"
+        ],
         "lora_dropout": 0.1,
         "bias": "none",
         "task_type": "CAUSAL_LM"
@@ -20,7 +25,8 @@
         "learning_rate": 2e-5,
         "lr_scheduler_type": "cosine",
         "warmup_steps": 100,
-        "save_strategy": "epoch",
+        "save_strategy": "steps",
+        "save_steps": 0.25,
         "logging_strategy": "epoch",
         "optim": "adamw_torch",
         "weight_decay": 0.01,

@@ -1,0 +1,23 @@
+[project]
+name = "rag-test"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "bert-score>=0.3.13",
+    "boto3",
+    "faiss-cpu",
+    "gaico",
+    "matplotlib",
+    "numpy",
+    "openai",
+    "psycopg[binary]",
+    "python-dotenv",
+    "pyyaml",
+    "sentence-transformers",
+    "torch",
+    "tqdm",
+    "transformers",
+    "vllm",
+]

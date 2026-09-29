@@ -1,0 +1,25 @@
+subset,rag_type,fine_tuned,fine_tuned_model,not_fine_tuned,not_fine_tuned_model
+answer_ideal,none,0.3239523104434451,M14.meta.e2.no_MLP.r32,0.35258993415545836,meta-llama/Meta-Llama-3.1-8B-Instruct
+answer_ideal,hybrid-rrf,0.3999165982949986,M14.meta.e2.no_MLP.r16 (hybrid-rrf),0.2892386065928129,meta-llama/Meta-Llama-3.1-8B-Instruct (hybrid-rrf)
+answer_ideal,hyde-answer,0.3901165788084936,M14.meta.e2.no_MLP.r16 (hyde-answer),0.28424732849850326,meta-llama/Meta-Llama-3.1-8B-Instruct (hyde-answer)
+answer_ideal,hyde-document,0.40335748836694385,M14.meta.e2.no_MLP.r16 (hyde-document),0.2539915252125434,meta-llama/Meta-Llama-3.1-8B-Instruct (hyde-document)
+answer_ideal,keyword-bm25,0.44121132227729853,M14.meta.e2.no_MLP.r16 (keyword-bm25),0.31110214419476956,meta-llama/Meta-Llama-3.1-8B-Instruct (keyword-bm25)
+answer_ideal,naive,0.3974923961316842,M14.meta.e2.no_MLP.r8 (naive),0.26364544098749115,meta-llama/Meta-Llama-3.1-8B-Instruct (naive)
+answer_ideal_agg,none,0.3191444254966739,M14.meta.e2.MLP.r8,0.24251704972588217,meta-llama/Meta-Llama-3.1-8B-Instruct
+answer_ideal_agg,hybrid-rrf,0.315036278997635,M14.meta.e2.MLP.r32 (hybrid-rrf),0.264096236383227,meta-llama/Meta-Llama-3.1-8B-Instruct (hybrid-rrf)
+answer_ideal_agg,hyde-answer,0.322617145243074,M14.meta.e2.MLP.r32 (hyde-answer),0.2608541971517237,meta-llama/Meta-Llama-3.1-8B-Instruct (hyde-answer)
+answer_ideal_agg,hyde-document,0.3322767200840888,M14.meta.e2.MLP.r32 (hyde-document),0.23363336146500252,meta-llama/Meta-Llama-3.1-8B-Instruct (hyde-document)
+answer_ideal_agg,keyword-bm25,0.32989052443613226,M14.meta.e2.no_MLP.r32 (keyword-bm25),0.2986324355982885,meta-llama/Meta-Llama-3.1-8B-Instruct (keyword-bm25)
+answer_ideal_agg,naive,0.23669633244535979,M14.meta.e4.MLP.r8 (naive),0.20332521218591776,meta-llama/Meta-Llama-3.1-8B-Instruct (naive)
+answer_short,none,0.16153112655326232,M14.meta.e2.MLP.r32,0.1665723591637996,meta-llama/Meta-Llama-3.1-8B-Instruct
+answer_short,hybrid-rrf,0.2642563768959506,M14.meta.e2.no_MLP.r32 (hybrid-rrf),0.14621785951017127,meta-llama/Meta-Llama-3.1-8B-Instruct (hybrid-rrf)
+answer_short,hyde-answer,0.24595187645264974,M14.meta.e4.MLP.r8 (hyde-answer),0.14516982086467656,meta-llama/Meta-Llama-3.1-8B-Instruct (hyde-answer)
+answer_short,hyde-document,0.2558044727226171,M14.meta.e4.MLP.r8 (hyde-document),0.1228820824329627,meta-llama/Meta-Llama-3.1-8B-Instruct (hyde-document)
+answer_short,keyword-bm25,0.286699574942575,M14.meta.e4.MLP.r8 (keyword-bm25),0.1600254122811164,meta-llama/Meta-Llama-3.1-8B-Instruct (keyword-bm25)
+answer_short,naive,0.2279582738498695,M14.meta.e2.no_MLP.r32 (naive),0.12862393976302028,meta-llama/Meta-Llama-3.1-8B-Instruct (naive)
+answer_short_agg,none,0.26884434188658357,M14.meta.e2.MLP.r16,0.2637746938285993,meta-llama/Meta-Llama-3.1-8B-Instruct
+answer_short_agg,hybrid-rrf,0.42113752924104314,M14.meta.e2.no_MLP.r16 (hybrid-rrf),0.18820306448968838,meta-llama/Meta-Llama-3.1-8B-Instruct (hybrid-rrf)
+answer_short_agg,hyde-answer,0.46542495978750253,M14.meta.e2.no_MLP.r8 (hyde-answer),0.18277333898032452,meta-llama/Meta-Llama-3.1-8B-Instruct (hyde-answer)
+answer_short_agg,hyde-document,0.3425026257330362,M14.meta.e2.no_MLP.r8 (hyde-document),0.15947661056627038,meta-llama/Meta-Llama-3.1-8B-Instruct (hyde-document)
+answer_short_agg,keyword-bm25,0.48673625428752254,M14.meta.e2.no_MLP.r8 (keyword-bm25),0.22438485099906869,meta-llama/Meta-Llama-3.1-8B-Instruct (keyword-bm25)
+answer_short_agg,naive,0.2925901147629849,M14.meta.e2.no_MLP.r32 (naive),0.14592609214275984,meta-llama/Meta-Llama-3.1-8B-Instruct (naive)

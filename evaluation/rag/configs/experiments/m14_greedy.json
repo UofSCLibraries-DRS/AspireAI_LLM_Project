@@ -1,0 +1,243 @@
+{
+    "out": "results/M14_greedy",
+    "include_non_rag": true,
+    "eval_data": {
+        "path": "scratch/eval/scenarios.csv",
+        "question_column": "question",
+        "ground_truth_columns": [
+            "answer_short",
+            "answer_ideal",
+            "answer_short_agg",
+            "answer_ideal_agg"
+        ]
+    },
+    "RAG_config": {
+        "top_k": 3,
+        "retrievers": [
+            {
+                "id": "naive",
+                "backend": "NaiveRetriever",
+                "config": {
+                    "database_url": "dbname=lighthouse_rag",
+                    "embedding_model": "intfloat/e5-base-v2",
+                    "embedding_device": "cpu",
+                    "embedding_size": 768,
+                    "search_field": "all",
+                    "query_prefix": "query: "
+                }
+            },
+            {
+                "id": "keyword-bm25",
+                "backend": "KeywordRetriever",
+                "config": {
+                    "database_url": "dbname=lighthouse_rag",
+                    "search_column": "search_text",
+                    "index_name": "documents_search_text_bm25",
+                    "keyword_count": 8,
+                    "max_new_tokens": 64
+                }
+            },
+            {
+                "id": "hybrid-rrf",
+                "backend": "HybridRetriever",
+                "config": {
+                    "database_url": "dbname=lighthouse_rag",
+                    "embedding_model": "intfloat/e5-base-v2",
+                    "embedding_device": "cpu",
+                    "embedding_size": 768,
+                    "search_field": "all",
+                    "query_prefix": "query: ",
+                    "search_column": "search_text",
+                    "index_name": "documents_search_text_bm25",
+                    "keyword_count": 8,
+                    "keyword_max_new_tokens": 64,
+                    "rrf_k": 60,
+                    "candidate_multiplier": 4
+                }
+            },
+            {
+                "id": "hyde-answer",
+                "backend": "HyDEAnswerRetriever",
+                "config": {
+                    "database_url": "dbname=lighthouse_rag",
+                    "embedding_model": "intfloat/e5-base-v2",
+                    "embedding_device": "cpu",
+                    "embedding_size": 768,
+                    "search_field": "all",
+                    "query_prefix": "passage: ",
+                    "max_new_tokens": 256
+                }
+            },
+            {
+                "id": "hyde-document",
+                "backend": "HyDEDocumentRetriever",
+                "config": {
+                    "database_url": "dbname=lighthouse_rag",
+                    "embedding_model": "intfloat/e5-base-v2",
+                    "embedding_device": "cpu",
+                    "embedding_size": 768,
+                    "search_field": "all",
+                    "query_prefix": "passage: ",
+                    "max_new_tokens": 256
+                }
+            }
+        ],
+        "prompt_template_path": "configs/templates/prompt/p1.yaml",
+        "retrieved_item_template_path": "configs/templates/retrieved_items/c1.yaml"
+    },
+    "chatbots": [
+        {
+            "id": "M14.meta.e2.MLP.r8",
+            "backend": "VLLMChatbot",
+            "batch_size": 2,
+            "config": {
+                "model_path": "/home/john/Research/library/models/M14.meta.e2.MLP.r8",
+                "is_instruct": true,
+                "temperature": 0.0,
+                "max_tokens": 1024,
+                "top_p": 1.0,
+                "llm_kwargs": {
+                    "dtype": "auto",
+                    "enforce_eager": true,
+                    "gpu_memory_utilization": 0.95,
+                    "max_model_len": 16384,
+                    "tensor_parallel_size": 1
+                }
+            }
+        },
+        {
+            "id": "M14.meta.e2.MLP.r16",
+            "backend": "VLLMChatbot",
+            "batch_size": 2,
+            "config": {
+                "model_path": "/home/john/Research/library/models/M14.meta.e2.MLP.r16",
+                "is_instruct": true,
+                "temperature": 0.0,
+                "max_tokens": 1024,
+                "top_p": 1.0,
+                "llm_kwargs": {
+                    "dtype": "auto",
+                    "enforce_eager": true,
+                    "gpu_memory_utilization": 0.95,
+                    "max_model_len": 16384,
+                    "tensor_parallel_size": 1
+                }
+            }
+        },
+        {
+            "id": "M14.meta.e2.MLP.r32",
+            "backend": "VLLMChatbot",
+            "batch_size": 2,
+            "config": {
+                "model_path": "/home/john/Research/library/models/M14.meta.e2.MLP.r32",
+                "is_instruct": true,
+                "temperature": 0.0,
+                "max_tokens": 1024,
+                "top_p": 1.0,
+                "llm_kwargs": {
+                    "dtype": "auto",
+                    "enforce_eager": true,
+                    "gpu_memory_utilization": 0.95,
+                    "max_model_len": 16384,
+                    "tensor_parallel_size": 1
+                }
+            }
+        },
+        {
+            "id": "M14.meta.e2.no_MLP.r8",
+            "backend": "VLLMChatbot",
+            "batch_size": 2,
+            "config": {
+                "model_path": "/home/john/Research/library/models/M14.meta.e2.no_MLP.r8",
+                "is_instruct": true,
+                "temperature": 0.0,
+                "max_tokens": 1024,
+                "top_p": 1.0,
+                "llm_kwargs": {
+                    "dtype": "auto",
+                    "enforce_eager": true,
+                    "gpu_memory_utilization": 0.95,
+                    "max_model_len": 16384,
+                    "tensor_parallel_size": 1
+                }
+            }
+        },
+        {
+            "id": "M14.meta.e2.no_MLP.r16",
+            "backend": "VLLMChatbot",
+            "batch_size": 2,
+            "config": {
+                "model_path": "/home/john/Research/library/models/M14.meta.e2.no_MLP.r16",
+                "is_instruct": true,
+                "temperature": 0.0,
+                "max_tokens": 1024,
+                "top_p": 1.0,
+                "llm_kwargs": {
+                    "dtype": "auto",
+                    "enforce_eager": true,
+                    "gpu_memory_utilization": 0.95,
+                    "max_model_len": 16384,
+                    "tensor_parallel_size": 1
+                }
+            }
+        },
+        {
+            "id": "M14.meta.e2.no_MLP.r32",
+            "backend": "VLLMChatbot",
+            "batch_size": 2,
+            "config": {
+                "model_path": "/home/john/Research/library/models/M14.meta.e2.no_MLP.r32",
+                "is_instruct": true,
+                "temperature": 0.0,
+                "max_tokens": 1024,
+                "top_p": 1.0,
+                "llm_kwargs": {
+                    "dtype": "auto",
+                    "enforce_eager": true,
+                    "gpu_memory_utilization": 0.95,
+                    "max_model_len": 16384,
+                    "tensor_parallel_size": 1
+                }
+            }
+        },
+        {
+            "id": "M14.meta.e4.MLP.r8",
+            "backend": "VLLMChatbot",
+            "batch_size": 2,
+            "config": {
+                "model_path": "/home/john/Research/library/models/M14.meta.e4.MLP.r8",
+                "is_instruct": true,
+                "temperature": 0.0,
+                "max_tokens": 1024,
+                "top_p": 1.0,
+                "llm_kwargs": {
+                    "dtype": "auto",
+                    "enforce_eager": true,
+                    "gpu_memory_utilization": 0.95,
+                    "max_model_len": 16384,
+                    "tensor_parallel_size": 1
+                }
+            }
+        },
+        {
+            "id": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+            "backend": "VLLMChatbot",
+            "batch_size": 2,
+            "config": {
+                "model_path": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+                "is_instruct": true,
+                "temperature": 0.0,
+                "max_tokens": 1024,
+                "top_p": 1.0,
+                "llm_kwargs": {
+                    "dtype": "auto",
+                    "enforce_eager": true,
+                    "gpu_memory_utilization": 0.95,
+                    "hf_token": true,
+                    "max_model_len": 16384,
+                    "tensor_parallel_size": 1
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+template: |
+  Use the provided texts to answer the question.
+
+  Texts: 
+
+  {retrieved_context}
+
+  Now, answer the following:
+
+  {query}
