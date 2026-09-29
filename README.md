@@ -6,7 +6,7 @@
 AspireAI_LLM_Project/
 ├── data/
 ├── demo/
-├── evalutation/
+├── evaluation/
 ├── fine_tuning/
 ├── .gitignore
 ├── requirements.txt
@@ -15,5 +15,7 @@ AspireAI_LLM_Project/
 
 ### Directories
 
-- **`data/`** - All excel/csv files for project.
-- **`data_handling/`** - Data processing and analysis files; contains jupyter notebooks and python code to handle our metadata (manipulations, cleaning, etc.)
+- **`data/`** - Scripts and notebooks for preparing and analyzing project data.
+- **`demo/`** - Frontend, backend, and chatbot components for project demonstrations.
+- **`fine_tuning/`** - Training pipelines, configurations, and scripts for fine-tuning language models.
+- **`evaluation/`** - Tools and experiments for evaluating model performance.
