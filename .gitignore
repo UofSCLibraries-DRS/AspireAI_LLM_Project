@@ -62,6 +62,4 @@ data/in
 
 demo/backend/db/data
 
-# evaluation/rag
-evaluation/rag/results/*/results.csv
-evaluation/rag/results/*/gaico
+

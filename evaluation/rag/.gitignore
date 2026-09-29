@@ -14,3 +14,7 @@ wheels/
 
 # Generated embedding caches
 .cache/
+
+
+results/*/results.csv
+results/*/gaico
