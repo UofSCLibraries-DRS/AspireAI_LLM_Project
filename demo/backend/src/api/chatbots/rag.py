@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import json
 import math
 import os
+import re
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, Literal, Protocol, cast
@@ -11,6 +13,19 @@ import torch.nn.functional as F
 
 from .base import Chatbot, ChatbotSource, TextSource
 from .bedrock import BedrockChatbot
+
+DEFAULT_KEYWORD_PROMPT = """You are generating a BM25 search query for a document
+retriever. Follow these instructions exactly:
+
+- Select at most {keyword_count} concise keywords or short noun phrases.
+- Prefer distinctive names, events, places, dates, and domain terminology.
+- Return one comma-separated line and nothing else.
+- Do not answer the question.
+- Do not include commentary, labels, numbering, or Markdown.
+
+<question>
+{query}
+</question>"""
 
 EMBEDDING_MODEL = "intfloat/e5-base-v2"
 EMBEDDING_SIZE = 768
@@ -232,6 +247,12 @@ class PostgresContextRetriever:
             cursor.execute(sql, parameters)
             rows = cursor.fetchall()
 
+        return self._format_rows(rows, top_k)
+
+    @classmethod
+    def _format_rows(
+        cls, rows: Sequence[Sequence[Any]], top_k: int
+    ) -> list[RetrievedDocument]:
         documents: list[RetrievedDocument] = []
         seen_ids: set[int] = set()
         for row in rows:
@@ -241,13 +262,13 @@ class PostgresContextRetriever:
             seen_ids.add(document_id)
             documents.append(
                 RetrievedDocument(
-                    text=self._format_document(
+                    text=cls._format_document(
                         collection=row[1],
                         title=row[2],
                         description=row[3],
                         transcript=row[4],
                     ),
-                    source=self._text_source(
+                    source=cls._text_source(
                         collection=row[1],
                         title=row[2],
                         description=row[3],
@@ -342,6 +363,154 @@ LIMIT %s
             "description": clean_description,
             "transcript": clean_transcript,
         }
+
+
+_IDENTIFIER = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+_KEYWORD_PREFIX = re.compile(r"^\s*(?:search\s+)?keywords?\s*:\s*", re.IGNORECASE)
+_LIST_PREFIX = re.compile(r"^\s*(?:[-*\u2022]|\d+[.)])\s*")
+
+
+def parse_keywords(generation: str, max_keywords: int = 8) -> str:
+    """Normalize common LLM list formats into pg_textsearch query text."""
+    _validate_positive_int(max_keywords, "max_keywords")
+    if not isinstance(generation, str) or not generation.strip():
+        raise ValueError("The chatbot generated no keywords")
+
+    text = generation.strip()
+    if text.startswith("```") and text.endswith("```"):
+        lines = text.splitlines()
+        text = "\n".join(lines[1:-1]).strip()
+
+    candidates: list[str]
+    try:
+        parsed = json.loads(text)
+    except json.JSONDecodeError:
+        parsed = None
+
+    if isinstance(parsed, dict):
+        parsed = parsed.get("keywords")
+    if isinstance(parsed, list):
+        candidates = [str(value) for value in parsed if isinstance(value, str)]
+    else:
+        text = _KEYWORD_PREFIX.sub("", text)
+        candidates = re.split(r"[,;|\n]+", text)
+
+    keywords = []
+    seen = set()
+    for candidate in candidates:
+        keyword = _LIST_PREFIX.sub("", candidate).strip().strip("\"'`[]()")
+        keyword = _KEYWORD_PREFIX.sub("", keyword).strip()
+        if not keyword:
+            continue
+        normalized = keyword.casefold()
+        if normalized in seen:
+            continue
+        seen.add(normalized)
+        keywords.append(keyword)
+        if len(keywords) == max_keywords:
+            break
+
+    if not keywords:
+        raise ValueError("The chatbot generated no usable keywords")
+    return " ".join(keywords)
+
+
+def _validate_identifier(value: str, name: str) -> str:
+    if not isinstance(value, str) or not _IDENTIFIER.fullmatch(value):
+        raise ValueError(f"{name} must be a simple PostgreSQL identifier")
+    return value
+
+
+def _validate_prompt_template(template: str, name: str) -> str:
+    if not isinstance(template, str) or "{query}" not in template:
+        raise ValueError(f"{name} must be a string containing {{query}}")
+    return template
+
+
+def _validate_positive_int(value: int, name: str) -> int:
+    if not isinstance(value, int) or isinstance(value, bool) or value < 1:
+        raise ValueError(f"{name} must be a positive integer")
+    return value
+
+
+def _generate(chatbot: Chatbot, prompt: str, max_new_tokens: int) -> str:
+    generation, _ = chatbot.generate(
+        prompt=prompt,
+        max_new_tokens=max_new_tokens,
+    )
+    if not isinstance(generation, str) or not generation.strip():
+        raise ValueError("The chatbot generated an empty retrieval query")
+    return generation.strip()
+
+
+class KeywordRetriever:
+    """Generate simple search terms with an LLM and rank documents with BM25."""
+
+    def __init__(
+        self,
+        database_url: str,
+        search_column: str = "search_text",
+        index_name: str = "documents_search_text_bm25",
+        keyword_count: int = 8,
+        max_new_tokens: int = 64,
+        prompt_template: str = DEFAULT_KEYWORD_PROMPT,
+        *,
+        chatbot: Chatbot,
+        connection_factory: ConnectionFactory | None = None,
+    ) -> None:
+        if not isinstance(database_url, str) or not database_url.strip():
+            raise ValueError("database_url must not be blank")
+        self.database_url = database_url
+        self.search_column = _validate_identifier(search_column, "search_column")
+        self.index_name = _validate_identifier(index_name, "index_name")
+        self.keyword_count = _validate_positive_int(keyword_count, "keyword_count")
+        self.max_new_tokens = _validate_positive_int(max_new_tokens, "max_new_tokens")
+        self.prompt_template = _validate_prompt_template(
+            prompt_template,
+            "prompt_template",
+        )
+        self.chatbot = chatbot
+        self.connection_factory = (
+            connection_factory or PostgresContextRetriever._connect
+        )
+
+    def generate_keywords(self, query: str) -> str:
+        if not isinstance(query, str) or not query.strip():
+            raise ValueError("query must not be blank")
+        prompt = self.prompt_template.format(
+            query=query,
+            keyword_count=self.keyword_count,
+        )
+        generation = _generate(self.chatbot, prompt, self.max_new_tokens)
+        return parse_keywords(generation, self.keyword_count)
+
+    def retrieve(self, question: str, top_k: int) -> list[RetrievedDocument]:
+        _validate_positive_int(top_k, "top_k")
+        keywords = self.generate_keywords(question)
+        sql, parameters = self._query(keywords, top_k)
+
+        with (
+            self.connection_factory(self.database_url) as connection,
+            connection.cursor() as cursor,
+        ):
+            cursor.execute(sql, parameters)
+            rows = cursor.fetchall()
+        return PostgresContextRetriever._format_rows(rows, top_k)
+
+    def _query(self, keywords: str, top_k: int) -> tuple[str, Sequence[object]]:
+        # Identifiers are validated before interpolation. Query text remains a
+        # bound value so generated content can never alter the SQL statement.
+        score = f"{self.search_column} <@> to_bm25query(%s, '{self.index_name}')"
+        return (
+            f"""
+SELECT id, collection, title, description, transcript,
+       {score} AS score
+FROM documents
+ORDER BY {score}
+LIMIT %s
+""",
+            (keywords, keywords, top_k),
+        )
 
 
 class RAGChatbot(Chatbot):

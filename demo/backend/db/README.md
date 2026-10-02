@@ -16,6 +16,17 @@ Run the generator from `demo/backend`:
 uv run python db/create_embeddings.py
 ```
 
+To report transcript length statistics without loading the whole CSV into
+memory, run:
+
+```bash
+python db/report_largest_transcripts.py
+```
+
+The report gives the mean transcript character count and the ten largest rows.
+Use `--top N` to change how many rows are listed or `--csv PATH` for another
+CSV file.
+
 These embeddings are ignored by git so you will have to manually transfer them from the local machine to the hosting machine:
 
 ```bash
