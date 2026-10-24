@@ -63,6 +63,9 @@ The existing `"model": "RAG"` API option now uses
 normalizes and deduplicates them, and ranks documents using BM25. `RAGChatbot`
 passes the retrieved context and original question to `M14` for the answer
 and returns the source titles, descriptions, and transcripts to the frontend.
+The answer prompt matches the evaluation's `p1.yaml` and `c1.yaml` templates
+(`Use the provided texts to answer the question` with `<item>` records), without
+the additional instruction to respond that records are insufficient.
 No frontend changes or embedding model downloads are required.
 
 The retriever can also be used directly:

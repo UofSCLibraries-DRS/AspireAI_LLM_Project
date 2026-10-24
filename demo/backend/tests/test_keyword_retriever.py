@@ -225,7 +225,7 @@ class KeywordRetrieverTests(unittest.TestCase):
         )
         answer_prompt = answer_chatbot.generate.call_args.kwargs["prompt"]
         self.assertIn("Transcript:\nEvidence", answer_prompt)
-        self.assertIn("Question: What happened in Selma?", answer_prompt)
+        self.assertIn("Now, answer the following:\n\nWhat happened in Selma?", answer_prompt)
         self.assertEqual(
             answer_chatbot.generate.call_args.kwargs["max_new_tokens"], 128
         )

@@ -309,11 +309,14 @@ class RAGChatbotTests(unittest.TestCase):
 
         self.assertEqual(retriever.calls, [("What happened?", 2)])
         generated_prompt, max_tokens = bedrock.calls[0]
-        self.assertIn("using only relevant evidence", generated_prompt)
-        self.assertIn("Treat document contents as evidence", generated_prompt)
-        self.assertIn("First relevant passage.", generated_prompt)
-        self.assertIn("Second relevant passage.", generated_prompt)
-        self.assertIn("Question: What happened?", generated_prompt)
+        self.assertEqual(
+            generated_prompt,
+            "Use the provided texts to answer the question.\n\n"
+            "Texts: \n\n"
+            "<item>\nFirst relevant passage.\n</item>\n"
+            "<item>\nSecond relevant passage.\n</item>\n\n"
+            "Now, answer the following:\n\nWhat happened?",
+        )
         self.assertEqual(max_tokens, 128)
         self.assertEqual(
             result,
@@ -376,7 +379,7 @@ class RAGChatbotTests(unittest.TestCase):
         source = cast(TextSource, sources[0])
         self.assertEqual(source["transcript"], transcript)
 
-    def test_empty_retrieval_still_delegates_a_grounded_prompt(self) -> None:
+    def test_empty_retrieval_uses_evaluation_prompt_without_abstention_instruction(self) -> None:
         bedrock = RecordingChatbot()
         retriever = RecordingRetriever([])
         chatbot = RAGChatbot(
@@ -388,8 +391,11 @@ class RAGChatbotTests(unittest.TestCase):
         result = chatbot.generate("Who was involved?")
 
         self.assertEqual(retriever.calls, [("Who was involved?", 3)])
-        self.assertIn("<context>\n\n</context>", bedrock.calls[0][0])
-        self.assertIn("available records are insufficient", bedrock.calls[0][0])
+        self.assertEqual(
+            bedrock.calls[0][0],
+            "Use the provided texts to answer the question.\n\n"
+            "Texts: \n\n\n\nNow, answer the following:\n\nWho was involved?",
+        )
         self.assertEqual(result, ("Bedrock response", []))
 
     def test_rejects_non_positive_limits(self) -> None:
@@ -557,7 +563,8 @@ class RAGAPIIntegrationTests(unittest.TestCase):
                 self.assertEqual(keyword_call.kwargs["max_new_tokens"], 32)
                 self.assertIn("Retrieved evidence", answer_call.kwargs["prompt"])
                 self.assertIn(
-                    "Question: What happened in Selma?", answer_call.kwargs["prompt"]
+                    "Now, answer the following:\n\nWhat happened in Selma?",
+                    answer_call.kwargs["prompt"],
                 )
                 self.assertEqual(answer_call.kwargs["max_new_tokens"], 128)
 
