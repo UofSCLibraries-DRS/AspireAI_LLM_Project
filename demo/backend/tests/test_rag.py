@@ -542,7 +542,7 @@ class RAGAPIIntegrationTests(unittest.TestCase):
                 rag = cast(RAGChatbot, api_main.chatbots["RAG"])
                 self.assertIsInstance(rag.retriever, KeywordRetriever)
                 keyword_retriever = cast(KeywordRetriever, rag.retriever)
-                self.assertIs(keyword_retriever.chatbot, api_main.chatbots["LLAMA"])
+                self.assertIs(keyword_retriever.chatbot, api_main.chatbots["M14"])
                 self.assertEqual(rag.top_k, 2)
                 self.assertEqual(rag.max_context_chars, 9000)
                 request = api_main.GenerateRequest(
@@ -586,7 +586,7 @@ class RAGAPIIntegrationTests(unittest.TestCase):
             self.assertIn("RAG", api_main.chatbots)
             rag = api_main.chatbots["RAG"]
             self.assertIsInstance(rag, RAGChatbot)
-            self.assertIs(rag.chatbot, api_main.chatbots["LLAMA"])
+            self.assertIs(rag.chatbot, api_main.chatbots["M14"])
         finally:
             api_main.chatbots.clear()
 

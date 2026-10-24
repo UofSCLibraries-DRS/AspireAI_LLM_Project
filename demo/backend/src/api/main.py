@@ -74,15 +74,15 @@ async def startup_event() -> None:
     except Exception as e:  # noqa: BLE001
         print(f"Failed to initialize LLAMA: {e}")
 
-    # Use the Bedrock Llama model to generate BM25 keywords and grounded answers.
+    # Use the fine-tuned M14 model for BM25 keywords and grounded answers.
     try:
-        llama = chatbots.get("LLAMA")
-        if not isinstance(llama, BedrockChatbot):
-            raise RuntimeError("LLAMA must initialize before RAG")  # noqa: TRY004
+        m14 = chatbots.get("M14")
+        if not isinstance(m14, BedrockChatbot):
+            raise RuntimeError("M14 must initialize before RAG")  # noqa: TRY004
         rag_settings = RAGSettings.from_env()
         retriever = KeywordRetriever(
             database_url=rag_settings.database_url,
-            chatbot=llama,
+            chatbot=m14,
             search_column=rag_settings.search_column,
             index_name=rag_settings.index_name,
             keyword_count=rag_settings.keyword_count,
@@ -90,13 +90,13 @@ async def startup_event() -> None:
         )
         chatbots["RAG"] = RAGChatbot(
             id="RAG",
-            chatbot=llama,
+            chatbot=m14,
             retriever=retriever,
             top_k=rag_settings.top_k,
             max_context_chars=rag_settings.max_context_chars,
         )
         print(
-            f"RAG initialized (retriever=keyword-bm25, "
+            f"RAG initialized (model=M14, retriever=keyword-bm25, "
             f"search_column={rag_settings.search_column}, "
             f"top_k={rag_settings.top_k})"
         )

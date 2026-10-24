@@ -12,7 +12,7 @@ uv run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 The `RAG` model uses keyword-based BM25 retrieval from the local `lighthouse_rag_pages`
-PostgreSQL database. It uses the `LLAMA` Bedrock model to generate search terms,
+PostgreSQL database. It uses the fine-tuned `M14` Bedrock model to generate search terms,
 then answer using the retrieved documents. Its optional environment settings
 are documented in `.env.example`.
 
@@ -59,9 +59,9 @@ uv run python -m tests.test_bedrock
 
 The existing `"model": "RAG"` API option now uses
 `src.api.chatbots.rag.KeywordRetriever`, ported from
-`evaluation/rag/retrievers/agentic.py`. It generates search terms with `LLAMA`,
+`evaluation/rag/retrievers/agentic.py`. It generates search terms with `M14`,
 normalizes and deduplicates them, and ranks documents using BM25. `RAGChatbot`
-passes the retrieved context and original question to `LLAMA` for the answer
+passes the retrieved context and original question to `M14` for the answer
 and returns the source titles, descriptions, and transcripts to the frontend.
 No frontend changes or embedding model downloads are required.
 
