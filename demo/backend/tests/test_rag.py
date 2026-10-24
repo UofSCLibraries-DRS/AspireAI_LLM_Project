@@ -412,6 +412,9 @@ class RAGChatbotTests(unittest.TestCase):
 class RAGSettingsTests(unittest.TestCase):
     def test_defaults(self) -> None:
         self.assertEqual(RAGSettings.from_env({}), RAGSettings())
+        self.assertEqual(
+            RAGSettings.from_env({}).database_url, "dbname=lighthouse_rag_pages"
+        )
 
     def test_configures_search_and_limits(self) -> None:
         settings = RAGSettings.from_env(

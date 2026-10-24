@@ -11,10 +11,17 @@ uv sync
 uv run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-The `RAG` model uses keyword-based BM25 retrieval from the local `lighthouse_rag`
+The `RAG` model uses keyword-based BM25 retrieval from the local `lighthouse_rag_pages`
 PostgreSQL database. It uses the `LLAMA` Bedrock model to generate search terms,
 then answer using the retrieved documents. Its optional environment settings
 are documented in `.env.example`.
+
+On EC2, set the backend's effective environment (or `demo/backend/.env`) to
+`RAG_DATABASE_URL=dbname=lighthouse_rag_pages port=5433 user=jaaydin`, then
+restart the backend. PostgreSQL 17 runs on port 5433 there; port 5432 still
+serves PostgreSQL 16. Local development uses the pages database on port 5432.
+Retrieval queries explicitly read `public.documents`. The EC2 role `jaaydin`
+needs `SELECT` on that table because the restore created it as `postgres`.
 
 ### Fine-tuned Bedrock model (M14)
 
@@ -64,7 +71,7 @@ The retriever can also be used directly:
 from src.api.chatbots.rag import KeywordRetriever, RAGChatbot
 
 # Use an existing backend chatbot instance for keyword generation and answers.
-retriever = KeywordRetriever(database_url="dbname=lighthouse_rag", chatbot=chatbot)
+retriever = KeywordRetriever(database_url="dbname=lighthouse_rag_pages", chatbot=chatbot)
 rag = RAGChatbot(id="keyword-rag", chatbot=chatbot, retriever=retriever)
 ```
 
@@ -82,7 +89,7 @@ For an existing database, install the extension as documented there, then run
 from `demo/backend` before using keyword retrieval:
 
 ```bash
-psql -d lighthouse_rag -v ON_ERROR_STOP=1 -f db/schema.sql
+psql -d lighthouse_rag_pages -v ON_ERROR_STOP=1 -f db/schema.sql
 ```
 
 Restart the backend after changing its settings. The vector retriever remains

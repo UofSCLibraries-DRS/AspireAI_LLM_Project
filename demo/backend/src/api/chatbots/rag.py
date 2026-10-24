@@ -60,7 +60,7 @@ class QueryEmbedder(Protocol):
 
 @dataclass(frozen=True)
 class RAGSettings:
-    database_url: str = "dbname=lighthouse_rag"
+    database_url: str = "dbname=lighthouse_rag_pages"
     top_k: int = 3
     max_context_chars: int = 12_000
     search_column: str = "search_text"
@@ -90,7 +90,7 @@ class RAGSettings:
             values.get("RAG_MAX_CONTEXT_CHARS", "12000"),
             "RAG_MAX_CONTEXT_CHARS",
         )
-        database_url = values.get("RAG_DATABASE_URL", "dbname=lighthouse_rag").strip()
+        database_url = values.get("RAG_DATABASE_URL", cls.database_url).strip()
         if not database_url:
             raise ValueError("RAG_DATABASE_URL must not be blank")
         return cls(
@@ -294,7 +294,7 @@ class PostgresContextRetriever:
             sql = f"""
 SELECT id, collection, title, description, transcript,
        {vector_column} <=> %s::vector AS distance
-FROM documents
+FROM public.documents
 WHERE {vector_column} IS NOT NULL
 ORDER BY {vector_column} <=> %s::vector
 LIMIT %s
@@ -308,7 +308,7 @@ LIMIT %s
                 f"""(
 SELECT id, collection, title, description, transcript,
        {vector_column} <=> %s::vector AS distance
-FROM documents
+FROM public.documents
 WHERE {vector_column} IS NOT NULL
 ORDER BY {vector_column} <=> %s::vector
 LIMIT %s
@@ -513,7 +513,7 @@ class KeywordRetriever:
             f"""
 SELECT id, collection, title, description, transcript,
        {score} AS score
-FROM documents
+FROM public.documents
 ORDER BY {score}
 LIMIT %s
 """,

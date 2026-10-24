@@ -91,6 +91,7 @@ class KeywordRetrieverTests(unittest.TestCase):
         self.assertEqual(self.chatbot.generate.call_args.kwargs["max_new_tokens"], 64)
         self.connections.assert_called_once_with("dbname=lighthouse_rag")
         sql, parameters = self.cursor.execute.call_args.args
+        self.assertIn("FROM public.documents", sql)
         self.assertIn(
             "search_text <@> to_bm25query(%s, 'documents_search_text_bm25')", sql
         )
