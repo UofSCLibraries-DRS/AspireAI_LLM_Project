@@ -6,7 +6,7 @@ import os
 import re
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any, Literal, Protocol, cast
+from typing import Any, Literal, Protocol
 
 import torch
 import torch.nn.functional as F
@@ -61,19 +61,29 @@ class QueryEmbedder(Protocol):
 @dataclass(frozen=True)
 class RAGSettings:
     database_url: str = "dbname=lighthouse_rag"
-    search_field: SearchField = "all"
     top_k: int = 3
     max_context_chars: int = 12_000
-    embedding_device: str = "cpu"
+    search_column: str = "search_text"
+    index_name: str = "documents_search_text_bm25"
+    keyword_count: int = 8
+    keyword_max_new_tokens: int = 64
 
     @classmethod
     def from_env(cls, environ: Mapping[str, str] | None = None) -> RAGSettings:
         values = os.environ if environ is None else environ
-        search_field = values.get("RAG_SEARCH_FIELD", "all")
-        if search_field not in {*VECTOR_COLUMNS, "all"}:
-            raise ValueError(
-                "RAG_SEARCH_FIELD must be title, description, transcript, or all"
-            )
+        search_column = _validate_identifier(
+            values.get("RAG_SEARCH_COLUMN", "search_text"), "RAG_SEARCH_COLUMN"
+        )
+        index_name = _validate_identifier(
+            values.get("RAG_INDEX_NAME", "documents_search_text_bm25"), "RAG_INDEX_NAME"
+        )
+        keyword_count = _positive_int(
+            values.get("RAG_KEYWORD_COUNT", "8"), "RAG_KEYWORD_COUNT"
+        )
+        keyword_max_new_tokens = _positive_int(
+            values.get("RAG_KEYWORD_MAX_NEW_TOKENS", "64"),
+            "RAG_KEYWORD_MAX_NEW_TOKENS",
+        )
 
         top_k = _positive_int(values.get("RAG_TOP_K", "3"), "RAG_TOP_K")
         max_context_chars = _positive_int(
@@ -83,16 +93,14 @@ class RAGSettings:
         database_url = values.get("RAG_DATABASE_URL", "dbname=lighthouse_rag").strip()
         if not database_url:
             raise ValueError("RAG_DATABASE_URL must not be blank")
-        embedding_device = values.get("RAG_EMBEDDING_DEVICE", "cpu").strip()
-        if not embedding_device:
-            raise ValueError("RAG_EMBEDDING_DEVICE must not be blank")
-
         return cls(
             database_url=database_url,
-            search_field=cast(SearchField, search_field),
             top_k=top_k,
             max_context_chars=max_context_chars,
-            embedding_device=embedding_device,
+            search_column=search_column,
+            index_name=index_name,
+            keyword_count=keyword_count,
+            keyword_max_new_tokens=keyword_max_new_tokens,
         )
 
 

@@ -9,8 +9,7 @@ from src.api.chatbots.base import Chatbot, ChatbotSource
 from src.api.chatbots.bedrock import BedrockChatbot
 from src.api.chatbots.huggingface import HuggingFaceChatbot
 from src.api.chatbots.rag import (
-    E5QueryEmbedder,
-    PostgresContextRetriever,
+    KeywordRetriever,
     RAGChatbot,
     RAGSettings,
 )
@@ -75,17 +74,19 @@ async def startup_event() -> None:
     except Exception as e:  # noqa: BLE001
         print(f"Failed to initialize LLAMA: {e}")
 
-    # Initialize RAG with the existing Bedrock Llama generator.
+    # Use the Bedrock Llama model to generate BM25 keywords and grounded answers.
     try:
         llama = chatbots.get("LLAMA")
         if not isinstance(llama, BedrockChatbot):
             raise RuntimeError("LLAMA must initialize before RAG")  # noqa: TRY004
         rag_settings = RAGSettings.from_env()
-        query_embedder = E5QueryEmbedder(device=rag_settings.embedding_device)
-        retriever = PostgresContextRetriever(
+        retriever = KeywordRetriever(
             database_url=rag_settings.database_url,
-            embedder=query_embedder,
-            search_field=rag_settings.search_field,
+            chatbot=llama,
+            search_column=rag_settings.search_column,
+            index_name=rag_settings.index_name,
+            keyword_count=rag_settings.keyword_count,
+            max_new_tokens=rag_settings.keyword_max_new_tokens,
         )
         chatbots["RAG"] = RAGChatbot(
             id="RAG",
@@ -95,7 +96,8 @@ async def startup_event() -> None:
             max_context_chars=rag_settings.max_context_chars,
         )
         print(
-            f"RAG initialized (search_field={rag_settings.search_field}, "
+            f"RAG initialized (retriever=keyword-bm25, "
+            f"search_column={rag_settings.search_column}, "
             f"top_k={rag_settings.top_k})"
         )
     except Exception as e:  # noqa: BLE001

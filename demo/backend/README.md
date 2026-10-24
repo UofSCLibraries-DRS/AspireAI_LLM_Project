@@ -11,9 +11,10 @@ uv sync
 uv run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-The `RAG` model uses the local `lighthouse_rag` PostgreSQL database and wraps
-the `LLAMA` Bedrock model. Its optional environment settings are documented in
-`.env.example`; retrieval searches all stored embedding fields by default.
+The `RAG` model uses keyword-based BM25 retrieval from the local `lighthouse_rag`
+PostgreSQL database. It uses the `LLAMA` Bedrock model to generate search terms,
+then answer using the retrieved documents. Its optional environment settings
+are documented in `.env.example`.
 
 ### Fine-tuned Bedrock model (M14)
 
@@ -47,11 +48,17 @@ For a live M14 smoke test using your AWS credentials:
 uv run python -m tests.test_bedrock
 ```
 
-### Keyword retrieval (backend only)
+### Keyword retrieval (RAG option)
 
-`src.api.chatbots.rag.KeywordRetriever` generates search terms with an injected
-backend `Chatbot` and ranks documents using BM25. It returns `RetrievedDocument`
-objects with source content and can be passed directly to `RAGChatbot`:
+The existing `"model": "RAG"` API option now uses
+`src.api.chatbots.rag.KeywordRetriever`, ported from
+`evaluation/rag/retrievers/agentic.py`. It generates search terms with `LLAMA`,
+normalizes and deduplicates them, and ranks documents using BM25. `RAGChatbot`
+passes the retrieved context and original question to `LLAMA` for the answer
+and returns the source titles, descriptions, and transcripts to the frontend.
+No frontend changes or embedding model downloads are required.
+
+The retriever can also be used directly:
 
 ```python
 from src.api.chatbots.rag import KeywordRetriever, RAGChatbot
@@ -61,13 +68,25 @@ retriever = KeywordRetriever(database_url="dbname=lighthouse_rag", chatbot=chatb
 rag = RAGChatbot(id="keyword-rag", chatbot=chatbot, retriever=retriever)
 ```
 
-The defaults use at most eight keywords, a 64-token generation limit, the
-`search_text` column, and the `documents_search_text_bm25` index. Override them
-with `keyword_count`, `max_new_tokens`, `search_column`, and `index_name`;
-`prompt_template` must contain `{query}` and may also contain `{keyword_count}`.
-This requires the `pg_textsearch` extension and BM25 schema described in
-[the database setup instructions](db/README.md). API model selection and startup
-continue to use the existing vector retriever.
+The defaults retrieve three documents using at most eight keywords, a 64-token
+keyword generation limit, the `search_text` column (title, description, and
+transcript), and the `documents_search_text_bm25` index. Configure these with
+`RAG_TOP_K`, `RAG_KEYWORD_COUNT`, `RAG_KEYWORD_MAX_NEW_TOKENS`,
+`RAG_SEARCH_COLUMN`, and `RAG_INDEX_NAME`. `RAG_MAX_CONTEXT_CHARS` caps answer
+context; the request's `max_new_tokens` applies to answer generation separately.
+`RAG_SEARCH_FIELD` and `RAG_EMBEDDING_DEVICE` no longer configure the RAG option.
+
+This requires the `pg_textsearch` extension, generated `search_text` column,
+and BM25 index described in [the database setup instructions](db/README.md).
+For an existing database, install the extension as documented there, then run
+from `demo/backend` before using keyword retrieval:
+
+```bash
+psql -d lighthouse_rag -v ON_ERROR_STOP=1 -f db/schema.sql
+```
+
+Restart the backend after changing its settings. The vector retriever remains
+available as `PostgresContextRetriever` for direct use.
 
 ### SafeGenChat (SGC)
 

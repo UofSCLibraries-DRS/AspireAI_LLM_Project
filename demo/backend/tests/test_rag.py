@@ -13,6 +13,7 @@ from src.api.chatbots.base import ChatbotSource, TextSource
 from src.api.chatbots.bedrock import BedrockChatbot
 from src.api.chatbots.rag import (
     E5QueryEmbedder,
+    KeywordRetriever,
     PostgresContextRetriever,
     RAGChatbot,
     RAGSettings,
@@ -416,23 +417,44 @@ class RAGSettingsTests(unittest.TestCase):
         settings = RAGSettings.from_env(
             {
                 "RAG_DATABASE_URL": "postgresql:///custom",
-                "RAG_SEARCH_FIELD": "title",
+                "RAG_SEARCH_COLUMN": "title",
+                "RAG_INDEX_NAME": "titles_bm25",
+                "RAG_KEYWORD_COUNT": "4",
+                "RAG_KEYWORD_MAX_NEW_TOKENS": "32",
                 "RAG_TOP_K": "5",
                 "RAG_MAX_CONTEXT_CHARS": "9000",
-                "RAG_EMBEDDING_DEVICE": "auto",
             }
         )
         self.assertEqual(settings.database_url, "postgresql:///custom")
-        self.assertEqual(settings.search_field, "title")
+        self.assertEqual(settings.search_column, "title")
+        self.assertEqual(settings.index_name, "titles_bm25")
+        self.assertEqual(settings.keyword_count, 4)
+        self.assertEqual(settings.keyword_max_new_tokens, 32)
         self.assertEqual(settings.top_k, 5)
         self.assertEqual(settings.max_context_chars, 9000)
-        self.assertEqual(settings.embedding_device, "auto")
 
     def test_rejects_invalid_environment_values(self) -> None:
-        with self.assertRaisesRegex(ValueError, "RAG_SEARCH_FIELD"):
-            RAGSettings.from_env({"RAG_SEARCH_FIELD": "body"})
-        with self.assertRaisesRegex(ValueError, "RAG_TOP_K"):
-            RAGSettings.from_env({"RAG_TOP_K": "0"})
+        for name in (
+            "RAG_TOP_K",
+            "RAG_MAX_CONTEXT_CHARS",
+            "RAG_KEYWORD_COUNT",
+            "RAG_KEYWORD_MAX_NEW_TOKENS",
+        ):
+            for value in ("0", "-1", "", "one"):
+                with (
+                    self.subTest(name=name, value=value),
+                    self.assertRaisesRegex(ValueError, name),
+                ):
+                    RAGSettings.from_env({name: value})
+        for name in ("RAG_SEARCH_COLUMN", "RAG_INDEX_NAME"):
+            for value in ("", "search_text; DROP TABLE documents", "schema.index"):
+                with (
+                    self.subTest(name=name, value=value),
+                    self.assertRaisesRegex(ValueError, name),
+                ):
+                    RAGSettings.from_env({name: value})
+        with self.assertRaisesRegex(ValueError, "RAG_DATABASE_URL"):
+            RAGSettings.from_env({"RAG_DATABASE_URL": "  "})
 
 
 class RAGAPIIntegrationTests(unittest.TestCase):
@@ -469,10 +491,20 @@ class RAGAPIIntegrationTests(unittest.TestCase):
             ],
         )
 
-    def test_startup_registers_rag_around_llama(self) -> None:
+    def test_startup_registers_keyword_rag_and_generates_answer_with_sources(self) -> None:
         api_main.chatbots.clear()
-        fake_embedder = FakeQueryEmbedder()
-        fake_retriever = RecordingRetriever([])
+        connections = RecordingConnectionFactory(
+            [(7, "archive", "Selma", "Oral history", "Retrieved evidence", -2.5)]
+        )
+        settings = RAGSettings(
+            database_url="dbname=custom",
+            search_column="title",
+            index_name="titles_bm25",
+            keyword_count=2,
+            keyword_max_new_tokens=32,
+            top_k=2,
+            max_context_chars=9000,
+        )
 
         try:
             with (
@@ -482,24 +514,68 @@ class RAGAPIIntegrationTests(unittest.TestCase):
                     side_effect=RuntimeError("skip local model"),
                 ),
                 patch.object(api_main.BedrockChatbot, "__init__", return_value=None),
+                patch.object(
+                    api_main.BedrockChatbot,
+                    "generate",
+                    side_effect=[
+                        ("Selma, voting rights, 1965", []), ("Grounded answer", [])
+                    ],
+                ) as generate,
                 patch.object(api_main.SafeChat, "__init__", return_value=None),
                 patch.object(
                     api_main.RAGSettings,
                     "from_env",
-                    return_value=RAGSettings(),
+                    return_value=settings,
                 ),
                 patch.object(
-                    api_main,
-                    "E5QueryEmbedder",
-                    return_value=fake_embedder,
+                    PostgresContextRetriever,
+                    "_connect",
+                    side_effect=connections,
                 ),
-                patch.object(
-                    api_main,
-                    "PostgresContextRetriever",
-                    return_value=fake_retriever,
-                ),
+                patch("src.api.chatbots.rag.E5QueryEmbedder") as embedder,
             ):
                 asyncio.run(api_main.startup_event())
+
+                rag = cast(RAGChatbot, api_main.chatbots["RAG"])
+                self.assertIsInstance(rag.retriever, KeywordRetriever)
+                keyword_retriever = cast(KeywordRetriever, rag.retriever)
+                self.assertIs(keyword_retriever.chatbot, api_main.chatbots["LLAMA"])
+                self.assertEqual(rag.top_k, 2)
+                self.assertEqual(rag.max_context_chars, 9000)
+                request = api_main.GenerateRequest(
+                    prompt="What happened in Selma?", model="RAG", max_new_tokens=128
+                )
+                response = asyncio.run(api_main.generate(request))
+                embedder.assert_not_called()
+
+                keyword_call, answer_call = generate.call_args_list
+                self.assertIn("at most 2", keyword_call.kwargs["prompt"])
+                self.assertIn("What happened in Selma?", keyword_call.kwargs["prompt"])
+                self.assertEqual(keyword_call.kwargs["max_new_tokens"], 32)
+                self.assertIn("Retrieved evidence", answer_call.kwargs["prompt"])
+                self.assertIn(
+                    "Question: What happened in Selma?", answer_call.kwargs["prompt"]
+                )
+                self.assertEqual(answer_call.kwargs["max_new_tokens"], 128)
+
+            self.assertEqual(connections.urls, ["dbname=custom"])
+            self.assertIn(
+                "title <@> to_bm25query(%s, 'titles_bm25')", connections.cursor.sql
+            )
+            self.assertEqual(
+                connections.cursor.parameters,
+                ("Selma voting rights", "Selma voting rights", 2),
+            )
+            self.assertEqual(response.model, "RAG")
+            self.assertEqual(response.text, "Grounded answer")
+            self.assertEqual(
+                response.sources,
+                [{
+                    "title": "Selma",
+                    "description": "Oral history",
+                    "transcript": "Retrieved evidence",
+                }],
+            )
 
             self.assertIn("LLAMA", api_main.chatbots)
             self.assertIn("M14", api_main.chatbots)
@@ -508,7 +584,6 @@ class RAGAPIIntegrationTests(unittest.TestCase):
             rag = api_main.chatbots["RAG"]
             self.assertIsInstance(rag, RAGChatbot)
             self.assertIs(rag.chatbot, api_main.chatbots["LLAMA"])
-            self.assertIs(rag.retriever, fake_retriever)
         finally:
             api_main.chatbots.clear()
 
