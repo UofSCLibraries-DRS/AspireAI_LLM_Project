@@ -24,7 +24,7 @@ import requests
 DEFAULT_URL = "http://localhost:8000/generate"
 DEFAULT_PROMPT = "Who was John H. McCray?"
 REQUEST_COUNT = 16
-AVAILABLE_MODES = ("M8", "M9", "LLAMA", "RAG", "SC")
+AVAILABLE_MODES = ("M8", "M14", "LLAMA", "RAG", "SC")
 
 
 @dataclass(frozen=True)

@@ -42,7 +42,7 @@ class BedrockChatbotConfig:
 class BedrockChatbot(Chatbot):
     """
     AWS Bedrock chatbot wrapper using InvokeModel API.
-    Designed for base models and fine-tuned variants with custom prompt templates.
+    Supports base and instruction-tuned models with explicit prompt templates.
     """
 
     def __init__(

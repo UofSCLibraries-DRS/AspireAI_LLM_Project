@@ -24,7 +24,7 @@ load_dotenv()
 # Request/Response Models
 class GenerateRequest(BaseModel):
     prompt: str = Field(..., description="The user's prompt/question")
-    model: Literal["M8", "M9", "LLAMA", "RAG", "SC", "SGC"] = Field(
+    model: Literal["M8", "M14", "LLAMA", "RAG", "SC", "SGC"] = Field(
         ..., description="Model to use for generation"
     )
     max_new_tokens: int | None = Field(
@@ -58,17 +58,22 @@ async def startup_event() -> None:
     except Exception as e:  # noqa: BLE001
         print(f"Failed to initialize M8: {e}")
 
-    # Initialize M9 (Bedrock)
+    # Initialize M14 (Bedrock).
     try:
-        chatbots["M9"] = BedrockChatbot(
-            id="M9", config_path="configs/chatbots/m9_bedrock.yaml"
+        chatbots["M14"] = BedrockChatbot(
+            id="M14", config_path="configs/chatbots/m14_bedrock.yaml"
         )
+        print("M14 (Bedrock) initialized")
+    except Exception as e:  # noqa: BLE001
+        print(f"Failed to initialize M14: {e}")
+
+    try:
         chatbots["LLAMA"] = BedrockChatbot(
             id="LLAMA", config_path="configs/chatbots/llama_bedrock.yaml"
         )
-        print("M9 (Bedrock) initialized")
+        print("LLAMA (Bedrock) initialized")
     except Exception as e:  # noqa: BLE001
-        print(f"Failed to initialize M9: {e}")
+        print(f"Failed to initialize LLAMA: {e}")
 
     # Initialize RAG with the existing Bedrock Llama generator.
     try:

@@ -502,6 +502,8 @@ class RAGAPIIntegrationTests(unittest.TestCase):
                 asyncio.run(api_main.startup_event())
 
             self.assertIn("LLAMA", api_main.chatbots)
+            self.assertIn("M14", api_main.chatbots)
+            self.assertNotIn("M9", api_main.chatbots)
             self.assertIn("RAG", api_main.chatbots)
             rag = api_main.chatbots["RAG"]
             self.assertIsInstance(rag, RAGChatbot)

@@ -2,12 +2,11 @@
 
 Bedrock has two different APIs for calling models: `InvokeModel` and `Converse`.
 
-Since we are fine-tuning from base models, we are locked in to using the `InvokeModel` API, which, for Llama 3.1, does not support stop sequences.
-
-If we choose to use baseline models through Bedrock, we will need to have two classes:
-
- - `BedrockInvokeModelChatbot`
- - `BedrockConverseChatbot`
+`BedrockChatbot` uses `InvokeModel` with an explicit prompt template for each
+model. M14 is fine-tuned from Llama 3.1 8B Instruct and uses
+`configs/prompt_templates/m14.yaml`; M9's original base-model template remains
+in `configs/prompt_templates/m9.yaml`. Both work with the same wrapper.
+Configured stop sequences trim generated text locally in `_post_process`.
 
 
 ### Safechat Class
