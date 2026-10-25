@@ -42,6 +42,7 @@ class GenerateResponse(BaseModel):
     text: str
     sources: list[ChatbotSource]
     max_new_tokens: int | None
+    confidence: float | None = Field(default=None, ge=0, le=1)
 
 
 # Initialize all chatbots at startup
@@ -185,16 +186,25 @@ async def generate(req: GenerateRequest = Body(...)):  # noqa: B008
     # Get the chatbot
     chatbot = chatbots[req.model]
 
-    if req.model in {"M14", "RAG"}:
+    if req.model in {"M14", "RAG", "SGC"}:
         state = await run_in_threadpool(warmup_state, start=True)
         if state.status != "ready":
             raise model_unavailable(state)
 
     try:
         # Generate response
-        response, sources = await run_in_threadpool(
-            chatbot.generate, prompt=req.prompt, max_new_tokens=req.max_new_tokens
-        )
+        confidence = None
+        if req.model == "M14" and isinstance(chatbot, BedrockChatbot):
+            response, confidence = await run_in_threadpool(
+                chatbot.generate_with_confidence,
+                prompt=req.prompt,
+                max_new_tokens=req.max_new_tokens,
+            )
+            sources = []
+        else:
+            response, sources = await run_in_threadpool(
+                chatbot.generate, prompt=req.prompt, max_new_tokens=req.max_new_tokens
+            )
 
         return GenerateResponse(
             model=req.model,
@@ -202,10 +212,11 @@ async def generate(req: GenerateRequest = Body(...)):  # noqa: B008
             text=response,
             sources=sources,
             max_new_tokens=req.max_new_tokens,
+            confidence=confidence,
         )
 
     except BedrockModelNotReadyError:
-        if req.model in {"M14", "RAG"}:
+        if req.model in {"M14", "RAG", "SGC"}:
             state = await run_in_threadpool(warmup_state, start=True, invalidate=True)
             raise model_unavailable(state)
         raise HTTPException(status_code=503, detail={"code": "model_unavailable"})

@@ -1,5 +1,7 @@
 import json
 import logging
+import math
+import statistics
 from collections.abc import Callable
 from dataclasses import dataclass
 
@@ -146,10 +148,56 @@ class BedrockChatbot(Chatbot):
             ),
         )
 
+    def generate_with_confidence(
+        self, prompt: str, max_new_tokens: int | None = None
+    ) -> tuple[str, float]:
+        """Return text and geometric-mean output-token probability for SGC."""
+        try:
+            text, payload = self._invoke(prompt, max_new_tokens, return_logprobs=True)
+        except ClientError as error:
+            if error.response.get("Error", {}).get("Code") == "ModelNotReadyException":
+                raise BedrockModelNotReadyError("Model is starting") from error
+            raise
+
+        if self.on_success is not None:
+            try:
+                self.on_success()
+            except Exception:
+                logger.exception("Unable to record Bedrock inference readiness")
+
+        logprobs = payload.get("logprobs")
+        if not isinstance(logprobs, list) or not logprobs:
+            raise ValueError("Bedrock did not return output-token log probabilities")
+        values = []
+        for entry in logprobs:
+            if not isinstance(entry, dict) or len(entry) != 1:
+                raise ValueError("Invalid Bedrock output-token log probabilities")
+            value = next(iter(entry.values()))
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, (int, float))
+                or not math.isfinite(value)
+                or value > 0
+            ):
+                raise ValueError("Invalid Bedrock output-token log probability")
+            values.append(value)
+        return text, math.exp(statistics.fmean(values))
+
     def invoke(
         self, prompt: str, max_new_tokens: int | None = None, *, client=None
     ) -> str:
         """Invoke and validate a response, propagating errors to the caller."""
+        text, _ = self._invoke(prompt, max_new_tokens, client=client)
+        return text
+
+    def _invoke(
+        self,
+        prompt: str,
+        max_new_tokens: int | None = None,
+        *,
+        client=None,
+        return_logprobs: bool = False,
+    ) -> tuple[str, dict]:
         templated_prompt = self.prompt_template.format(user_prompt=prompt)
         request_body = {
             "prompt": templated_prompt,
@@ -159,6 +207,8 @@ class BedrockChatbot(Chatbot):
             "temperature": self.config.model_temperature,
             "top_p": self.config.top_p,
         }
+        if return_logprobs:
+            request_body["return_logprobs"] = True
         response = (self.client if client is None else client).invoke_model(
             modelId=self.config.model_id,
             body=json.dumps(request_body),
@@ -174,4 +224,5 @@ class BedrockChatbot(Chatbot):
             response_body.get("generation"), str
         ):
             raise TypeError("Bedrock response must contain a generation string")
-        return self._post_process(response_body["generation"], templated_prompt)
+        text = self._post_process(response_body["generation"], templated_prompt)
+        return text, response_body

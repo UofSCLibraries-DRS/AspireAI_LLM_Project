@@ -60,21 +60,21 @@ M14 inference and immediately returns `202` while warming or `200` when ready.
 An unavailable coordinator returns `503`; POST also returns `503` during a
 failure's 30-second cooldown.
 
-M14 and RAG share readiness and a host-wide Linux file lock. Both Gunicorn
+M14, RAG, and SGC share readiness and a host-wide Linux file lock. Both Gunicorn
 workers must use the same local state directory. A worker crash automatically
 releases the lock, allowing another visitor to restart warm-up. State is keyed
 by model ARN and region; a successful inference counts as ready for four
 minutes. Each successful M14 call, including RAG keyword and answer calls,
 refreshes this timestamp. Merely polling status does not refresh it.
 
-The browser checks readiness before M14/RAG questions and retains one pending
+The browser checks readiness before M14/RAG/SGC questions and retains one pending
 question in memory while polling every two seconds. It sends the question once
 ready, guards both click and Enter submissions, and restores the question after
 failure for retry. A page refresh discards the pending question. Other models
 bypass the gate. Direct API callers receive `503` with
 `detail.code="model_warming"` and `Retry-After: 2` until ready; retry their
 original `/generate` request after readiness is confirmed. Successful generation
-responses retain their existing shape.
+responses include an optional `confidence` field (numeric for M14, otherwise null).
 
 Warm-up uses a dedicated client with SDK retries disabled and a ten-minute
 application retry budget. It retries model restoration and temporary failures
@@ -202,14 +202,67 @@ available as `PostgresContextRetriever` for direct use.
 
 ### SafeGenChat (SGC)
 
-Run the supplied SafeGenChat service separately on the same host before using
-the `SGC` model. The backend calls `http://127.0.0.1:8001/solve` by default:
+`SafeGenChat` is already in the demo dropdown and uses `"model": "SGC"` in
+`POST /generate`. Run the `SGC_rewrite` service separately on the same EC2 host.
+The request path is:
 
-```bash
-SGC_PORT=8001 uv run python main.py
+```text
+Browser → /api/generate → demo backend (3000) → SGC /solve (8001)
+                                                  ├─ demo backend /generate, model M14 (3000)
+                                                  └─ demo backend /generate, model SC (3000)
+                                                       └─ SafeChat (3001)
 ```
 
-Change `configs/chatbots/sgc.yaml` if the SGC service uses another local port.
+System 1 uses the existing M14 Bedrock chatbot. `/generate` with `model: "M14"`
+requests `return_logprobs: true` and returns `confidence` as the geometric mean
+of output-token probabilities, `exp(mean(logprobs))`. Missing or malformed
+log probabilities produce an error rather than a fabricated score. See the
+[AWS log probability format](https://docs.aws.amazon.com/bedrock/latest/userguide/custom-model-import-advanced-features.html).
+The frontend waits for M14 readiness before sending SGC questions. Automatic
+SGC can fall back to SafeChat, so check M14 independently too.
+
+On EC2:
+
+1. Install and start `SGC_rewrite/sgc.service` following that repository's
+   README. Adjust its `jaaydin` account and `/home/jaaydin/sgc` paths if needed.
+   It sends both M14 and SC requests directly to this backend on port 3000.
+2. Keep `configs/chatbots/sgc.yaml` pointed at `http://127.0.0.1:8001`.
+   Its 300-second timeout allows for SGC's sequential System 1 and System 2
+   calls (180 and 45 seconds in the supplied daemon).
+3. In the existing Nginx location that proxies `/api/` to the backend, set
+   `proxy_read_timeout 330s;` so Nginx can wait for SGC. Check with
+   `sudo nginx -t`, then `sudo systemctl reload nginx`.
+4. Restart `backend.service` after copying the updated backend, and deploy
+   the frontend with `bash demo/deploy_frontend.sh` from the Aspire repo root.
+
+Check each connection on the host:
+
+```bash
+# Start/join M14 warm-up. Poll GET /warmup until status is ready before continuing.
+curl -fsS -X POST http://127.0.0.1:3000/warmup
+curl -fsS http://127.0.0.1:3000/warmup
+
+# System 1: must return text AND confidence.
+curl --max-time 190 -fsS http://127.0.0.1:3000/generate \
+  -H 'Content-Type: application/json' \
+  -d '{"prompt":"Who was Modjeska Simkins?","model":"M14","max_new_tokens":32}'
+
+# System 2: must return a SafeChat answer.
+curl --max-time 50 -fsS http://127.0.0.1:3000/generate \
+  -H 'Content-Type: application/json' \
+  -d '{"prompt":"Who was Modjeska Simkins?","model":"SC"}'
+
+curl -fsS http://127.0.0.1:8001/health
+
+# Full demo → SGC → solvers path.
+curl --max-time 310 -fsS http://127.0.0.1:3000/generate \
+  -H 'Content-Type: application/json' \
+  -d '{"prompt":"Who was Modjeska Simkins?","model":"SGC"}'
+```
+
+Finally select **SafeGenChat** in the hosted demo and send a question. Use
+`journalctl -u sgc.service -f` to see which solver was selected. Keep ports
+8001, 3000, and 3001 private; the browser uses the existing `/api/` proxy.
 
 
 

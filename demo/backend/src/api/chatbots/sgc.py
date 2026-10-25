@@ -13,7 +13,7 @@ class SGCChatbotConfig:
     """Connection settings for SafeGenChat's ``POST /solve`` endpoint."""
 
     url: str
-    timeout: float = 30.0
+    timeout: float = 300.0
 
     @classmethod
     def from_yaml(cls, path: str) -> "SGCChatbotConfig":
@@ -60,7 +60,9 @@ class SGCChatbot(Chatbot):
         except requests.exceptions.ConnectionError:
             return "Could not connect to the SGC service", []
         except requests.exceptions.HTTPError as error:
-            status_code = error.response.status_code if error.response else "unknown"
+            status_code = (
+                error.response.status_code if error.response is not None else "unknown"
+            )
             return f"SGC error: HTTP {status_code}", []
         except requests.exceptions.RequestException as error:
             return f"SGC request failed: {error!s}", []

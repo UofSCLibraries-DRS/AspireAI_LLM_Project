@@ -1,6 +1,7 @@
 import asyncio
 import io
 import json
+import math
 import unittest
 from unittest.mock import Mock, patch
 
@@ -29,10 +30,30 @@ class BedrockChatbotTests(unittest.TestCase):
             id="M14", config_path="configs/chatbots/m14_bedrock.yaml"
         )
 
-    def respond_with(self, generation: str) -> None:
+    def respond_with(self, generation: str, **extra) -> None:
         self.client.invoke_model.return_value = {
-            "body": io.BytesIO(json.dumps({"generation": generation}).encode())
+            "body": io.BytesIO(json.dumps({"generation": generation, **extra}).encode())
         }
+
+    def test_confidence_uses_geometric_mean_of_output_token_probabilities(self):
+        self.respond_with("Answer<|eot_id|>", logprobs=[{"1": math.log(0.25)}, {"2": 0}])
+        self.chatbot.on_success = Mock()
+        text, confidence = self.chatbot.generate_with_confidence("Question", 32)
+        self.assertEqual(text, "Answer")
+        self.assertAlmostEqual(confidence, 0.5)
+        body = json.loads(self.client.invoke_model.call_args.kwargs["body"])
+        self.assertIs(body["return_logprobs"], True)
+        self.assertEqual(body["max_gen_len"], 32)
+        self.chatbot.on_success.assert_called_once()
+
+    def test_confidence_rejects_missing_or_invalid_logprobs(self):
+        for logprobs in (None, [], [{"1": True}], [{"1": 0.1}],
+                         [{"1": float("nan")}], [{"1": float("-inf")}],
+                         [{"1": -1, "2": -2}], [{"1": "-1"}]):
+            with self.subTest(logprobs=logprobs):
+                self.respond_with("Answer", logprobs=logprobs)
+                with self.assertRaises(ValueError):
+                    self.chatbot.generate_with_confidence("Question")
 
     def test_m14_sends_instruct_prompt_to_imported_model(self) -> None:
         self.respond_with("A concise answer.<|eot_id|>Unwanted continuation")
@@ -90,14 +111,26 @@ class BedrockChatbotTests(unittest.TestCase):
             patch.object(api_main, "warmup_coordinator", coordinator),
         ):
             request = api_main.GenerateRequest(prompt="Question", model="M14")
-            self.respond_with("Answer<|eot_id|>")
+            self.respond_with("Answer<|eot_id|>", logprobs=[{"1": math.log(0.8)}])
             response = asyncio.run(api_main.generate(request))
             self.assertEqual(response.model, "M14")
             self.assertEqual(response.text, "Answer")
+            self.assertAlmostEqual(response.confidence, 0.8)
 
     def test_api_rejects_removed_m9_option(self) -> None:
         with self.assertRaises(ValidationError):
             api_main.GenerateRequest(prompt="Question", model="M9")
+
+    def test_native_llama_api_does_not_request_imported_model_logprobs(self):
+        with patch.dict(api_main.chatbots, {"LLAMA": self.chatbot}, clear=True):
+            self.respond_with("Answer")
+            response = asyncio.run(api_main.generate(
+                api_main.GenerateRequest(prompt="Question", model="LLAMA")
+            ))
+        self.assertEqual(response.text, "Answer")
+        self.assertIsNone(response.confidence)
+        body = json.loads(self.client.invoke_model.call_args.kwargs["body"])
+        self.assertNotIn("return_logprobs", body)
 
 
 def main():

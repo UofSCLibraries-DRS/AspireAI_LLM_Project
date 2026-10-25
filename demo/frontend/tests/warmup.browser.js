@@ -58,8 +58,8 @@ async function runTests() {
       await delay(50);
       assert(demo.calls('/warmup').length === count, 'polling continued after readiness');
     }],
-    ['early RAG question shares page warm-up and guards click and Enter', async demo => {
-      demo.selector.value = 'RAG';
+    ['early SGC question shares page warm-up and guards click and Enter', async demo => {
+      demo.selector.value = 'SGC';
       demo.input.value = 'Who was McCray?';
       const question = demo.window.sendMessage();
       demo.input.value = 'duplicate';
@@ -72,7 +72,7 @@ async function runTests() {
       await question;
       const calls = demo.calls('/generate');
       assert(calls.length === 1, 'question must generate once');
-      assert(JSON.parse(calls[0].body).model === 'RAG', 'captured model changed');
+      assert(JSON.parse(calls[0].body).model === 'SGC', 'captured model changed');
       assert(JSON.parse(calls[0].body).prompt === 'Who was McCray?', 'captured question changed');
       assert(demo.document.querySelectorAll('.message.user').length === 1, 'duplicate user message');
       assert(!demo.button.disabled, 'Send was not restored');

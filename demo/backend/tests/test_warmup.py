@@ -384,17 +384,17 @@ class WarmupAPITests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(response.json()["status"], "failed")
                 self.assertEqual(response.headers["Cache-Control"], "no-store")
 
-    async def test_m14_and_rag_share_readiness_gate(self):
+    async def test_m14_rag_and_sgc_share_readiness_gate(self):
         bot = Mock()
-        with patch.dict(api_main.chatbots, {"M14": bot, "RAG": bot}, clear=True):
-            for model in ("M14", "RAG"):
+        with patch.dict(api_main.chatbots, {"M14": bot, "RAG": bot, "SGC": bot}, clear=True):
+            for model in ("M14", "RAG", "SGC"):
                 response = await self.client.post(
                     "/generate", json={"model": model, "prompt": "Question"}
                 )
                 self.assertEqual(response.status_code, 503)
                 self.assertEqual(response.json()["detail"]["code"], "model_warming")
             bot.generate.assert_not_called()
-            self.assertEqual(self.coordinator.start.call_count, 2)
+            self.assertEqual(self.coordinator.start.call_count, 3)
 
     async def test_loss_of_readiness_restarts_warmup(self):
         self.coordinator.start.return_value = WarmupStatus(status="ready")
