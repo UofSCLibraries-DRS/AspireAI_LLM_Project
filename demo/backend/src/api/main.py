@@ -1,12 +1,15 @@
+import logging
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from typing import Literal
 
 from dotenv import load_dotenv
 from fastapi import Body, FastAPI, HTTPException
+from fastapi.concurrency import run_in_threadpool
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from src.api.chatbots.base import Chatbot, ChatbotSource
-from src.api.chatbots.bedrock import BedrockChatbot
+from src.api.chatbots.bedrock import BedrockChatbot, BedrockModelNotReadyError
 from src.api.chatbots.huggingface import HuggingFaceChatbot
 from src.api.chatbots.rag import (
     KeywordRetriever,
@@ -15,6 +18,7 @@ from src.api.chatbots.rag import (
 )
 from src.api.chatbots.safechat import SafeChat
 from src.api.chatbots.sgc import SGCChatbot
+from src.api.warmup import WarmupCoordinator, WarmupStatus
 
 # Load environment variables
 load_dotenv()
@@ -42,10 +46,15 @@ class GenerateResponse(BaseModel):
 
 # Initialize all chatbots at startup
 chatbots: dict[str, Chatbot] = {}
+warmup_coordinator: WarmupCoordinator | None = None
+logger = logging.getLogger(__name__)
+NO_CACHE = {"Cache-Control": "no-store"}
 
 
 async def startup_event() -> None:
     """Initialize all chatbots when the API starts."""
+    global warmup_coordinator
+    warmup_coordinator = None
     print("Initializing chatbots...")
 
     # Initialize M8 (HuggingFace)
@@ -65,6 +74,14 @@ async def startup_event() -> None:
         print("M14 (Bedrock) initialized")
     except Exception as e:  # noqa: BLE001
         print(f"Failed to initialize M14: {e}")
+
+    m14 = chatbots.get("M14")
+    if isinstance(m14, BedrockChatbot):
+        try:
+            warmup_coordinator = WarmupCoordinator(m14)
+            m14.on_success = warmup_coordinator.mark_success
+        except Exception:
+            logger.exception("Unable to initialize Bedrock warm-up coordination")
 
     try:
         chatbots["LLAMA"] = BedrockChatbot(
@@ -168,10 +185,15 @@ async def generate(req: GenerateRequest = Body(...)):  # noqa: B008
     # Get the chatbot
     chatbot = chatbots[req.model]
 
+    if req.model in {"M14", "RAG"}:
+        state = await run_in_threadpool(warmup_state, start=True)
+        if state.status != "ready":
+            raise model_unavailable(state)
+
     try:
         # Generate response
-        response, sources = chatbot.generate(
-            prompt=req.prompt, max_new_tokens=req.max_new_tokens
+        response, sources = await run_in_threadpool(
+            chatbot.generate, prompt=req.prompt, max_new_tokens=req.max_new_tokens
         )
 
         return GenerateResponse(
@@ -182,9 +204,84 @@ async def generate(req: GenerateRequest = Body(...)):  # noqa: B008
             max_new_tokens=req.max_new_tokens,
         )
 
+    except BedrockModelNotReadyError:
+        if req.model in {"M14", "RAG"}:
+            state = await run_in_threadpool(warmup_state, start=True, invalidate=True)
+            raise model_unavailable(state)
+        raise HTTPException(status_code=503, detail={"code": "model_unavailable"})
     except Exception as e:  # noqa: BLE001
         print(str(e))
         raise HTTPException(status_code=500, detail=f"Error generating response: {e!s}")
+
+
+def get_warmup_coordinator() -> WarmupCoordinator:
+    if warmup_coordinator is None:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": "model_unavailable",
+                "message": "The model is unavailable.",
+            },
+            headers=NO_CACHE,
+        )
+    return warmup_coordinator
+
+
+def model_unavailable(state: WarmupStatus) -> HTTPException:
+    warming = state.status != "failed"
+    return HTTPException(
+        status_code=503,
+        detail={
+            "code": "model_warming" if warming else "model_unavailable",
+            "message": "Model is starting…" if warming else state.message,
+        },
+        headers={**NO_CACHE, "Retry-After": "2" if warming else "30"},
+    )
+
+
+def warmup_state(*, start: bool, invalidate: bool = False) -> WarmupStatus:
+    coordinator = get_warmup_coordinator()
+    try:
+        if invalidate:
+            coordinator.invalidate()
+        return coordinator.start() if start else coordinator.status()
+    except (OSError, RuntimeError):
+        logger.exception("Bedrock warm-up coordinator unavailable")
+        raise model_unavailable(
+            WarmupStatus(status="failed", message="The model is unavailable.")
+        )
+
+
+def warmup_response(*, start: bool) -> JSONResponse:
+    try:
+        state = warmup_state(start=start)
+    except HTTPException:
+        state = WarmupStatus(status="failed", message="The model is unavailable.")
+        return JSONResponse(
+            status_code=503, content=state.model_dump(), headers=NO_CACHE
+        )
+    code = 200
+    if start:
+        code = (
+            202
+            if state.status == "warming"
+            else 503
+            if state.status == "failed"
+            else 200
+        )
+    return JSONResponse(status_code=code, content=state.model_dump(), headers=NO_CACHE)
+
+
+@app.post("/warmup", response_model=WarmupStatus)
+def start_warmup():
+    """Start or join M14 restoration without holding the HTTP request open."""
+    return warmup_response(start=True)
+
+
+@app.get("/warmup", response_model=WarmupStatus)
+def read_warmup():
+    """Read readiness only; polling never invokes Bedrock or refreshes readiness."""
+    return warmup_response(start=False)
 
 
 if __name__ == "__main__":

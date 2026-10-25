@@ -398,7 +398,7 @@ def parse_keywords(generation: str, max_keywords: int = 8) -> str:
     if isinstance(parsed, dict):
         parsed = parsed.get("keywords")
     if isinstance(parsed, list):
-        candidates = [str(value) for value in parsed if isinstance(value, str)]
+        candidates = [value for value in parsed if isinstance(value, str)]
     else:
         text = _KEYWORD_PREFIX.sub("", text)
         candidates = re.split(r"[,;|\n]+", text)
@@ -569,8 +569,7 @@ class RAGChatbot(Chatbot):
         bounded_documents = self._bounded_documents(documents)
         # Match evaluation/rag's p1 prompt and c1 retrieved-item templates.
         context = "\n".join(
-            f"<item>\n{document.text}\n</item>"
-            for document in bounded_documents
+            f"<item>\n{document.text}\n</item>" for document in bounded_documents
         )
         return (
             "Use the provided texts to answer the question.\n\n"

@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from pydantic import ValidationError
 from src.api import main as api_main
 from src.api.chatbots.bedrock import BedrockChatbot
+from src.api.warmup import WarmupStatus
 
 ########################################################################
 ###                                                                  ###
@@ -82,7 +83,12 @@ class BedrockChatbotTests(unittest.TestCase):
         self.assertEqual(chatbot._post_process("Answer</answer>More text", ""), "Answer")
 
     def test_api_accepts_m14(self) -> None:
-        with patch.dict(api_main.chatbots, {"M14": self.chatbot}, clear=True):
+        coordinator = Mock()
+        coordinator.start.return_value = WarmupStatus(status="ready")
+        with (
+            patch.dict(api_main.chatbots, {"M14": self.chatbot}, clear=True),
+            patch.object(api_main, "warmup_coordinator", coordinator),
+        ):
             request = api_main.GenerateRequest(prompt="Question", model="M14")
             self.respond_with("Answer<|eot_id|>")
             response = asyncio.run(api_main.generate(request))

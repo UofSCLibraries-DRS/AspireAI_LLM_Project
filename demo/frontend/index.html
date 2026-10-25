@@ -337,6 +337,11 @@
       flex: 1;
     }
 
+    #warmupStatus {
+      font-size: 0.85em;
+      color: var(--text-secondary);
+    }
+
     #modelSelector {
       padding: 8px 12px;
       border: 1px solid var(--border-color);
@@ -699,6 +704,7 @@
           <select id="modelSelector">
             <!-- Options will be populated by JavaScript -->
           </select>
+          <span id="warmupStatus" role="status" aria-live="polite"></span>
           <div class="button-row">
             <textarea id="userInput" placeholder="Type your message here..." rows="1"></textarea>
             <button id="sendBtn" onclick="sendMessage()">Send</button>
@@ -772,6 +778,63 @@
     const modelSelector = document.getElementById('modelSelector');
 
     const GENERATE_API = "https://lighthouse.chat.library.sc.edu/api/generate";
+    const WARMUP_API = new URL('warmup', GENERATE_API).href;
+    const warmupStatus = document.getElementById('warmupStatus');
+    let warmupPromise = null;
+    let requestInProgress = false;
+    let pendingQuestion = null;
+
+    function usesImportedModel(model) {
+      return model === 'M14' || model === 'RAG';
+    }
+
+    modelSelector.addEventListener('change', () => {
+      warmupStatus.hidden = !usesImportedModel(modelSelector.value);
+    });
+
+    async function fetchWarmup(method) {
+      const response = await fetch(WARMUP_API, {
+        method,
+        cache: 'no-store',
+        signal: AbortSignal.timeout(10000)
+      });
+      const state = await response.json();
+      if ((!response.ok && state.status !== 'failed') ||
+          !['cold', 'warming', 'ready', 'failed'].includes(state.status)) {
+        throw new Error('Unable to check whether the model is ready.');
+      }
+      return state;
+    }
+
+    function ensureModelReady() {
+      // Page load and a queued question share the same polling loop.
+      if (warmupPromise) return warmupPromise;
+      warmupPromise = (async () => {
+        const deadline = Date.now() + 11 * 60 * 1000;
+        let state = await fetchWarmup('POST');
+        while (state.status !== 'ready') {
+          if (state.status === 'failed') {
+            throw new Error(state.message || 'The model could not start. Please try again shortly.');
+          }
+          if (Date.now() >= deadline) {
+            throw new Error('The model is taking longer to start. Please try again.');
+          }
+          warmupStatus.textContent = requestInProgress
+            ? 'Model is starting… Your question will send automatically.'
+            : 'Model is starting… You can type your question now.';
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          // A worker may have died; only an active visitor restarts its abandoned job.
+          state = await fetchWarmup(state.status === 'cold' ? 'POST' : 'GET');
+        }
+        warmupStatus.textContent = 'Model ready';
+      })().catch(error => {
+        warmupStatus.textContent = error.message || 'Unable to start the model. Please try again.';
+        throw error;
+      }).finally(() => {
+        warmupPromise = null;
+      });
+      return warmupPromise;
+    }
 
     // Initialize model selector
     function initializeModelSelector() {
@@ -951,6 +1014,7 @@
     }
 
     async function sendMessage() {
+      if (requestInProgress) return;
       const message = userInput.value.trim();
       if (!message) return;
 
@@ -958,42 +1022,61 @@
       const selectedModel = AVAILABLE_MODELS.find(m => m.apiValue === selectedModelValue);
       const modelDisplayName = selectedModel ? selectedModel.name : selectedModelValue;
 
-      addMessage(message, 'user');
+      // A retry of the retained question reuses its existing chat message.
+      if (!pendingQuestion || pendingQuestion.message !== message ||
+          pendingQuestion.model !== selectedModelValue) {
+        pendingQuestion = { message, model: selectedModelValue, displayName: modelDisplayName };
+        addMessage(message, 'user');
+      }
+      const question = pendingQuestion;
+      requestInProgress = true;
       userInput.value = '';
       userInput.style.height = 'auto';
-
+      userInput.readOnly = true;
+      modelSelector.disabled = true;
       sendBtn.disabled = true;
-      sendBtn.textContent = 'Sending...';
 
       try {
-        const response = await fetch(GENERATE_API, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            prompt: message,
-            model: selectedModelValue,
-            max_new_tokens: 128
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error(`API error ${response.status}`);
+        if (usesImportedModel(question.model)) {
+          sendBtn.textContent = 'Model is starting…';
+          await ensureModelReady();
         }
-
-        const data = await response.json();
-        const botText = data?.text || "No response received";
-        const sources = data?.sources || [];
-
-        addMessage(botText, 'bot', modelDisplayName, sources);
-
+        // Allow one automatic requeue if Bedrock lost readiness after the check.
+        for (let attempt = 0; attempt < 2; attempt++) {
+          sendBtn.textContent = 'Sending...';
+          const response = await fetch(GENERATE_API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              prompt: question.message,
+              model: question.model,
+              max_new_tokens: 128
+            })
+          });
+          const data = await response.json();
+          if (response.status === 503 && data.detail?.code === 'model_warming' &&
+              usesImportedModel(question.model) && attempt === 0) {
+            sendBtn.textContent = 'Model is starting…';
+            await ensureModelReady();
+            continue;
+          }
+          if (!response.ok) {
+            throw new Error(data.detail?.message || 'The response engine encountered an error. Please try again.');
+          }
+          addMessage(data?.text || 'No response received', 'bot', question.displayName, data?.sources || []);
+          pendingQuestion = null;
+          break;
+        }
       } catch (error) {
         console.error('Error:', error);
-        addSystemMessage('The response engine encountered an error. Please try again.');
+        userInput.value = question.message;
+        addSystemMessage(error.message || 'Unable to send your question. Please try again.');
       } finally {
+        requestInProgress = false;
+        userInput.readOnly = false;
+        modelSelector.disabled = false;
         sendBtn.disabled = false;
-        sendBtn.textContent = 'Send';
+        sendBtn.textContent = pendingQuestion ? 'Retry' : 'Send';
       }
     }
 
@@ -1013,6 +1096,7 @@
     // Load theme preference
     window.addEventListener('DOMContentLoaded', () => {
       initializeModelSelector();
+      ensureModelReady().catch(() => {}); // The status element displays startup failures.
 
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme === 'dark') {

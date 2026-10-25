@@ -1,4 +1,6 @@
 import json
+import logging
+from collections.abc import Callable
 from dataclasses import dataclass
 
 import boto3
@@ -8,9 +10,11 @@ from botocore.exceptions import ClientError
 
 from .base import Chatbot, ChatbotSource
 
-# TODO:
-#   Test cold start issues...
-#   How long are cold starts taking, is it feasible to wait for the cold start in this code?
+logger = logging.getLogger(__name__)
+
+
+class BedrockModelNotReadyError(RuntimeError):
+    """An imported model needs restoration before inference can proceed."""
 
 
 @dataclass
@@ -51,6 +55,7 @@ class BedrockChatbot(Chatbot):
         config_path: str,
     ):
         super().__init__(id=id)
+        self.on_success: Callable[[], None] | None = None
 
         # Read config
         self.config = BedrockChatbotConfig.from_yaml(config_path)
@@ -103,38 +108,20 @@ class BedrockChatbot(Chatbot):
         Returns:
             Generated text response
         """
-        if max_new_tokens is None:
-            max_new_tokens = self.config.max_tokens
-
         try:
-            # Apply prompt template
-            templated_prompt = self.prompt_template.format(user_prompt=prompt)
-
-            # Prepare request body for Llama models
-            # Format based on Meta Llama documentation
-            request_body = {
-                "prompt": templated_prompt,
-                "max_gen_len": max_new_tokens,
-                "temperature": self.config.model_temperature,
-                "top_p": self.config.top_p,
-            }
-
-            # Call Bedrock InvokeModel API
-            response = self.client.invoke_model(
-                modelId=self.config.model_id,
-                body=json.dumps(request_body),
-            )
-
-            # Parse response
-            response_body = json.loads(response["body"].read())
-
-            # Extract generated text
-            # Llama models return: {"generation": "text", "prompt_token_count": N, ...}
-
-            return self._post_process(response_body["generation"], templated_prompt), []
+            text = self.invoke(prompt, max_new_tokens)
+            if self.on_success is not None:
+                try:
+                    self.on_success()
+                except Exception:
+                    # Coordination failure must not discard a successful answer.
+                    logger.exception("Unable to record Bedrock inference readiness")
+            return text, []
 
         except ClientError as e:
             error_code = e.response.get("Error", {}).get("Code", "Unknown")
+            if error_code == "ModelNotReadyException":
+                raise BedrockModelNotReadyError("Model is starting") from e
             error_message = e.response.get("Error", {}).get("Message", str(e))
             return f"Bedrock API error [{error_code}]: {error_message}", []
 
@@ -146,3 +133,45 @@ class BedrockChatbot(Chatbot):
 
         except Exception as e:  # noqa: BLE001
             return f"Bedrock error: {e!s}", []
+
+    def warmup_client(self, remaining_seconds: float):
+        """A dedicated, single-attempt client; the coordinator owns retries."""
+        return boto3.client(
+            service_name="bedrock-runtime",
+            region_name=self.config.region_name,
+            config=BotoConfig(
+                connect_timeout=min(5, remaining_seconds),
+                read_timeout=min(310, remaining_seconds),
+                retries={"total_max_attempts": 1, "mode": "standard"},
+            ),
+        )
+
+    def invoke(
+        self, prompt: str, max_new_tokens: int | None = None, *, client=None
+    ) -> str:
+        """Invoke and validate a response, propagating errors to the caller."""
+        templated_prompt = self.prompt_template.format(user_prompt=prompt)
+        request_body = {
+            "prompt": templated_prompt,
+            "max_gen_len": self.config.max_tokens
+            if max_new_tokens is None
+            else max_new_tokens,
+            "temperature": self.config.model_temperature,
+            "top_p": self.config.top_p,
+        }
+        response = (self.client if client is None else client).invoke_model(
+            modelId=self.config.model_id,
+            body=json.dumps(request_body),
+            contentType="application/json",
+            accept="application/json",
+        )
+        body = response["body"]
+        try:
+            response_body = json.loads(body.read())
+        finally:
+            body.close()
+        if not isinstance(response_body, dict) or not isinstance(
+            response_body.get("generation"), str
+        ):
+            raise TypeError("Bedrock response must contain a generation string")
+        return self._post_process(response_body["generation"], templated_prompt)

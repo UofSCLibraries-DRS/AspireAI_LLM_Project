@@ -19,6 +19,7 @@ from src.api.chatbots.rag import (
     RAGSettings,
     RetrievedDocument,
 )
+from src.api.warmup import WarmupStatus
 
 
 class RecordingChatbot:
@@ -502,6 +503,7 @@ class RAGAPIIntegrationTests(unittest.TestCase):
 
     def test_startup_registers_keyword_rag_and_generates_answer_with_sources(self) -> None:
         api_main.chatbots.clear()
+        previous_coordinator = api_main.warmup_coordinator
         connections = RecordingConnectionFactory(
             [(7, "archive", "Selma", "Oral history", "Retrieved evidence", -2.5)]
         )
@@ -542,7 +544,9 @@ class RAGAPIIntegrationTests(unittest.TestCase):
                     side_effect=connections,
                 ),
                 patch("src.api.chatbots.rag.E5QueryEmbedder") as embedder,
+                patch.object(api_main, "WarmupCoordinator") as coordinator,
             ):
+                coordinator.return_value.start.return_value = WarmupStatus(status="ready")
                 asyncio.run(api_main.startup_event())
 
                 rag = cast(RAGChatbot, api_main.chatbots["RAG"])
@@ -596,6 +600,7 @@ class RAGAPIIntegrationTests(unittest.TestCase):
             self.assertIs(rag.chatbot, api_main.chatbots["M14"])
         finally:
             api_main.chatbots.clear()
+            api_main.warmup_coordinator = previous_coordinator
 
 
 if __name__ == "__main__":

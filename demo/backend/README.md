@@ -49,6 +49,108 @@ Run offline Bedrock regression tests with:
 uv run python -m unittest discover -s tests -p test_bedrock.py
 ```
 
+### Warm M14 when the demo opens
+
+The deployed page's inline script in `../frontend/index.html` sends
+`POST /api/warmup` when it opens. The backend starts a background, one-token
+M14 inference and immediately returns `202` while warming or `200` when ready.
+`GET /api/warmup` reads status without inference. Both endpoints return
+`{"model":"M14","status":"cold|warming|ready|failed","message":null}`
+(a safe message is provided on failure) with `Cache-Control: no-store`.
+An unavailable coordinator returns `503`; POST also returns `503` during a
+failure's 30-second cooldown.
+
+M14 and RAG share readiness and a host-wide Linux file lock. Both Gunicorn
+workers must use the same local state directory. A worker crash automatically
+releases the lock, allowing another visitor to restart warm-up. State is keyed
+by model ARN and region; a successful inference counts as ready for four
+minutes. Each successful M14 call, including RAG keyword and answer calls,
+refreshes this timestamp. Merely polling status does not refresh it.
+
+The browser checks readiness before M14/RAG questions and retains one pending
+question in memory while polling every two seconds. It sends the question once
+ready, guards both click and Enter submissions, and restores the question after
+failure for retry. A page refresh discards the pending question. Other models
+bypass the gate. Direct API callers receive `503` with
+`detail.code="model_warming"` and `Retry-After: 2` until ready; retry their
+original `/generate` request after readiness is confirmed. Successful generation
+responses retain their existing shape.
+
+Warm-up uses a dedicated client with SDK retries disabled and a ten-minute
+application retry budget. It retries model restoration and temporary failures
+with backoff, while permissions, invalid configuration, and malformed responses
+fail immediately. A single invocation may wait up to 310 seconds, bounded by
+the remaining budget. The budget controls attempts; transport connection and
+response reads can add a small amount of time to the final attempt. The
+`uvicorn.error.bedrock_warmup` logger records duration, attempts, and outcomes.
+
+This starts restoration earlier; a visitor who submits immediately may still
+wait. Even a one-token warm-up is billable. Imported models are billed in
+five-minute windows and scale down after five idle minutes. There are no
+periodic keep-alive calls. See [AWS imported-model invocation](https://docs.aws.amazon.com/bedrock/latest/userguide/invoke-imported-model.html)
+and [pricing](https://aws.amazon.com/bedrock/pricing/).
+
+#### Deploy on the existing EC2 host
+
+From the repository root on EC2, install the supplied drop-in. It preserves
+the existing `backend.service` command and its two Gunicorn workers:
+
+```bash
+sudo install -d -m 0755 /etc/systemd/system/backend.service.d
+sudo install -m 0644 demo/deployment/backend.service.d/warmup.conf /etc/systemd/system/backend.service.d/warmup.conf
+sudo systemctl daemon-reload
+sudo systemctl restart backend.service
+sudo systemctl status backend.service --no-pager
+```
+
+Systemd creates `/run/aspireai-backend`, owned by the service's existing
+`User=jaaydin`, with mode `0700`. Do not set a different
+`BEDROCK_WARMUP_STATE_DIR` in `.env`/`EnvironmentFile`; systemd's environment-file
+values override `Environment=`. Local development needs no systemd changes and
+uses a private directory under the OS temporary directory. Shared filesystem
+coordination supports one host; use a shared coordinator before adding hosts.
+
+Before deploying the frontend, compare these read-only checks:
+
+```bash
+curl -i http://127.0.0.1:3000/warmup
+curl -i https://lighthouse.chat.library.sc.edu/api/warmup
+```
+
+Both must reach the backend and return the same status with `no-store`.
+Check `sudo nginx -T` if `/api/warmup` returns a proxy 404 or the static page.
+The existing `/api/` location should proxy all methods to
+`http://127.0.0.1:3000/`, with the trailing slash stripping the `/api/` prefix.
+If the configuration only forwards `/api/generate`, add a corresponding
+`/api/warmup` route for both GET and POST. After any proxy edit, run
+`sudo nginx -t` and `sudo systemctl reload nginx`.
+
+Deploy the frontend using the existing script, which backs up `/var/www/html`:
+
+```bash
+bash demo/deploy_frontend.sh
+sudo journalctl -u backend.service -f
+```
+
+For live acceptance, leave the model idle for more than five minutes with all
+demo tabs closed. Open the demo and confirm `POST /api/warmup` precedes any
+question; opening additional tabs must join the same job. Submit a question
+while warming and confirm one user message, followed by one answer after ready.
+The journal should show one warm-up job. Once ready, network activity must show
+no further warm-up polling or keep-alive requests. Check failure/retry behavior
+offline rather than changing production permissions.
+
+Run all offline backend regression tests (no AWS calls) from `demo/backend`:
+
+```bash
+uv run python -m unittest discover -s tests -p 'test_*.py'
+```
+
+The suite covers two processes sharing one invocation, worker death and restart,
+readiness expiry, retry budgets/cooldowns, response validation, and API
+responsiveness during inference. For browser regression tests, see
+`../frontend/tests/test_warmup_browser.py`.
+
 For a live M14 smoke test using your AWS credentials:
 
 ```bash
