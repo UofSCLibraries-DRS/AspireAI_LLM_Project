@@ -221,6 +221,10 @@ log probabilities produce an error rather than a fabricated score. See the
 The frontend waits for M14 readiness before sending SGC questions. Automatic
 SGC can fall back to SafeChat, so check M14 independently too.
 
+SGC generation responses include `system: "System1"` or `"System2"`. The demo
+shows **SafeGenChat (S1)** or **SafeGenChat (S2)** beneath the answer; when the
+solver is unavailable, the label stays **SafeGenChat**.
+
 On EC2:
 
 1. Install and start `SGC_rewrite/sgc.service` following that repository's

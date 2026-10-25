@@ -43,6 +43,7 @@ class GenerateResponse(BaseModel):
     sources: list[ChatbotSource]
     max_new_tokens: int | None
     confidence: float | None = Field(default=None, ge=0, le=1)
+    system: Literal["System1", "System2"] | None = None
 
 
 # Initialize all chatbots at startup
@@ -194,6 +195,7 @@ async def generate(req: GenerateRequest = Body(...)):  # noqa: B008
     try:
         # Generate response
         confidence = None
+        system = None
         if req.model == "M14" and isinstance(chatbot, BedrockChatbot):
             response, confidence = await run_in_threadpool(
                 chatbot.generate_with_confidence,
@@ -201,6 +203,12 @@ async def generate(req: GenerateRequest = Body(...)):  # noqa: B008
                 max_new_tokens=req.max_new_tokens,
             )
             sources = []
+        elif isinstance(chatbot, SGCChatbot):
+            response, sources, system = await run_in_threadpool(
+                chatbot.generate_with_system,
+                prompt=req.prompt,
+                max_new_tokens=req.max_new_tokens,
+            )
         else:
             response, sources = await run_in_threadpool(
                 chatbot.generate, prompt=req.prompt, max_new_tokens=req.max_new_tokens
@@ -213,6 +221,7 @@ async def generate(req: GenerateRequest = Body(...)):  # noqa: B008
             sources=sources,
             max_new_tokens=req.max_new_tokens,
             confidence=confidence,
+            system=system,
         )
 
     except BedrockModelNotReadyError:

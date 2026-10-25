@@ -41,6 +41,12 @@ class SGCChatbot(Chatbot):
     def generate(
         self, prompt: str, max_new_tokens: int | None = None
     ) -> tuple[str, list[ChatbotSource]]:
+        text, sources, _ = self.generate_with_system(prompt, max_new_tokens)
+        return text, sources
+
+    def generate_with_system(
+        self, prompt: str, max_new_tokens: int | None = None
+    ) -> tuple[str, list[ChatbotSource], str | None]:
         """Generate a solution through SGC.
 
         SGC controls its own decoding settings, so ``max_new_tokens`` is not
@@ -56,20 +62,23 @@ class SGCChatbot(Chatbot):
             response.raise_for_status()
             payload = response.json()
         except requests.exceptions.Timeout:
-            return "SGC request timed out", []
+            return "SGC request timed out", [], None
         except requests.exceptions.ConnectionError:
-            return "Could not connect to the SGC service", []
+            return "Could not connect to the SGC service", [], None
         except requests.exceptions.HTTPError as error:
             status_code = (
                 error.response.status_code if error.response is not None else "unknown"
             )
-            return f"SGC error: HTTP {status_code}", []
+            return f"SGC error: HTTP {status_code}", [], None
         except requests.exceptions.RequestException as error:
-            return f"SGC request failed: {error!s}", []
+            return f"SGC request failed: {error!s}", [], None
         except ValueError:
-            return "SGC returned an invalid JSON response", []
+            return "SGC returned an invalid JSON response", [], None
 
         solution = payload.get("solution") if isinstance(payload, dict) else None
         if not isinstance(solution, str):
-            return "SGC returned a response without a solution", []
-        return solution, []
+            return "SGC returned a response without a solution", [], None
+        system = payload.get("system")
+        if system not in ("System1", "System2"):
+            system = None
+        return solution, [], system

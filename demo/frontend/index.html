@@ -1063,7 +1063,10 @@
           if (!response.ok) {
             throw new Error(data.detail?.message || 'The response engine encountered an error. Please try again.');
           }
-          addMessage(data?.text || 'No response received', 'bot', question.displayName, data?.sources || []);
+          const solver = data?.system === 'System1' ? 'S1' : data?.system === 'System2' ? 'S2' : null;
+          const responseLabel = question.model === 'SGC' && solver
+            ? `${question.displayName} (${solver})` : question.displayName;
+          addMessage(data?.text || 'No response received', 'bot', responseLabel, data?.sources || []);
           pendingQuestion = null;
           break;
         }

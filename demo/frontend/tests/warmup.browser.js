@@ -111,6 +111,31 @@ async function runTests() {
       assert(demo.document.querySelectorAll('.message.user').length === 1, 'requeue duplicated question');
       assert(demo.document.querySelectorAll('.message.bot').length === 1, 'requeue duplicated answer');
     }],
+    ['SGC labels each answer with its solver and falls back when missing', async demo => {
+      demo.window.fixture.ready = true;
+      demo.selector.value = 'SGC';
+      for (const [system, label] of [
+        ['System1', 'SafeGenChat (S1)'],
+        ['System2', 'SafeGenChat (S2)'],
+        [undefined, 'SafeGenChat'],
+        ['unknown', 'SafeGenChat']
+      ]) {
+        demo.window.fixture.responses.push({ status: 200, body: { text: 'Answer', sources: [], system } });
+        demo.input.value = 'Which solver?';
+        await demo.window.sendMessage();
+        const labels = demo.document.querySelectorAll('.message-wrapper.bot .message-info');
+        assert(labels[labels.length - 1].textContent === label, `Expected ${label}`);
+      }
+      const firstLabel = demo.document.querySelector('.message-wrapper.bot .message-info');
+      assert(firstLabel.textContent === 'SafeGenChat (S1)', 'later requests changed an earlier label');
+
+      demo.selector.value = 'SC';
+      demo.window.fixture.responses.push({ status: 200, body: { text: 'Answer', sources: [], system: 'System1' } });
+      demo.input.value = 'Use SafeChat';
+      await demo.window.sendMessage();
+      const labels = demo.document.querySelectorAll('.message-wrapper.bot .message-info');
+      assert(labels[labels.length - 1].textContent === 'SafeChat', 'other chatbot label changed');
+    }],
     ['network failure restores input and unlocks the form', async demo => {
       demo.window.fixture.networkError = true;
       demo.input.value = 'Network retry';
