@@ -15,7 +15,7 @@ import random
 import tempfile
 import threading
 import time
-from contextlib import contextmanager
+from contextlib import closing, contextmanager
 from pathlib import Path
 from typing import Literal
 
@@ -186,7 +186,7 @@ class WarmupCoordinator:
                 attempts += 1
                 try:
                     # Closing this client cannot affect normal generation's client.
-                    with self.chatbot.warmup_client(remaining) as client:
+                    with closing(self.chatbot.warmup_client(remaining)) as client:
                         self.chatbot.invoke("Hello", max_new_tokens=1, client=client)
                     self.mark_success()
                     logger.info(

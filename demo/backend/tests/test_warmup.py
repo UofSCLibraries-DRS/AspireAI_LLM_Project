@@ -1,16 +1,19 @@
 import asyncio
 import io
+import json
 import multiprocessing
 import tempfile
 import threading
 import time
 import unittest
-from contextlib import nullcontext
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
+import boto3
 import httpx
 from botocore.exceptions import ClientError, EndpointConnectionError
+from botocore.response import StreamingBody
+from botocore.stub import Stubber
 from src.api import main as api_main
 from src.api.chatbots.bedrock import BedrockChatbot, BedrockModelNotReadyError
 from src.api.warmup import FRESH_SECONDS, WarmupCoordinator, WarmupStatus
@@ -32,7 +35,7 @@ class BlockingChatbot:
         self.calls, self.entered, self.release = calls, entered, release
 
     def warmup_client(self, remaining):
-        return nullcontext(object())
+        return SimpleNamespace(close=lambda: None)
 
     def invoke(self, *args, **kwargs):
         with self.calls.get_lock():
@@ -64,7 +67,15 @@ class CoordinatorTests(unittest.TestCase):
                 region_name="us-east-1",
             ),
         )
-        self.bot.warmup_client.return_value = nullcontext(object())
+        self.clients = []
+
+        def make_client(remaining):
+            # Match boto3: close() is supported, __enter__/__exit__ are not.
+            client = Mock(spec=["close"])
+            self.clients.append(client)
+            return client
+
+        self.bot.warmup_client.side_effect = make_client
         self.bot.invoke.return_value = ""
         self.coordinator = WarmupCoordinator(self.bot, self.temp.name)
 
@@ -96,6 +107,8 @@ class CoordinatorTests(unittest.TestCase):
         self.bot.invoke.assert_called_once()
         self.assertEqual(self.bot.invoke.call_args.args, ("Hello",))
         self.assertEqual(self.bot.invoke.call_args.kwargs["max_new_tokens"], 1)
+        self.assertIs(self.bot.invoke.call_args.kwargs["client"], self.clients[0])
+        self.clients[0].close.assert_called_once_with()
         second = WarmupCoordinator(self.bot, self.temp.name)
         self.assertEqual(second.start().status, "ready")
         self.assertEqual(self.bot.invoke.call_count, 1)
@@ -115,6 +128,9 @@ class CoordinatorTests(unittest.TestCase):
                     thread.join(3)
         self.assertEqual(self.coordinator.status().status, "ready")
         self.assertEqual(self.bot.invoke.call_count, 4)
+        self.assertEqual(len(self.clients), 4)
+        for client in self.clients:
+            client.close.assert_called_once_with()
 
     def test_fatal_failure_has_cooldown_and_hides_details(self):
         self.bot.invoke.side_effect = aws_error("AccessDeniedException")
@@ -124,6 +140,7 @@ class CoordinatorTests(unittest.TestCase):
         self.assertNotIn("private", status.message)
         self.assertEqual(self.coordinator.start().status, "failed")
         self.assertEqual(self.bot.invoke.call_count, 1)
+        self.clients[0].close.assert_called_once_with()
         self.bot.invoke.side_effect = None
         with patch("src.api.warmup.time.time", return_value=time.time() + 31):
             self.assertEqual(self.coordinator.start().status, "warming")
@@ -262,6 +279,48 @@ class BedrockWarmupTests(unittest.TestCase):
             self.assertEqual(config.connect_timeout, 5)
             self.bot.warmup_client(600)
             self.assertEqual(factory.call_args.kwargs["config"].read_timeout, 310)
+
+    def test_warmup_with_real_sdk_client_and_stubbed_inference(self):
+        # Exercise the actual SDK client lifecycle without credentials or AWS calls.
+        client = boto3.session.Session().client(
+            "bedrock-runtime",
+            region_name="us-east-1",
+            aws_access_key_id="testing",
+            aws_secret_access_key="testing",
+        )
+        payload = b'{"generation": ""}'
+        expected = {
+            "modelId": self.bot.config.model_id,
+            "body": json.dumps(
+                {
+                    "prompt": self.bot.prompt_template.format(user_prompt="Hello"),
+                    "max_gen_len": 1,
+                    "temperature": self.bot.config.model_temperature,
+                    "top_p": self.bot.config.top_p,
+                }
+            ),
+            "contentType": "application/json",
+            "accept": "application/json",
+        }
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Stubber(client) as stubber,
+            patch.object(self.bot, "warmup_client", return_value=client),
+            patch.object(client, "close", wraps=client.close) as close,
+        ):
+            stubber.add_response(
+                "invoke_model",
+                {
+                    "body": StreamingBody(io.BytesIO(payload), len(payload)),
+                    "contentType": "application/json",
+                },
+                expected,
+            )
+            coordinator = WarmupCoordinator(self.bot, directory)
+            coordinator._run(coordinator._try_job_lock())
+            self.assertEqual(coordinator.status().status, "ready")
+            close.assert_called_once_with()
+            stubber.assert_no_pending_responses()
 
     def test_invoke_raises_on_malformed_body_and_closes_it(self):
         body = io.BytesIO(b'{"error": "not a generation"}')
