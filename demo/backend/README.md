@@ -16,6 +16,19 @@ PostgreSQL database. It uses the fine-tuned `M14` Bedrock model to generate sear
 then answer using the retrieved documents. Its optional environment settings
 are documented in `.env.example`.
 
+The frontend supplies completed chat turns as `context`, an ordered list of
+`{"role": "user" | "assistant", "text": "..."}` objects. The backend keeps only
+the latest three completed question/response pairs (six past turns), separate
+from the current `prompt`. Failed requests and retries do not add duplicate
+turns. History follows the visible conversation across model selections and
+is cleared when the page reloads.
+
+M14 uses this history in its answer prompt. RAG uses it for both retrieval and
+answer generation; S1 experience examples remain separate from retrieval.
+SafeGenChat forwards history only to S1, and also enforces the three-pair limit
+for direct `/solve` callers. SafeChat/S2 receives only the current question.
+Requests without `context` retain single-turn behavior.
+
 On EC2, set the backend's effective environment (or `demo/backend/.env`) to
 `RAG_DATABASE_URL=dbname=lighthouse_rag_pages port=5433 user=jaaydin`, then
 restart the backend. PostgreSQL 17 runs on port 5433 there; port 5432 still
@@ -217,10 +230,11 @@ Browser → /api/generate → demo backend (3000) → SGC /solve (8001)
 ```
 
 System 1 uses RAG backed by the existing M14 Bedrock chatbot. SGC sends the current
-question as `prompt`, conversation history and trusted experience examples as
-`answer_context`, and `return_confidence: true` to `/generate` with `model: "RAG"`.
-Retrieval searches only the current question; answer generation receives the
-retrieved texts and experience together in one prompt. This requests
+question as `prompt`, bounded conversation history as `context`, trusted
+experience examples as `answer_context`, and `return_confidence: true` to
+`/generate` with `model: "RAG"`. Retrieval uses the current question and chat
+history; answer generation receives history, retrieved texts, and experience
+together in one prompt. This requests
 `return_logprobs: true` and returns `confidence` as the geometric mean
 of output-token probabilities, `exp(mean(logprobs))`. Missing or malformed
 log probabilities produce an error rather than a fabricated score. See the

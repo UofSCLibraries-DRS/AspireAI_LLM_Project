@@ -13,6 +13,12 @@ import torch.nn.functional as F
 
 from .base import Chatbot, ChatbotSource, TextSource
 from .bedrock import BedrockChatbot
+from .conversation import (
+    ConversationTurn,
+    conversation_prompt,
+    format_context,
+    recent_context,
+)
 
 DEFAULT_KEYWORD_PROMPT = """You are generating a BM25 search query for a document
 retriever. Follow these instructions exactly:
@@ -587,10 +593,19 @@ class RAGChatbot(Chatbot):
         )
 
     def _prepare_generation(
-        self, question: str, answer_context: str | None
+        self,
+        question: str,
+        answer_context: str | None,
+        context: list[ConversationTurn] | None = None,
     ) -> tuple[str, list[ChatbotSource]]:
-        # Search with the current question, without keywords from past examples.
-        documents = self.retriever.retrieve(question, self.top_k)
+        history = recent_context(context)
+        # Resolve follow-ups using chat history, keeping experience examples out of search.
+        documents = self.retriever.retrieve(
+            conversation_prompt(question, history), self.top_k
+        )
+        answer_context = "\n\n".join(
+            section for section in (format_context(history), answer_context) if section
+        )
         return self._augment_prompt(question, documents, answer_context), [
             document.source for document in documents if document.source is not None
         ]
@@ -601,8 +616,9 @@ class RAGChatbot(Chatbot):
         max_new_tokens: int | None = None,
         *,
         answer_context: str | None = None,
+        context: list[ConversationTurn] | None = None,
     ) -> tuple[str, list[ChatbotSource]]:
-        augmented_prompt, sources = self._prepare_generation(prompt, answer_context)
+        augmented_prompt, sources = self._prepare_generation(prompt, answer_context, context)
         response, _ = self.chatbot.generate(
             prompt=augmented_prompt,
             max_new_tokens=max_new_tokens,
@@ -615,9 +631,10 @@ class RAGChatbot(Chatbot):
         max_new_tokens: int | None = None,
         *,
         answer_context: str | None = None,
+        context: list[ConversationTurn] | None = None,
     ) -> tuple[str, list[ChatbotSource], float]:
         """Return grounded text, sources, and answer-token confidence for SGC."""
-        augmented_prompt, sources = self._prepare_generation(prompt, answer_context)
+        augmented_prompt, sources = self._prepare_generation(prompt, answer_context, context)
         response, confidence = self.chatbot.generate_with_confidence(
             prompt=augmented_prompt,
             max_new_tokens=max_new_tokens,

@@ -173,6 +173,54 @@ async function runTests() {
       const messages = demo.document.querySelectorAll('.message-wrapper.bot');
       assert(!messages[messages.length - 1].querySelector('.message-sources'), 'S2 inherited S1 sources');
     }],
+    ['requests include completed chat pairs across chatbot selections without source panels', async demo => {
+      demo.window.fixture.ready = true;
+      const history = [];
+      const models = ['M14', 'RAG', 'SGC', 'M14', 'RAG'];
+      for (let index = 0; index < models.length; index++) {
+        demo.selector.value = models[index];
+        const question = `Question ${index}`;
+        const answer = `Answer ${index}`;
+        demo.window.fixture.responses.push({ status: 200, body: {
+          text: answer, system: 'System1',
+          sources: [{ title: 'Source only', description: null, transcript: 'Source panel text' }]
+        } });
+        demo.input.value = question;
+        await demo.window.sendMessage();
+        const sent = JSON.parse(demo.calls('/generate')[index].body);
+        assert(sent.prompt === question, 'current question changed');
+        assert(JSON.stringify(sent.context) === JSON.stringify(history), 'history differs from completed chat');
+        assert(!JSON.stringify(sent.context).includes('Source panel text'), 'source panel leaked into history');
+        const citations = demo.document.querySelectorAll('.source-toggle');
+        citations[citations.length - 1].click();
+        history.push({ role: 'user', text: question }, { role: 'assistant', text: answer });
+      }
+      assert(JSON.parse(demo.calls('/generate')[4].body).context.length === 8, 'frontend unexpectedly trimmed history');
+    }],
+    ['failed requests and retries do not add incomplete or duplicated history', async demo => {
+      demo.window.fixture.ready = true;
+      demo.selector.value = 'M14';
+      demo.input.value = 'First question';
+      await demo.window.sendMessage();
+      const firstPair = [
+        { role: 'user', text: 'First question' }, { role: 'assistant', text: 'Answer' }
+      ];
+      demo.window.fixture.responses.push({ status: 500, body: { detail: { message: 'Temporary failure' } } });
+      demo.input.value = 'Second question';
+      await demo.window.sendMessage();
+      assert(demo.input.value === 'Second question', 'failed question was lost');
+      await demo.window.sendMessage();
+      const calls = demo.calls('/generate').map(call => JSON.parse(call.body));
+      assert(JSON.stringify(calls[1].context) === JSON.stringify(firstPair), 'failed request had wrong context');
+      assert(JSON.stringify(calls[2].context) === JSON.stringify(firstPair), 'retry changed or duplicated context');
+      demo.input.value = 'Third question';
+      await demo.window.sendMessage();
+      const context = JSON.parse(demo.calls('/generate')[3].body).context;
+      assert(JSON.stringify(context) === JSON.stringify([
+        ...firstPair, { role: 'user', text: 'Second question' }, { role: 'assistant', text: 'Answer' }
+      ]), 'retry polluted later history');
+      assert(demo.document.querySelectorAll('.message.user').length === 3, 'retry duplicated a user message');
+    }],
     ['network failure restores input and unlocks the form', async demo => {
       demo.selector.value = 'M14';
       demo.window.fixture.networkError = true;

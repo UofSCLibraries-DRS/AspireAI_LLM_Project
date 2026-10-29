@@ -67,7 +67,7 @@ class WarmupBrowserTests(unittest.TestCase):
         self.assertIsNotNone(result, process.stderr[-2000:])
         status, details = result.groups()
         self.assertEqual(status, "passed", html.unescape(details))
-        self.assertEqual(len(json.loads(html.unescape(details))), 8)
+        self.assertEqual(len(json.loads(html.unescape(details))), 10)
 
 
 if __name__ == "__main__":

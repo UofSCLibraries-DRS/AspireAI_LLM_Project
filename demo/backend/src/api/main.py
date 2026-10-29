@@ -10,6 +10,11 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from src.api.chatbots.base import Chatbot, ChatbotSource
 from src.api.chatbots.bedrock import BedrockChatbot, BedrockModelNotReadyError
+from src.api.chatbots.conversation import (
+    ConversationTurn,
+    conversation_prompt,
+    recent_context,
+)
 from src.api.chatbots.huggingface import HuggingFaceChatbot
 from src.api.chatbots.rag import (
     KeywordRetriever,
@@ -27,6 +32,7 @@ load_dotenv()
 # Request/Response Models
 class GenerateRequest(BaseModel):
     prompt: str = Field(..., description="The user's prompt/question")
+    context: list[ConversationTurn] = Field(default_factory=list)
     model: Literal["M8", "M14", "LLAMA", "RAG", "SC", "SGC"] = Field(
         ..., description="Model to use for generation"
     )
@@ -35,7 +41,7 @@ class GenerateRequest(BaseModel):
         description="Maximum tokens to generate (uses model default if not provided)",
     )
     answer_context: str | None = Field(
-        None, description="Conversation history and experience examples for RAG answers"
+        None, description="Additional RAG answer context, such as S1 experience examples"
     )
     return_confidence: bool = Field(
         False, description="Include answer-token confidence for RAG"
@@ -192,6 +198,7 @@ async def generate(req: GenerateRequest = Body(...)):  # noqa: B008
 
     # Get the chatbot
     chatbot = chatbots[req.model]
+    context = recent_context(req.context)
 
     if req.model in {"M14", "RAG", "SGC"}:
         state = await run_in_threadpool(warmup_state, start=True)
@@ -205,7 +212,7 @@ async def generate(req: GenerateRequest = Body(...)):  # noqa: B008
         if req.model == "M14" and isinstance(chatbot, BedrockChatbot):
             response, confidence = await run_in_threadpool(
                 chatbot.generate_with_confidence,
-                prompt=req.prompt,
+                prompt=conversation_prompt(req.prompt, context),
                 max_new_tokens=req.max_new_tokens,
             )
             sources = []
@@ -216,6 +223,7 @@ async def generate(req: GenerateRequest = Body(...)):  # noqa: B008
                     prompt=req.prompt,
                     max_new_tokens=req.max_new_tokens,
                     answer_context=req.answer_context,
+                    context=context,
                 )
             else:
                 response, sources = await run_in_threadpool(
@@ -223,16 +231,23 @@ async def generate(req: GenerateRequest = Body(...)):  # noqa: B008
                     prompt=req.prompt,
                     max_new_tokens=req.max_new_tokens,
                     answer_context=req.answer_context,
+                    context=context,
                 )
         elif isinstance(chatbot, SGCChatbot):
             response, sources, system = await run_in_threadpool(
                 chatbot.generate_with_system,
                 prompt=req.prompt,
                 max_new_tokens=req.max_new_tokens,
+                context=context,
             )
         else:
             response, sources = await run_in_threadpool(
-                chatbot.generate, prompt=req.prompt, max_new_tokens=req.max_new_tokens
+                chatbot.generate,
+                prompt=(
+                    req.prompt if req.model == "SC"
+                    else conversation_prompt(req.prompt, context)
+                ),
+                max_new_tokens=req.max_new_tokens,
             )
 
         return GenerateResponse(

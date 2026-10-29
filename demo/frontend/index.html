@@ -782,6 +782,7 @@
     let warmupPromise = null;
     let requestInProgress = false;
     let pendingQuestion = null;
+    const conversationHistory = [];
 
     function usesImportedModel(model) {
       return model === 'M14' || model === 'RAG' || model === 'SGC';
@@ -1026,7 +1027,10 @@
       // A retry of the retained question reuses its existing chat message.
       if (!pendingQuestion || pendingQuestion.message !== message ||
           pendingQuestion.model !== selectedModelValue) {
-        pendingQuestion = { message, model: selectedModelValue, displayName: modelDisplayName };
+        pendingQuestion = {
+          message, model: selectedModelValue, displayName: modelDisplayName,
+          context: conversationHistory.map(turn => ({ ...turn }))
+        };
         addMessage(message, 'user');
       }
       const question = pendingQuestion;
@@ -1050,6 +1054,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               prompt: question.message,
+              context: question.context,
               model: question.model,
               max_new_tokens: 128
             })
@@ -1068,6 +1073,12 @@
           const responseLabel = question.model === 'SGC' && solver
             ? `${question.displayName} (${solver})` : question.displayName;
           addMessage(data?.text || 'No response received', 'bot', responseLabel, data?.sources || []);
+          if (typeof data?.text === 'string' && data.text.trim()) {
+            conversationHistory.push(
+              { role: 'user', text: question.message },
+              { role: 'assistant', text: data.text }
+            );
+          }
           pendingQuestion = null;
           break;
         }

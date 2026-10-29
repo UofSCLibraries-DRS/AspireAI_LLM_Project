@@ -6,6 +6,7 @@ import requests
 import yaml
 
 from .base import Chatbot, ChatbotSource
+from .conversation import ConversationTurn, recent_context
 
 
 @dataclass
@@ -39,13 +40,23 @@ class SGCChatbot(Chatbot):
         self.config = SGCChatbotConfig.from_yaml(config_path)
 
     def generate(
-        self, prompt: str, max_new_tokens: int | None = None
+        self,
+        prompt: str,
+        max_new_tokens: int | None = None,
+        *,
+        context: list[ConversationTurn] | None = None,
     ) -> tuple[str, list[ChatbotSource]]:
-        text, sources, _ = self.generate_with_system(prompt, max_new_tokens)
+        text, sources, _ = self.generate_with_system(
+            prompt, max_new_tokens, context=context
+        )
         return text, sources
 
     def generate_with_system(
-        self, prompt: str, max_new_tokens: int | None = None
+        self,
+        prompt: str,
+        max_new_tokens: int | None = None,
+        *,
+        context: list[ConversationTurn] | None = None,
     ) -> tuple[str, list[ChatbotSource], str | None]:
         """Generate a solution through SGC.
 
@@ -53,10 +64,14 @@ class SGCChatbot(Chatbot):
         part of its public API and is intentionally not forwarded.
         """
         del max_new_tokens
+        request_payload: dict[str, object] = {"problem": prompt}
+        history = recent_context(context)
+        if history:
+            request_payload["context"] = [turn.model_dump() for turn in history]
         try:
             response = requests.post(
                 f"{self.config.url.rstrip('/')}/solve",
-                json={"problem": prompt},
+                json=request_payload,
                 timeout=self.config.timeout,
             )
             response.raise_for_status()
