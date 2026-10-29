@@ -81,4 +81,7 @@ class SGCChatbot(Chatbot):
         system = payload.get("system")
         if system not in ("System1", "System2"):
             system = None
-        return solution, [], system
+        sources = payload.get("sources", []) if system == "System1" else []
+        if not isinstance(sources, list):
+            sources = []
+        return solution, sources, system

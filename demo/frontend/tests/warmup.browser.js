@@ -138,6 +138,41 @@ async function runTests() {
       const labels = demo.document.querySelectorAll('.message-wrapper.bot .message-info');
       assert(labels[labels.length - 1].textContent === 'Chatbot 1', 'other chatbot label changed');
     }],
+    ['SGC S1 uses the same expandable source citations as RAG', async demo => {
+      demo.window.fixture.ready = true;
+      const source = {
+        title: 'Oral history', description: 'A recorded interview',
+        transcript: 'The original transcript.'
+      };
+      for (const model of ['RAG', 'SGC']) {
+        demo.selector.value = model;
+        demo.window.fixture.responses.push({
+          status: 200, body: { text: 'Grounded answer', sources: [source], system: 'System1' }
+        });
+        demo.input.value = 'Who was involved?';
+        await demo.window.sendMessage();
+        const messages = demo.document.querySelectorAll('.message-wrapper.bot');
+        const message = messages[messages.length - 1];
+        const citation = message.querySelector('.source-toggle');
+        const panel = message.querySelector('.source-panel');
+        assert(citation?.textContent === '[1]', `${model} citation missing`);
+        assert(panel.hidden, `${model} source should start collapsed`);
+        citation.click();
+        assert(!panel.hidden, `${model} citation did not open`);
+        for (const field of Object.values(source)) {
+          assert(panel.textContent.includes(field), `${model} source field missing: ${field}`);
+        }
+        citation.click();
+        assert(panel.hidden, `${model} citation did not close`);
+      }
+      demo.window.fixture.responses.push({
+        status: 200, body: { text: 'SafeChat answer', sources: [], system: 'System2' }
+      });
+      demo.input.value = 'Next question';
+      await demo.window.sendMessage();
+      const messages = demo.document.querySelectorAll('.message-wrapper.bot');
+      assert(!messages[messages.length - 1].querySelector('.message-sources'), 'S2 inherited S1 sources');
+    }],
     ['network failure restores input and unlocks the form', async demo => {
       demo.selector.value = 'M14';
       demo.window.fixture.networkError = true;

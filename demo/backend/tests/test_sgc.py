@@ -55,6 +55,38 @@ class SGCChatbotTests(unittest.TestCase):
 
 
 class SGCAPIIntegrationTests(unittest.TestCase):
+    @patch("src.api.chatbots.sgc.requests.post")
+    def test_sgc_forwards_s1_sources_and_does_not_leak_them_to_s2(self, post: Mock):
+        sources = [{"title": "Record", "description": "History", "transcript": "Evidence"}]
+        coordinator = Mock()
+        coordinator.start.return_value = WarmupStatus(status="ready")
+        bot = SGCChatbot(id="SGC", config_path="configs/chatbots/sgc.yaml")
+
+        async def check_responses():
+            async with httpx.AsyncClient(
+                transport=httpx.ASGITransport(app=api_main.app), base_url="http://test"
+            ) as client:
+                for system, returned_sources, expected in (
+                    ("System1", sources, sources),
+                    ("System2", [], []),
+                    ("System1", [], []),
+                ):
+                    post.return_value.json.return_value = {
+                        "solution": "Answer", "system": system, "sources": returned_sources
+                    }
+                    response = await client.post(
+                        "/generate", json={"prompt": "Question", "model": "SGC"}
+                    )
+                    self.assertEqual(response.status_code, 200)
+                    self.assertEqual(response.json()["system"], system)
+                    self.assertEqual(response.json()["sources"], expected)
+
+        with (
+            patch.dict(api_main.chatbots, {"SGC": bot}, clear=True),
+            patch.object(api_main, "warmup_coordinator", coordinator),
+        ):
+            asyncio.run(check_responses())
+
     def test_generate_request_accepts_sgc_model(self) -> None:
         request = api_main.GenerateRequest(prompt="question", model="SGC")
         self.assertEqual(request.model, "SGC")

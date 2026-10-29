@@ -34,6 +34,12 @@ class GenerateRequest(BaseModel):
         None,
         description="Maximum tokens to generate (uses model default if not provided)",
     )
+    answer_context: str | None = Field(
+        None, description="Conversation history and experience examples for RAG answers"
+    )
+    return_confidence: bool = Field(
+        False, description="Include answer-token confidence for RAG"
+    )
 
 
 class GenerateResponse(BaseModel):
@@ -203,6 +209,21 @@ async def generate(req: GenerateRequest = Body(...)):  # noqa: B008
                 max_new_tokens=req.max_new_tokens,
             )
             sources = []
+        elif isinstance(chatbot, RAGChatbot):
+            if req.return_confidence:
+                response, sources, confidence = await run_in_threadpool(
+                    chatbot.generate_with_confidence,
+                    prompt=req.prompt,
+                    max_new_tokens=req.max_new_tokens,
+                    answer_context=req.answer_context,
+                )
+            else:
+                response, sources = await run_in_threadpool(
+                    chatbot.generate,
+                    prompt=req.prompt,
+                    max_new_tokens=req.max_new_tokens,
+                    answer_context=req.answer_context,
+                )
         elif isinstance(chatbot, SGCChatbot):
             response, sources, system = await run_in_threadpool(
                 chatbot.generate_with_system,

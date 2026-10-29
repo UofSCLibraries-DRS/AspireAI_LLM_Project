@@ -3,7 +3,7 @@ import math
 import unittest
 from types import SimpleNamespace
 from typing import Any, cast
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import torch
 from pydantic import ValidationError
@@ -468,6 +468,56 @@ class RAGSettingsTests(unittest.TestCase):
 
 
 class RAGAPIIntegrationTests(unittest.TestCase):
+    def test_rag_combines_evidence_and_experience_and_returns_answer_confidence(self):
+        source = {"title": "Record", "description": None, "transcript": "Full evidence"}
+        retriever = RecordingRetriever([RetrievedDocument("Retrieved evidence", source)])
+        model = Mock(spec=BedrockChatbot)
+        model.generate_with_confidence.return_value = ("Grounded answer", 0.83)
+        rag = RAGChatbot(id="RAG", chatbot=model, retriever=retriever)
+        coordinator = Mock()
+        coordinator.start.return_value = WarmupStatus(status="ready")
+        answer_context = (
+            "Context:\nuser: Earlier question\n\n"
+            "Relevant examples:\nExample 1:\nProblem: Prior question\nSolution: Prior answer"
+        )
+
+        with (
+            patch.dict(api_main.chatbots, {"RAG": rag}, clear=True),
+            patch.object(api_main, "warmup_coordinator", coordinator),
+        ):
+            response = asyncio.run(api_main.generate(api_main.GenerateRequest(
+                prompt="Current question", model="RAG", max_new_tokens=128,
+                answer_context=answer_context, return_confidence=True,
+            )))
+
+        self.assertEqual(retriever.calls, [("Current question", 3)])
+        model.generate.assert_not_called()
+        model.generate_with_confidence.assert_called_once_with(
+            prompt=(
+                "Use the provided texts and context to answer the question.\n\n"
+                "Texts: \n\n<item>\nRetrieved evidence\n</item>\n\n"
+                f"{answer_context}\n\nNow, answer the following:\n\nCurrent question"
+            ),
+            max_new_tokens=128,
+        )
+        self.assertEqual(response.text, "Grounded answer")
+        self.assertEqual(response.confidence, 0.83)
+        self.assertEqual(response.sources, [source])
+
+    def test_confident_rag_with_no_documents_or_experience_still_answers(self):
+        model = Mock(spec=BedrockChatbot)
+        model.generate_with_confidence.return_value = ("Answer", 0.7)
+        rag = RAGChatbot(
+            id="RAG", chatbot=model, retriever=RecordingRetriever([])
+        )
+
+        self.assertEqual(rag.generate_with_confidence("Question"), ("Answer", [], 0.7))
+        self.assertEqual(
+            model.generate_with_confidence.call_args.kwargs["prompt"],
+            "Use the provided texts to answer the question.\n\n"
+            "Texts: \n\n\n\nNow, answer the following:\n\nQuestion",
+        )
+
     def test_generate_request_accepts_rag_model(self) -> None:
         request = api_main.GenerateRequest(prompt="question", model="RAG")
         self.assertEqual(request.model, "RAG")

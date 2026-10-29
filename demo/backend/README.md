@@ -74,7 +74,8 @@ failure for retry. A page refresh discards the pending question. Other models
 bypass the gate. Direct API callers receive `503` with
 `detail.code="model_warming"` and `Retry-After: 2` until ready; retry their
 original `/generate` request after readiness is confirmed. Successful generation
-responses include an optional `confidence` field (numeric for M14, otherwise null).
+responses include an optional `confidence` field (numeric for M14 and for RAG
+with `return_confidence: true`, otherwise null).
 
 Warm-up uses a dedicated client with SDK retries disabled and a ten-minute
 application retry budget. It retries model restoration and temporary failures
@@ -208,13 +209,19 @@ The request path is:
 
 ```text
 Browser → /api/generate → demo backend (3000) → SGC /solve (8001)
-                                                  ├─ demo backend /generate, model M14 (3000)
+                                                  ├─ demo backend /generate, model RAG (3000)
+                                                  │    ├─ M14 keywords → BM25 documents
+                                                  │    └─ M14 answer with documents + experience
                                                   └─ demo backend /generate, model SC (3000)
                                                        └─ SafeChat (3001)
 ```
 
-System 1 uses the existing M14 Bedrock chatbot. `/generate` with `model: "M14"`
-requests `return_logprobs: true` and returns `confidence` as the geometric mean
+System 1 uses RAG backed by the existing M14 Bedrock chatbot. SGC sends the current
+question as `prompt`, conversation history and trusted experience examples as
+`answer_context`, and `return_confidence: true` to `/generate` with `model: "RAG"`.
+Retrieval searches only the current question; answer generation receives the
+retrieved texts and experience together in one prompt. This requests
+`return_logprobs: true` and returns `confidence` as the geometric mean
 of output-token probabilities, `exp(mean(logprobs))`. Missing or malformed
 log probabilities produce an error rather than a fabricated score. See the
 [AWS log probability format](https://docs.aws.amazon.com/bedrock/latest/userguide/custom-model-import-advanced-features.html).
@@ -224,12 +231,15 @@ SGC can fall back to SafeChat, so check M14 independently too.
 SGC generation responses include `system: "System1"` or `"System2"`. The demo
 shows **SafeGenChat (S1)** or **SafeGenChat (S2)** beneath the answer; when the
 solver is unavailable, the label stays **SafeGenChat**.
+Selected S1 answers also return `sources` through `/solve` and `/generate`, so
+the frontend shows the same numbered, expandable source citations as RAG.
+When SGC chooses S2, the discarded S1 answer's sources are not returned.
 
 On EC2:
 
 1. Install and start `SGC_rewrite/sgc.service` following that repository's
    README. Adjust its `jaaydin` account and `/home/jaaydin/sgc` paths if needed.
-   It sends both M14 and SC requests directly to this backend on port 3000.
+   It sends both RAG and SC requests directly to this backend on port 3000.
 2. Keep `configs/chatbots/sgc.yaml` pointed at `http://127.0.0.1:8001`.
    Its 300-second timeout allows for SGC's sequential System 1 and System 2
    calls (180 and 45 seconds in the supplied daemon).
@@ -246,10 +256,10 @@ Check each connection on the host:
 curl -fsS -X POST http://127.0.0.1:3000/warmup
 curl -fsS http://127.0.0.1:3000/warmup
 
-# System 1: must return text AND confidence.
+# System 1: must return text, confidence, and sources.
 curl --max-time 190 -fsS http://127.0.0.1:3000/generate \
   -H 'Content-Type: application/json' \
-  -d '{"prompt":"Who was Modjeska Simkins?","model":"M14","max_new_tokens":32}'
+  -d '{"prompt":"Who was Modjeska Simkins?","model":"RAG","return_confidence":true,"max_new_tokens":32}'
 
 # System 2: must return a SafeChat answer.
 curl --max-time 50 -fsS http://127.0.0.1:3000/generate \

@@ -565,28 +565,61 @@ class RAGChatbot(Chatbot):
             remaining -= len(text)
         return bounded
 
-    def _augment_prompt(self, question: str, documents: list[RetrievedDocument]) -> str:
+    def _augment_prompt(
+        self,
+        question: str,
+        documents: list[RetrievedDocument],
+        answer_context: str | None = None,
+    ) -> str:
         bounded_documents = self._bounded_documents(documents)
         # Match evaluation/rag's p1 prompt and c1 retrieved-item templates.
         context = "\n".join(
             f"<item>\n{document.text}\n</item>" for document in bounded_documents
         )
+        instruction = "Use the provided texts to answer the question."
+        if answer_context:
+            instruction = "Use the provided texts and context to answer the question."
         return (
-            "Use the provided texts to answer the question.\n\n"
+            f"{instruction}\n\n"
             f"Texts: \n\n{context}\n\n"
-            f"Now, answer the following:\n\n{question}"
+            + (f"{answer_context.strip()}\n\n" if answer_context else "")
+            + f"Now, answer the following:\n\n{question}"
         )
 
-    def generate(
-        self, prompt: str, max_new_tokens: int | None = None
+    def _prepare_generation(
+        self, question: str, answer_context: str | None
     ) -> tuple[str, list[ChatbotSource]]:
-        documents = self.retriever.retrieve(prompt, self.top_k)
-        augmented_prompt = self._augment_prompt(prompt, documents)
+        # Search with the current question, without keywords from past examples.
+        documents = self.retriever.retrieve(question, self.top_k)
+        return self._augment_prompt(question, documents, answer_context), [
+            document.source for document in documents if document.source is not None
+        ]
+
+    def generate(
+        self,
+        prompt: str,
+        max_new_tokens: int | None = None,
+        *,
+        answer_context: str | None = None,
+    ) -> tuple[str, list[ChatbotSource]]:
+        augmented_prompt, sources = self._prepare_generation(prompt, answer_context)
         response, _ = self.chatbot.generate(
             prompt=augmented_prompt,
             max_new_tokens=max_new_tokens,
         )
-        sources: list[ChatbotSource] = [
-            document.source for document in documents if document.source is not None
-        ]
         return response, sources
+
+    def generate_with_confidence(
+        self,
+        prompt: str,
+        max_new_tokens: int | None = None,
+        *,
+        answer_context: str | None = None,
+    ) -> tuple[str, list[ChatbotSource], float]:
+        """Return grounded text, sources, and answer-token confidence for SGC."""
+        augmented_prompt, sources = self._prepare_generation(prompt, answer_context)
+        response, confidence = self.chatbot.generate_with_confidence(
+            prompt=augmented_prompt,
+            max_new_tokens=max_new_tokens,
+        )
+        return response, sources, confidence
