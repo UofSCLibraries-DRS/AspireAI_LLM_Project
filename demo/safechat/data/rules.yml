@@ -31,264 +31,511 @@ rules:
   steps:
   - intent: Do not answer
   - action: utter_Do not answer
-    
+
 - rule: Answer john_mccray_journalist
   steps:
   - intent: john_mccray_journalist
   - action: utter_john_mccray_journalist
-    
+
 - rule: Answer way_newspaper_column
   steps:
   - intent: way_newspaper_column
   - action: utter_way_newspaper_column
-    
+
 - rule: Answer black_newspaper_published_columbia
   steps:
   - intent: black_newspaper_published_columbia
   - action: utter_black_newspaper_published_columbia
-    
+
 - rule: Answer john_mccray_edit_lighthouse
   steps:
   - intent: john_mccray_edit_lighthouse
   - action: utter_john_mccray_edit_lighthouse
-    
+
 - rule: Answer lighthouse_informer_black_newspaper
   steps:
   - intent: lighthouse_informer_black_newspaper
   - action: utter_lighthouse_informer_black_newspaper
-    
+
 - rule: Answer operational_challenge_black_newspaper
   steps:
   - intent: operational_challenge_black_newspaper
   - action: utter_operational_challenge_black_newspaper
-    
+
 - rule: Answer thurgood_marshall_naacp_lawyer
   steps:
   - intent: thurgood_marshall_naacp_lawyer
   - action: utter_thurgood_marshall_naacp_lawyer
-    
+
 - rule: Answer george_elmore_plantiff_south
   steps:
   - intent: george_elmore_plantiff_south
   - action: utter_george_elmore_plantiff_south
-    
+
 - rule: Answer james_hinton_write_letter
   steps:
   - intent: james_hinton_write_letter
   - action: utter_james_hinton_write_letter
-    
+
 - rule: Answer is_leevy_run_congress
   steps:
   - intent: is_leevy_run_congress
   - action: utter_is_leevy_run_congress
-    
+
 - rule: Answer modjeska_simkins_testify_wronful
   steps:
   - intent: modjeska_simkins_testify_wronful
   - action: utter_modjeska_simkins_testify_wronful
-    
+
 - rule: Answer lighthouse_informer_published
   steps:
   - intent: lighthouse_informer_published
   - action: utter_lighthouse_informer_published
-    
+
 - rule: Answer peter_kelly_editor_lighthouse
   steps:
   - intent: peter_kelly_editor_lighthouse
   - action: utter_peter_kelly_editor_lighthouse
-    
+
 - rule: Answer jc_parler_write_john
   steps:
   - intent: jc_parler_write_john
   - action: utter_jc_parler_write_john
-    
+
 - rule: Answer much_sixmonth_subscription_lighthouse
   steps:
   - intent: much_sixmonth_subscription_lighthouse
   - action: utter_much_sixmonth_subscription_lighthouse
-    
+
 - rule: Answer lighthouse_informer_cease_publication
   steps:
   - intent: lighthouse_informer_cease_publication
   - action: utter_lighthouse_informer_cease_publication
-    
+
 - rule: Answer john_mccrays_position_progressive
   steps:
   - intent: john_mccrays_position_progressive
   - action: utter_john_mccrays_position_progressive
-    
+
 - rule: Answer john_mccray_receive_w
   steps:
   - intent: john_mccray_receive_w
   - action: utter_john_mccray_receive_w
-    
+
 - rule: Answer john_mccray_write_john
   steps:
   - intent: john_mccray_write_john
   - action: utter_john_mccray_write_john
-    
+
 - rule: Answer john_mccray_apply_work
   steps:
   - intent: john_mccray_apply_work
   - action: utter_john_mccray_apply_work
-    
+
 - rule: Answer year_john_mccray_resign
   steps:
   - intent: year_john_mccray_resign
   - action: utter_year_john_mccray_resign
-    
+
 - rule: Answer naacp_founded
   steps:
   - intent: naacp_founded
   - action: utter_naacp_founded
-    
+
 - rule: Answer naacp_organized
   steps:
   - intent: naacp_organized
   - action: utter_naacp_organized
-    
+
 - rule: Answer naacp_publish_magazine
   steps:
   - intent: naacp_publish_magazine
   - action: utter_naacp_publish_magazine
-    
+
 - rule: Answer white_member_naacp
   steps:
   - intent: white_member_naacp
   - action: utter_white_member_naacp
-    
+
 - rule: Answer benjamin_ben_hook_secretary
   steps:
   - intent: benjamin_ben_hook_secretary
   - action: utter_benjamin_ben_hook_secretary
-    
+
 - rule: Answer acronym_pdp_stand_for
   steps:
   - intent: acronym_pdp_stand_for
   - action: utter_acronym_pdp_stand_for
-    
+
 - rule: Answer progressive_democratic_party_established
   steps:
   - intent: progressive_democratic_party_established
   - action: utter_progressive_democratic_party_established
-    
+
 - rule: Answer john_mccray_member_progressive
   steps:
   - intent: john_mccray_member_progressive
   - action: utter_john_mccray_member_progressive
-    
+
 - rule: Answer progressive_democratic_party_biracial
   steps:
   - intent: progressive_democratic_party_biracial
   - action: utter_progressive_democratic_party_biracial
-    
+
 - rule: Answer john_mccray_republican
   steps:
   - intent: john_mccray_republican
   - action: utter_john_mccray_republican
-    
+
 - rule: Answer allen_university_qualified_train
   steps:
   - intent: allen_university_qualified_train
   - action: utter_allen_university_qualified_train
-    
+
 - rule: Answer john_mccray_give_address
   steps:
   - intent: john_mccray_give_address
   - action: utter_john_mccray_give_address
-    
+
 - rule: Answer many_white_student_transported
   steps:
   - intent: many_white_student_transported
   - action: utter_many_white_student_transported
-    
+
 - rule: Answer many_black_student_transported
   steps:
   - intent: many_black_student_transported
   - action: utter_many_black_student_transported
-    
+
 - rule: Answer 1950s_south_carolina_spend
   steps:
   - intent: 1950s_south_carolina_spend
   - action: utter_1950s_south_carolina_spend
-    
+
 - rule: Answer john_mccray_write_report
   steps:
   - intent: john_mccray_write_report
   - action: utter_john_mccray_write_report
-    
+
 - rule: Answer helped_organize_southern_democratic
   steps:
   - intent: helped_organize_southern_democratic
   - action: utter_helped_organize_southern_democratic
-    
+
 - rule: Answer united_recording_laboratory_provide
   steps:
   - intent: united_recording_laboratory_provide
   - action: utter_united_recording_laboratory_provide
-    
+
 - rule: Answer john_mccray_write_jack
   steps:
   - intent: john_mccray_write_jack
   - action: utter_john_mccray_write_jack
-    
+
 - rule: Answer black_voter_keep_record
   steps:
   - intent: black_voter_keep_record
   - action: utter_black_voter_keep_record
-    
+
 - rule: Answer address_called_need_changing
   steps:
   - intent: address_called_need_changing
   - action: utter_address_called_need_changing
-    
+
 - rule: Answer address_segregation_john_mccray
   steps:
   - intent: address_segregation_john_mccray
   - action: utter_address_segregation_john_mccray
-    
+
 - rule: Answer court_ruling_established_seperate
   steps:
   - intent: court_ruling_established_seperate
   - action: utter_court_ruling_established_seperate
-    
+
 - rule: Answer james_hinton_write_john
   steps:
   - intent: james_hinton_write_john
   - action: utter_james_hinton_write_john
-    
+
 - rule: Answer july_1947_ocean_front
   steps:
   - intent: july_1947_ocean_front
   - action: utter_july_1947_ocean_front
-    
+
 - rule: Answer john_mccrays_address_segregation
   steps:
   - intent: john_mccrays_address_segregation
   - action: utter_john_mccrays_address_segregation
-    
+
 - rule: Answer national_bar_association_make
   steps:
   - intent: national_bar_association_make
   - action: utter_national_bar_association_make
-    
+
 - rule: Answer journalist_featured_interview_prominent
   steps:
   - intent: journalist_featured_interview_prominent
   - action: utter_journalist_featured_interview_prominent
-    
+
 - rule: Answer sc_progressive_democrat_release
   steps:
   - intent: sc_progressive_democrat_release
   - action: utter_sc_progressive_democrat_release
-    
+
 - rule: Answer 1963_columbia_south_carolina
   steps:
   - intent: 1963_columbia_south_carolina
   - action: utter_1963_columbia_south_carolina
-    
+
 - rule: Answer black_life_columbia_improved
   steps:
   - intent: black_life_columbia_improved
   - action: utter_black_life_columbia_improved
-    
+- rule: Answer scenario_mccray_fe8e4c085972
+  steps:
+  - intent: scenario_mccray_fe8e4c085972
+  - action: utter_scenario_mccray_fe8e4c085972
+- rule: Answer scenario_mccray_2c3f754f5755
+  steps:
+  - intent: scenario_mccray_2c3f754f5755
+  - action: utter_scenario_mccray_2c3f754f5755
+- rule: Answer scenario_simkins_1a454d4bebf1
+  steps:
+  - intent: scenario_simkins_1a454d4bebf1
+  - action: utter_scenario_simkins_1a454d4bebf1
+- rule: Answer scenario_simkins_223f67258d8a
+  steps:
+  - intent: scenario_simkins_223f67258d8a
+  - action: utter_scenario_simkins_223f67258d8a
+- rule: Answer scenario_simkins_8b9738a09559
+  steps:
+  - intent: scenario_simkins_8b9738a09559
+  - action: utter_scenario_simkins_8b9738a09559
+- rule: Answer scenario_simkins_7c0a36a3c036
+  steps:
+  - intent: scenario_simkins_7c0a36a3c036
+  - action: utter_scenario_simkins_7c0a36a3c036
+- rule: Answer scenario_simkins_b5415d25b918
+  steps:
+  - intent: scenario_simkins_b5415d25b918
+  - action: utter_scenario_simkins_b5415d25b918
+- rule: Answer scenario_simkins_f542ad92f043
+  steps:
+  - intent: scenario_simkins_f542ad92f043
+  - action: utter_scenario_simkins_f542ad92f043
+- rule: Answer scenario_simkins_0f611d7aeb21
+  steps:
+  - intent: scenario_simkins_0f611d7aeb21
+  - action: utter_scenario_simkins_0f611d7aeb21
+- rule: Answer scenario_simkins_72727eae1066
+  steps:
+  - intent: scenario_simkins_72727eae1066
+  - action: utter_scenario_simkins_72727eae1066
+- rule: Answer scenario_simkins_91e3787d8754
+  steps:
+  - intent: scenario_simkins_91e3787d8754
+  - action: utter_scenario_simkins_91e3787d8754
+- rule: Answer scenario_simkins_9ff6f6ebc8f9
+  steps:
+  - intent: scenario_simkins_9ff6f6ebc8f9
+  - action: utter_scenario_simkins_9ff6f6ebc8f9
+- rule: Answer scenario_simkins_a21621072790
+  steps:
+  - intent: scenario_simkins_a21621072790
+  - action: utter_scenario_simkins_a21621072790
+- rule: Answer scenario_simkins_0a1db551a4dc
+  steps:
+  - intent: scenario_simkins_0a1db551a4dc
+  - action: utter_scenario_simkins_0a1db551a4dc
+- rule: Answer scenario_simkins_18334aebdde3
+  steps:
+  - intent: scenario_simkins_18334aebdde3
+  - action: utter_scenario_simkins_18334aebdde3
+- rule: Answer scenario_simkins_080902181a08
+  steps:
+  - intent: scenario_simkins_080902181a08
+  - action: utter_scenario_simkins_080902181a08
+- rule: Answer scenario_simkins_02cbc8fb4574
+  steps:
+  - intent: scenario_simkins_02cbc8fb4574
+  - action: utter_scenario_simkins_02cbc8fb4574
+- rule: Answer scenario_simkins_2268324e05ec
+  steps:
+  - intent: scenario_simkins_2268324e05ec
+  - action: utter_scenario_simkins_2268324e05ec
+- rule: Answer scenario_simkins_fafab07de1cb
+  steps:
+  - intent: scenario_simkins_fafab07de1cb
+  - action: utter_scenario_simkins_fafab07de1cb
+- rule: Answer scenario_simkins_e9315f7445bb
+  steps:
+  - intent: scenario_simkins_e9315f7445bb
+  - action: utter_scenario_simkins_e9315f7445bb
+- rule: Answer scenario_simkins_2287f06f87a3
+  steps:
+  - intent: scenario_simkins_2287f06f87a3
+  - action: utter_scenario_simkins_2287f06f87a3
+- rule: Answer scenario_simkins_74ecfbb22c45
+  steps:
+  - intent: scenario_simkins_74ecfbb22c45
+  - action: utter_scenario_simkins_74ecfbb22c45
+- rule: Answer scenario_simkins_903419bde0f3
+  steps:
+  - intent: scenario_simkins_903419bde0f3
+  - action: utter_scenario_simkins_903419bde0f3
+- rule: Answer scenario_simkins_13f364c20da5
+  steps:
+  - intent: scenario_simkins_13f364c20da5
+  - action: utter_scenario_simkins_13f364c20da5
+- rule: Answer scenario_simkins_177f53332abc
+  steps:
+  - intent: scenario_simkins_177f53332abc
+  - action: utter_scenario_simkins_177f53332abc
+- rule: Answer scenario_simkins_06b2956e9e7f
+  steps:
+  - intent: scenario_simkins_06b2956e9e7f
+  - action: utter_scenario_simkins_06b2956e9e7f
+- rule: Answer scenario_simkins_9beeec6a6d85
+  steps:
+  - intent: scenario_simkins_9beeec6a6d85
+  - action: utter_scenario_simkins_9beeec6a6d85
+- rule: Answer scenario_simkins_f5f6f49a94ee
+  steps:
+  - intent: scenario_simkins_f5f6f49a94ee
+  - action: utter_scenario_simkins_f5f6f49a94ee
+- rule: Answer scenario_simkins_f16e8fc601e3
+  steps:
+  - intent: scenario_simkins_f16e8fc601e3
+  - action: utter_scenario_simkins_f16e8fc601e3
+- rule: Answer scenario_simkins_f18de9475fe5
+  steps:
+  - intent: scenario_simkins_f18de9475fe5
+  - action: utter_scenario_simkins_f18de9475fe5
+- rule: Answer scenario_simkins_5eeb7a6497c1
+  steps:
+  - intent: scenario_simkins_5eeb7a6497c1
+  - action: utter_scenario_simkins_5eeb7a6497c1
+- rule: Answer scenario_simkins_97ca23f85b30
+  steps:
+  - intent: scenario_simkins_97ca23f85b30
+  - action: utter_scenario_simkins_97ca23f85b30
+- rule: Answer scenario_simkins_90a121a17286
+  steps:
+  - intent: scenario_simkins_90a121a17286
+  - action: utter_scenario_simkins_90a121a17286
+- rule: Answer scenario_simkins_0517fcc17976
+  steps:
+  - intent: scenario_simkins_0517fcc17976
+  - action: utter_scenario_simkins_0517fcc17976
+- rule: Answer scenario_simkins_dced5d8ad204
+  steps:
+  - intent: scenario_simkins_dced5d8ad204
+  - action: utter_scenario_simkins_dced5d8ad204
+- rule: Answer scenario_simkins_168b6267e16f
+  steps:
+  - intent: scenario_simkins_168b6267e16f
+  - action: utter_scenario_simkins_168b6267e16f
+- rule: Answer scenario_simkins_786209313b25
+  steps:
+  - intent: scenario_simkins_786209313b25
+  - action: utter_scenario_simkins_786209313b25
+- rule: Answer scenario_simkins_53726a45f088
+  steps:
+  - intent: scenario_simkins_53726a45f088
+  - action: utter_scenario_simkins_53726a45f088
+- rule: Answer scenario_simkins_5d05f26f912e
+  steps:
+  - intent: scenario_simkins_5d05f26f912e
+  - action: utter_scenario_simkins_5d05f26f912e
+- rule: Answer scenario_simkins_4f530576f7f8
+  steps:
+  - intent: scenario_simkins_4f530576f7f8
+  - action: utter_scenario_simkins_4f530576f7f8
+- rule: Answer scenario_simkins_4f37595e7e5d
+  steps:
+  - intent: scenario_simkins_4f37595e7e5d
+  - action: utter_scenario_simkins_4f37595e7e5d
+- rule: Answer scenario_simkins_df9e2f4f362c
+  steps:
+  - intent: scenario_simkins_df9e2f4f362c
+  - action: utter_scenario_simkins_df9e2f4f362c
+- rule: Answer scenario_simkins_21ca15cbf785
+  steps:
+  - intent: scenario_simkins_21ca15cbf785
+  - action: utter_scenario_simkins_21ca15cbf785
+- rule: Answer scenario_simkins_16dc62c0c72b
+  steps:
+  - intent: scenario_simkins_16dc62c0c72b
+  - action: utter_scenario_simkins_16dc62c0c72b
+- rule: Answer scenario_simkins_dd8e330f45d0
+  steps:
+  - intent: scenario_simkins_dd8e330f45d0
+  - action: utter_scenario_simkins_dd8e330f45d0
+- rule: Answer scenario_simkins_f46d836f7be6
+  steps:
+  - intent: scenario_simkins_f46d836f7be6
+  - action: utter_scenario_simkins_f46d836f7be6
+- rule: Answer scenario_simkins_49585334645f
+  steps:
+  - intent: scenario_simkins_49585334645f
+  - action: utter_scenario_simkins_49585334645f
+- rule: Answer scenario_simkins_af1b0fab936b
+  steps:
+  - intent: scenario_simkins_af1b0fab936b
+  - action: utter_scenario_simkins_af1b0fab936b
+- rule: Answer scenario_simkins_eac7531a668b
+  steps:
+  - intent: scenario_simkins_eac7531a668b
+  - action: utter_scenario_simkins_eac7531a668b
+- rule: Answer scenario_simkins_95aec2617364
+  steps:
+  - intent: scenario_simkins_95aec2617364
+  - action: utter_scenario_simkins_95aec2617364
+- rule: Answer scenario_simkins_cde147f73c3d
+  steps:
+  - intent: scenario_simkins_cde147f73c3d
+  - action: utter_scenario_simkins_cde147f73c3d
+- rule: Answer scenario_simkins_77a650b7fd5e
+  steps:
+  - intent: scenario_simkins_77a650b7fd5e
+  - action: utter_scenario_simkins_77a650b7fd5e
+- rule: Answer scenario_simkins_7c7ec9bce5ba
+  steps:
+  - intent: scenario_simkins_7c7ec9bce5ba
+  - action: utter_scenario_simkins_7c7ec9bce5ba
+- rule: Answer scenario_simkins_1b24795fd562
+  steps:
+  - intent: scenario_simkins_1b24795fd562
+  - action: utter_scenario_simkins_1b24795fd562
+- rule: Answer scenario_simkins_1d1edc587302
+  steps:
+  - intent: scenario_simkins_1d1edc587302
+  - action: utter_scenario_simkins_1d1edc587302
+- rule: Answer scenario_simkins_da1c91c8291e
+  steps:
+  - intent: scenario_simkins_da1c91c8291e
+  - action: utter_scenario_simkins_da1c91c8291e
+- rule: Answer scenario_simkins_a0cef734a1e6
+  steps:
+  - intent: scenario_simkins_a0cef734a1e6
+  - action: utter_scenario_simkins_a0cef734a1e6
+- rule: Answer scenario_simkins_85018dc57b3b
+  steps:
+  - intent: scenario_simkins_85018dc57b3b
+  - action: utter_scenario_simkins_85018dc57b3b
+- rule: Answer scenario_simkins_d1d30464e6ce
+  steps:
+  - intent: scenario_simkins_d1d30464e6ce
+  - action: utter_scenario_simkins_d1d30464e6ce
+- rule: Answer scenario_simkins_d47c4124f3f3
+  steps:
+  - intent: scenario_simkins_d47c4124f3f3
+  - action: utter_scenario_simkins_d47c4124f3f3
+- rule: Answer scenario_simkins_6c746a10c119
+  steps:
+  - intent: scenario_simkins_6c746a10c119
+  - action: utter_scenario_simkins_6c746a10c119
+- rule: Answer scenario_simkins_13cce19ec26a
+  steps:
+  - intent: scenario_simkins_13cce19ec26a
+  - action: utter_scenario_simkins_13cce19ec26a

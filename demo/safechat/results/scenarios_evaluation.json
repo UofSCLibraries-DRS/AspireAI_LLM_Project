@@ -1,0 +1,813 @@
+{
+  "model": "models/scenarios-with-answers-20261029.tar.gz",
+  "total": 161,
+  "passed": 161,
+  "failed": 0,
+  "results": [
+    {
+      "question": "Was John McCray a journalist?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was \"The Way It Was\" a newspaper column?\"",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Were Black newspapers published in Columbia during the first half of the 20th-century?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did John McCray edit The Lighthouse and Informer?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was The Lighthouse and Informer a Black newspaper?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why were Black newspapers published in South Carolina?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why was John McCray's career as a journalist important?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What operational challenges did Black newspaper publications face?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What did Black newspapers write about?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did journalism empower Black South Carolinians?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was Thurgood Marshall an NAACP lawyer?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was George Elmore the plantiff in a South Carolina civil rights case?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did James Hinton write a letter to Representative John D. Long in 1944?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did I.S. Leevy run for congress in 1954?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did Modjeska Simkins testify about wronful polling practices in 1944?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why did James Hinton and E.A. Adams write to Representative John D. Long of South Carolina in March 1944?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What was the relationship like between George Elmore and John McCray?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did I.S. Leevy support the presidency of Dwight Eisenhower?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Who was Osceola McKaine?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why did Modjeska Simkins testify about polling in Columbia, SC in 1944?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "When was The Lighthouse and Informer established?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Where was The Lighthouse and Informer published?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was Peter Kelly the editor of The Lighthouse and Informer?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did J.C. Parler write to John McCray about articles in The Lighthouse and Informer?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How much did a six-month subscription to The Lighthouse and Informer cost in 1946?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why was The Lighthouse and Informer created?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How was The Lighthouse and Informer publication connected to the work of the NAACP?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did The Lighthouse and Informer impact John McCray's career?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why did The Lighthouse and Informer cease publication?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why was The Lighthouse and Informer important?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How much did a year-long subscription to The Lighthouse and Informer cost in 1946?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What was John McCray's position in the Progressive Democratic Party in 1944?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did John McCray receive W. J. Hunter’s support for the Re-elect Truman Campaign?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did John McCray write to John Oscar Floyd on September 23, 1943?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did John McCray apply to work with the S.C. Division of the Southern Regional Council?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What year did John McCray resign as the editor of The Lighthouse and Informer?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was it necessary for John McCray to organize the Progressive Democratic Party?",
+      "answer_column": "answer_ideal_agg",
+      "passed": true
+    },
+    {
+      "question": "Why did Richard J. Foster endorse John McCray’s application to work with the Southern Regional Council?",
+      "answer_column": "answer_ideal_agg",
+      "passed": true
+    },
+    {
+      "question": "Did John McCray enjoy working for The Lighthouse and Informer?",
+      "answer_column": "answer_ideal_agg",
+      "passed": true
+    },
+    {
+      "question": "Did John McCray have any enemies?",
+      "answer_column": "answer_ideal_agg",
+      "passed": true
+    },
+    {
+      "question": "According to John McCray, were Black voters in Marion County being discriminated against?",
+      "answer_column": "answer_ideal_agg",
+      "passed": true
+    },
+    {
+      "question": "When was the NAACP founded?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Where was the NAACP organized?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did the NAACP publish a magazine?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Were there white members of the NAACP?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was Benjamin (Ben) Hooks a secretary for the NAACP?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What was the relationship like between the SC State Conference of NAACP Branches and the National Office of the NAACP?",
+      "answer_column": "answer_ideal_agg",
+      "passed": true
+    },
+    {
+      "question": "Was the SC State Conference of the NAACP successful in the fight for civil rights in the 1940s and 50s?",
+      "answer_column": "answer_ideal_agg",
+      "passed": true
+    },
+    {
+      "question": "Why was Sarah Mae Flemming's city bus lawsuit significant?",
+      "answer_column": "answer_ideal_agg",
+      "passed": true
+    },
+    {
+      "question": "What challenges did NAACP chapters face in South Carolina?",
+      "answer_column": "answer_ideal_agg",
+      "passed": true
+    },
+    {
+      "question": "Was the NAACP established as a religious organization?",
+      "answer_column": "answer_ideal_agg",
+      "passed": true
+    },
+    {
+      "question": "What does the acronym PDP stand for?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "When was the Progressive Democratic Party established?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was John McCray a member of the Progressive Democratic Party?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was the Progressive Democratic Party a bi-racial political group?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was John McCray a Republican?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did John McCray help recruit members for the Progressive Democratic Party?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What did John McCray think of the Progressive Democratic Party?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What does the term Progressive\" stand for in the Progressive Democratic Party?\"",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What was the relationship like between the Progressive Democratic Party and the State Democratic Party?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did the Progressive Democratic Party improve the lives of Black people in South Carolina?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was Allen University qualified to train teachers during the 1963 school year?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did John McCray give an address titled, Why Segregation of the Races Must Go\"?\"",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How many white students were transported to school in South Carolina, according to the 1951 report released by the State Superintendent of Education?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How many Black students were transported to school in South Carolina, according to the 1951 report released by the State Superintendent of Education?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "In the 1950s, did South Carolina spend more money on Black education than white education?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did Allen University recieve approval to provide teacher training in 1963?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did segregation impact Black education?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why did John McCray give an address titled, Why Segregation of the Races Must Go\"?\"",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did students help promote desegregation throughout the South?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What concerns did people have about placing Black students in vocational schools?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did John McCray write reports about Black voter registration?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Who helped organize the Southern Democratic Conference to support Black voter registration in 1962?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did United Recording Laboratories provide tapes of Dr. Martin Luther King Jr.'s call for registration and voting?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did John McCray write to Jack Minnis about creating political cartoons?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did Black voters keep record of reasons they were denied the right to vote in South Carolina?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did McCray use political cartoons to support Black voter registration?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why did John McCray report on Black voter registration?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What factors helped to increase the rate of Black voter registration in South Carolina?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did John McCray believe that the March on Washington would help improve Black voter registration?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did the Southern Democratic Conference support Black, Southern voters?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was an address called \"The Need for Changing\" given at Charleston County Hall in 1947?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What address on segregation did John McCray give to Pee Dee Union Baptist Church on April 8, 1951?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Which court ruling established the \"seperate but equal\" principle that made segregation legal throughout the United States?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did James Hinton write to John McCray about the treatment of Corporal Linwood Brown in South Carolina?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "In July 1947, were there any ocean front beaches open to Black people in Charleston, S.C.?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did Black people help to dismantle Jim Crow in the United States?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "According to John McCray, why was the South unable to operate a \"seperate but equal\" school system that was actually equal?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What was the significance of the Clarendon County school case?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did serving in the millitary protect Black servicemen from discrimination in the early-20th century?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why did members of the NAACP Junior Branch in Charleston request that part of Fort Moultrie be turned into an ocean front resort for Black people?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Does John McCray's address \"Why Segregation of the Races Must Go?\" discuss school segregation?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did the National Bar Association make a publication called \"Who's Who Among Negro Lawyers\" in 1945?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What journalist is featured in the interview, \"Prominent Editor Sees Bright Future for Negro Journalists?\"",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did the S.C. Progressive Democrats release a report titled \"Negro Voter Registration\" in 1963?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "In 1963, did Columbia, South Carolina have a group called the Mayor's Committee on Race Relations?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did racial segregation in education impede racial progress in the South?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why did the National Bar Association produce a publication called \"Who's Who Among Negro Lawyers\"?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why did John McCray believe that journalism was the key to progress for Black people?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why had Black voter registration increased in South Carolina by the early 1960s?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How had Black life in Columbia improved by the 1960s?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "When was Modjeska Simkins born?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was Simkins a founder of Victory Savings Bank?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "When did Modjeska Simkins run for Columbia City Council?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Where was Modjeska Simkins born?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What was Modjeska Simkins legal first name?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why did Modjeska Simkins and other Black citizens sue Columbia over the City Council election of 1984?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why was Modjeska Simkins asked to leave the Democratic Party in 1966?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What connection did Modjeska Simkins have to Herbert Aptheker?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did Simkins promise to improve Columbia if elected to City Council in the 1960s?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why did Simkins write out her own funeral plans in 1938?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did Southern Conference Educational Fund, Inc. issue a news release on December 28, 1964?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did Alvin Krebs give a speech about racial inequality in education at the 42nd Annual NAACP Convention?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Who did Simkins write to about desegregation at the University of South Carolina on March 24, 1958?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did Simkins broadcast about voter registration?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did Strom Thurmond oppose the Civil Rights Act of 1957?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why did many Black teachers in the South need legal protection from getting fired during the Civil Rights Movement?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was it dangerous to participate in Civil Rights efforts in the South?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did Simkins believe that the State NAACP adequately supported desegregation efforts at the University of South Carolina in the 1950s?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "According to Simkins, how did Strom Thurmond influence racial politics?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did Simkins support the Civil Rights Movement in South Carolina?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "When was the Richland County Citizens Committee, Inc. (RCCC) organized?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Where was the RCCC located in 1972?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did Simkins, on behalf of the RCCC, write to the Richland County Council about hiring discrimination at Richland Memorial Hospital?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "When was the RCCC chartered?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What was Simkins role at the RCCC in 1972?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did the RCCC help to address racial discrimination that occurred at Richland Memorial Hospital?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did the RCCC support voting efforts within the Black community?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did the RCCC use broadcasting to address issues impacting the Black community?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "According to the RCCC, how did segregation impact Columbia's public parks?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did the RCCC seek to uplift Columbia's Black community?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "When was Victory Savings Bank of Columbia founded?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was Modjeska Simkins the sole founder of Victory Savings Bank?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did the Board of Directors for Victory Savings Bank meet on February 11, 1988?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "When did the Victory Savings Bank Board of Directors meet on February 11, 1988?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was Tim McConnell a director of Victory Savings Bank in 1988?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why did the Victory Savings Bank Board of Directors hold a special meeting in February of 1988?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why did members of the Board of Directors for Victory Savings Banks want to increase the sale of the company's stocks?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What connection did the NAACP have to Victory Savings Bank?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What role did Victory Savings Bank play in supporting Black community members who were being persecuted for signing school desegregation petitions in the 1950s?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why was Victory Savings Bank important to Black citizens in South Carolina?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What does the acronym \"ACLU\" stand for?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was Modjeska Simkins ever in a leadership position with the ACLU?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How much did a basic, individual membership with the ACLU cost in 1984?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was a life membership with the ACLU $2000 in 1984?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did the executive director of the ACLU write to Modjeska Simkins on July 18, 1984?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What was the ACLU's stance on the death penalty?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did the ACLU believe anti-pornography laws could impact freedom of speech?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did the SC ACLU grow within its first few years of operation?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did the Madama Fellowship help to support the work of the South Carolina ACLU?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What role did Dwight Nelson play in improving the operations of the South Carolina ACLU?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Did Modjeska Simkins have a leadership role when working with Good Samaritan-Waverly Hospital?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was Good Samaritan-Waverly Hospital the result of a merger?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Where was the Good Samaritan-Waverly Hospital established?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Was Good Samaritan-Waverly Hospital originally a segregated hospital?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How much money did the hospital desire to raise for renovations?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "Why was Good Samaritan-Waverly Hospital founded?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did Modjeska Simkins support Good Samaritan-Waverly Hospital?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How did Good Samaritan-Waverly Hospital help to improve healthcare for Black people in Richland County?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "How was money raised to renovate Good Samaritan-Waverly Hospital?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    },
+    {
+      "question": "What challenges ultimately led to the closure of Good Samaritan-Waverly Hospital in 1973?",
+      "answer_column": "answer_ideal",
+      "passed": true
+    }
+  ]
+}

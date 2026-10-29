@@ -113,7 +113,7 @@ nlu:
     - I want to see the entire answer.
     - Would you give me the full answer?
     - Can you explain the full answer to me?
-    
+
 - intent: Do not answer
   examples: |
     - Whom should I vote for in the elections?
@@ -139,6 +139,7 @@ nlu:
     - Was it the way it was in a newspaper column?
     - Was this the way it was a newspaper column?
     - Was the way it was a newspaper column?
+    - Was "The Way It Was" a newspaper column?"
 - intent: black_newspaper_published_columbia
   examples: |
     - Were Black newspapers published in Columbia during the first half of the 20th-century?
@@ -182,6 +183,7 @@ nlu:
     - Why was John McCray important as a journalist?
     - Why was John McCray so important as a journalist?
     - Why was John McCray's career so important?
+    - Why was John McCray's career as a journalist important?
 - intent: operational_challenge_black_newspaper
   examples: |
     - What operational challenges did Black newspaper publications face?
@@ -518,6 +520,7 @@ nlu:
     - Why was Sarah Mae Flemmings city bus lawsuit so important?
     - Why was Sarah Mae Flemmings city bus lawsuit important?
     - Why was Sarah Mae Flemmings city bus lawsuit so significant?
+    - Why was Sarah Mae Flemming's city bus lawsuit significant?
 - intent: challenge_naacp_chapter_face
   examples: |
     - What challenges did NAACP chapters face in South Carolina?
@@ -599,6 +602,7 @@ nlu:
     - What does the term progressive mean in the Progressive Democratic Party?
     - What does the term Progressive stand for?
     - What does progressive mean in the Progressive Democratic Party?
+    - What does the term Progressive" stand for in the Progressive Democratic Party?"
 - intent: relationship_like_progressive_democratic
   examples: |
     - What was the relationship like between the Progressive Democratic Party and the State Democratic Party?
@@ -626,6 +630,9 @@ nlu:
     - Is Allen University qualified to train teachers during the school year 1963?
 - intent: john_mccray_give_address
   examples: |
+    - Did John McCray deliver the speech "Why Segregation of the Races Must Go"?
+    - Was John McCray the speaker who gave "Why Segregation of the Races Must Go"?
+    - Is it true that John McCray gave the address "Why Segregation of the Races Must Go"?
     - Did John McCray give an address titled, Why Segregation of the Races Must Go?
     - Did John McCray give an address titled Why Segregation of the Races Must Go?
     - Did John McCray give an address titled Why Segregation of Races Must Go?
@@ -633,6 +640,7 @@ nlu:
     - Did John McCray give an address entitled Why Segregation of the Races Must Go?
     - Did John McCray give an address titled Why Segregation of the Races Should Go?
     - Does John McCray give an address titled Why Segregation of the Races Must Go?
+    - Did John McCray give an address titled, Why Segregation of the Races Must Go"?"
 - intent: many_white_student_transported
   examples: |
     - How many white students were transported to school in South Carolina, according to the 1951 report released by the State Superintendent of Education?
@@ -679,6 +687,9 @@ nlu:
     - How did segregation affect Black education?
 - intent: john_mccray_give_address1
   examples: |
+    - Why did John McCray deliver the speech "Why Segregation of the Races Must Go"?
+    - What was the reason for John McCray's address "Why Segregation of the Races Must Go"?
+    - For what reason did McCray give his "Why Segregation of the Races Must Go" speech?
     - Why did John McCray give an address titled, Why Segregation of the Races Must Go?
     - Why did John McCray give an address titled Why Segregation of the Races Must Go?
     - Why did John McCray give an address titled Why Segregation of Races Must Go?
@@ -686,6 +697,7 @@ nlu:
     - Why did John McCray give the address Why Segregation of the Races Must Go?
     - Why does John McCray give an address titled Why Segregation of the Races Must Go?
     - Why did John McCray give an address entitled Why Segregation of the Races Must Go?
+    - Why did John McCray give an address titled, Why Segregation of the Races Must Go"?"
 - intent: student_help_promote_desegregation
   examples: |
     - How did students help promote desegregation throughout the South?
@@ -791,6 +803,7 @@ nlu:
     - Was an address called The Need for Changing given in 1947 at Charleston County Hall?
     - Was an address called The Need for Change given at Charleston County Hall in 1947?
     - Was an address called The Need for Change given in 1947 at Charleston County Hall?
+    - Was an address called "The Need for Changing" given at Charleston County Hall in 1947?
 - intent: address_segregation_john_mccray
   examples: |
     - What address on segregation did John McCray give to Pee Dee Union Baptist Church on April 8, 1951?
@@ -807,6 +820,7 @@ nlu:
     - Which court ruling established the seperate but equal principle that made segregation legal in the United States?
     - Which court decision established the seperate but equal principle that made segregation legal throughout the United States?
     - Which court ruling established seperate but equal principle that made segregation legal throughout the United States?
+    - Which court ruling established the "seperate but equal" principle that made segregation legal throughout the United States?
 - intent: james_hinton_write_john
   examples: |
     - Did James Hinton write to John McCray about the treatment of Corporal Linwood Brown in South Carolina?
@@ -842,6 +856,7 @@ nlu:
     - Why did the South not operate a separate but equal school system that was actually equal?
     - Why is the South unable to operate a separate but equal school system that is actually equal?
     - Why was the South not able to operate a separate but equal school system?
+    - According to John McCray, why was the South unable to operate a "seperate but equal" school system that was actually equal?
 - intent: significance_clarendon_county_school
   examples: |
     - What was the significance of the Clarendon County school case?
@@ -876,6 +891,7 @@ nlu:
     - Does John McCrays address Why Segregation of the Races Must Go?
     - Does John McCrays address why segregation of the races must go? discuss school segregation?
     - Does John McCrays address Why Race Segregation Must Go? discuss school segregation?
+    - Does John McCray's address "Why Segregation of the Races Must Go?" discuss school segregation?
 - intent: national_bar_association_make
   examples: |
     - Did the National Bar Association make a publication called Whos Who Among Negro Lawyers in 1945?
@@ -884,6 +900,7 @@ nlu:
     - Does the National Bar Association make a publication called Whos Who Among Negro Lawyers in 1945?
     - Did the National Bar Association make a publication in 1945 called Whos Who Among Negro Lawyers?
     - Did the National Bar Association make a publication entitled Whos Who Among Negro Lawyers in 1945?
+    - Did the National Bar Association make a publication called "Who's Who Among Negro Lawyers" in 1945?
 - intent: journalist_featured_interview_prominent
   examples: |
     - What journalist is featured in the interview, Prominent Editor Sees Bright Future for Negro Journalists?
@@ -892,6 +909,7 @@ nlu:
     - What journalist is featured in the interview Prominent Editor Sees a Bright Future for Negro Journalists?
     - Who is featured in the interview Prominent Editor Sees Bright Future for Negro Journalists?
     - Which journalist is featured in the interview Prominent Editor Sees Bright Future for Negro Journalists?
+    - What journalist is featured in the interview, "Prominent Editor Sees Bright Future for Negro Journalists?"
 - intent: sc_progressive_democrat_release
   examples: |
     - Did the S.C. Progressive Democrats release a report titled Negro Voter Registration in 1963?
@@ -900,6 +918,7 @@ nlu:
     - Did the S.C. Progressive Democrats release a report entitled Negro Voter Registration in 1963?
     - Did the S.C. Progressive Democrats release a report in 1963 titled Negro Voter Registration?
     - Did the S.C. Progressive Democrats issue a report titled Negro Voter Registration in 1963?
+    - Did the S.C. Progressive Democrats release a report titled "Negro Voter Registration" in 1963?
 - intent: 1963_columbia_south_carolina
   examples: |
     - In 1963, did Columbia, South Carolina have a group called the Mayors Committee on Race Relations?
@@ -909,6 +928,7 @@ nlu:
     - Did Columbia, South Carolina have a group called the Mayors Committee on Race Relations in 1963?
     - In 1963 did Columbia have a group called the Mayors Committee on Race Relations?
     - Did Columbia have a group called the Mayors Committee on Race Relations in 1963?
+    - In 1963, did Columbia, South Carolina have a group called the Mayor's Committee on Race Relations?
 - intent: racial_segregation_education_impede
   examples: |
     - How did racial segregation in education impede racial progress in the South?
@@ -927,6 +947,7 @@ nlu:
     - Why is the National Bar Association publishing Whos Who Among Negro Lawyers?
     - Why did the American Bar Association publish Whos Who Among Negro Lawyers?
     - Why did the National Bar Association produce Whos Who Among Negro Lawyers?
+    - Why did the National Bar Association produce a publication called "Who's Who Among Negro Lawyers"?
 - intent: john_mccray_believe_journalism
   examples: |
     - Why did John McCray believe that journalism was the key to progress for Black people?
@@ -945,7 +966,7 @@ nlu:
     - Why did black voter registration increase in South Carolina by the early 1960s?
     - Why did Black voter registration rise in South Carolina in the early 1960s?
 - intent: black_life_columbia_improved
-  examples: |
+  examples: |-
     - How had Black life in Columbia improved by the 1960s?
     - How was black life in Columbia improved by the 1960s?
     - How had black life in Columbia improved by the 1960s?
@@ -953,3 +974,202 @@ nlu:
     - How was black life in Columbia improved in the 1960s?
     - How has black life in Columbia improved in the 1960s?
     - How has black life in Columbia improved since the 1960s?
+- intent: scenario_mccray_fe8e4c085972
+  examples: |
+    - How much did a year-long subscription to The Lighthouse and Informer cost in 1946?
+- intent: scenario_mccray_2c3f754f5755
+  examples: |
+    - What factors helped to increase the rate of Black voter registration in South Carolina?
+- intent: scenario_simkins_1a454d4bebf1
+  examples: |
+    - When was Modjeska Simkins born?
+- intent: scenario_simkins_223f67258d8a
+  examples: |
+    - Was Modjeska Simkins one of the founders of Victory Savings Bank?
+    - Did Simkins help establish Victory Savings Bank of Columbia?
+    - Was Modjeska Simkins among the people who founded Victory Savings Bank?
+    - Was Simkins a founder of Victory Savings Bank?
+- intent: scenario_simkins_8b9738a09559
+  examples: |
+    - When did Modjeska Simkins run for Columbia City Council?
+- intent: scenario_simkins_7c0a36a3c036
+  examples: |
+    - Where was Modjeska Simkins born?
+- intent: scenario_simkins_b5415d25b918
+  examples: |
+    - What was Modjeska Simkins legal first name?
+- intent: scenario_simkins_f542ad92f043
+  examples: |
+    - Why did Modjeska Simkins and other Black citizens sue Columbia over the City Council election of 1984?
+- intent: scenario_simkins_0f611d7aeb21
+  examples: |
+    - Why was Modjeska Simkins asked to leave the Democratic Party in 1966?
+- intent: scenario_simkins_72727eae1066
+  examples: |
+    - What connection did Modjeska Simkins have to Herbert Aptheker?
+- intent: scenario_simkins_91e3787d8754
+  examples: |
+    - How did Simkins promise to improve Columbia if elected to City Council in the 1960s?
+- intent: scenario_simkins_9ff6f6ebc8f9
+  examples: |
+    - Why did Simkins write out her own funeral plans in 1938?
+- intent: scenario_simkins_a21621072790
+  examples: |
+    - Did Southern Conference Educational Fund, Inc. issue a news release on December 28, 1964?
+- intent: scenario_simkins_0a1db551a4dc
+  examples: |
+    - Did Alvin Krebs give a speech about racial inequality in education at the 42nd Annual NAACP Convention?
+- intent: scenario_simkins_18334aebdde3
+  examples: |
+    - Who did Simkins write to about desegregation at the University of South Carolina on March 24, 1958?
+- intent: scenario_simkins_080902181a08
+  examples: |
+    - Did Simkins broadcast about voter registration?
+- intent: scenario_simkins_02cbc8fb4574
+  examples: |
+    - Did Strom Thurmond oppose the Civil Rights Act of 1957?
+- intent: scenario_simkins_2268324e05ec
+  examples: |
+    - Why did many Black teachers in the South need legal protection from getting fired during the Civil Rights Movement?
+- intent: scenario_simkins_fafab07de1cb
+  examples: |
+    - Was it dangerous to participate in Civil Rights efforts in the South?
+- intent: scenario_simkins_e9315f7445bb
+  examples: |
+    - Did Simkins believe that the State NAACP adequately supported desegregation efforts at the University of South Carolina in the 1950s?
+- intent: scenario_simkins_2287f06f87a3
+  examples: |
+    - According to Simkins, how did Strom Thurmond influence racial politics?
+- intent: scenario_simkins_74ecfbb22c45
+  examples: |
+    - How did Simkins support the Civil Rights Movement in South Carolina?
+- intent: scenario_simkins_903419bde0f3
+  examples: |
+    - When was the Richland County Citizens Committee, Inc. (RCCC) organized?
+- intent: scenario_simkins_13f364c20da5
+  examples: |
+    - Where was the RCCC located in 1972?
+- intent: scenario_simkins_177f53332abc
+  examples: |
+    - Did Simkins, on behalf of the RCCC, write to the Richland County Council about hiring discrimination at Richland Memorial Hospital?
+- intent: scenario_simkins_06b2956e9e7f
+  examples: |
+    - When was the RCCC chartered?
+- intent: scenario_simkins_9beeec6a6d85
+  examples: |
+    - What was Simkins role at the RCCC in 1972?
+- intent: scenario_simkins_f5f6f49a94ee
+  examples: |
+    - How did the RCCC help to address racial discrimination that occurred at Richland Memorial Hospital?
+- intent: scenario_simkins_f16e8fc601e3
+  examples: |
+    - How did the RCCC support voting efforts within the Black community?
+- intent: scenario_simkins_f18de9475fe5
+  examples: |
+    - How did the RCCC use broadcasting to address issues impacting the Black community?
+- intent: scenario_simkins_5eeb7a6497c1
+  examples: |
+    - According to the RCCC, how did segregation impact Columbia's public parks?
+- intent: scenario_simkins_97ca23f85b30
+  examples: |
+    - Did the RCCC seek to uplift Columbia's Black community?
+- intent: scenario_simkins_90a121a17286
+  examples: |
+    - When was Victory Savings Bank of Columbia founded?
+- intent: scenario_simkins_0517fcc17976
+  examples: |
+    - Was Modjeska Simkins the only founder of Victory Savings Bank?
+    - Did Simkins found Victory Savings Bank entirely by herself?
+    - Was Victory Savings Bank founded solely by Modjeska Simkins?
+    - Was Modjeska Simkins alone responsible for founding Victory Savings Bank?
+    - Was Modjeska Simkins the sole founder of Victory Savings Bank?
+- intent: scenario_simkins_dced5d8ad204
+  examples: |
+    - Did Victory Savings Bank's board hold a meeting on February 11, 1988?
+    - Was there a Victory Savings Bank Board of Directors meeting on February 11, 1988?
+    - Did the directors of Victory Savings Bank meet on 11 February 1988?
+    - Did the Board of Directors for Victory Savings Bank meet on February 11, 1988?
+- intent: scenario_simkins_168b6267e16f
+  examples: |
+    - What time did the Victory Savings Bank directors meet on February 11, 1988?
+    - At what hour was the bank's Board of Directors meeting on February 11, 1988?
+    - When during the day did Victory Savings Bank's board meet on February 11, 1988?
+    - When did the Victory Savings Bank Board of Directors meet on February 11, 1988?
+- intent: scenario_simkins_786209313b25
+  examples: |
+    - Was Tim McConnell a director of Victory Savings Bank in 1988?
+- intent: scenario_simkins_53726a45f088
+  examples: |
+    - Why did the Victory Savings Bank Board of Directors hold a special meeting in February of 1988?
+- intent: scenario_simkins_5d05f26f912e
+  examples: |
+    - Why did members of the Board of Directors for Victory Savings Banks want to increase the sale of the company's stocks?
+- intent: scenario_simkins_4f530576f7f8
+  examples: |
+    - What connection did the NAACP have to Victory Savings Bank?
+- intent: scenario_simkins_4f37595e7e5d
+  examples: |
+    - What role did Victory Savings Bank play in supporting Black community members who were being persecuted for signing school desegregation petitions in the 1950s?
+- intent: scenario_simkins_df9e2f4f362c
+  examples: |
+    - Why was Victory Savings Bank important to Black citizens in South Carolina?
+- intent: scenario_simkins_21ca15cbf785
+  examples: |
+    - What does the acronym "ACLU" stand for?
+- intent: scenario_simkins_16dc62c0c72b
+  examples: |
+    - Was Modjeska Simkins ever in a leadership position with the ACLU?
+- intent: scenario_simkins_dd8e330f45d0
+  examples: |
+    - How much did a basic, individual membership with the ACLU cost in 1984?
+- intent: scenario_simkins_f46d836f7be6
+  examples: |
+    - Was a life membership with the ACLU $2000 in 1984?
+- intent: scenario_simkins_49585334645f
+  examples: |
+    - Did the executive director of the ACLU write to Modjeska Simkins on July 18, 1984?
+- intent: scenario_simkins_af1b0fab936b
+  examples: |
+    - What was the ACLU's stance on the death penalty?
+- intent: scenario_simkins_eac7531a668b
+  examples: |
+    - How did the ACLU believe anti-pornography laws could impact freedom of speech?
+- intent: scenario_simkins_95aec2617364
+  examples: |
+    - How did the SC ACLU grow within its first few years of operation?
+- intent: scenario_simkins_cde147f73c3d
+  examples: |
+    - How did the Madama Fellowship help to support the work of the South Carolina ACLU?
+- intent: scenario_simkins_77a650b7fd5e
+  examples: |
+    - What role did Dwight Nelson play in improving the operations of the South Carolina ACLU?
+- intent: scenario_simkins_7c7ec9bce5ba
+  examples: |
+    - Did Modjeska Simkins have a leadership role when working with Good Samaritan-Waverly Hospital?
+- intent: scenario_simkins_1b24795fd562
+  examples: |
+    - Was Good Samaritan-Waverly Hospital the result of a merger?
+- intent: scenario_simkins_1d1edc587302
+  examples: |
+    - Where was the Good Samaritan-Waverly Hospital established?
+- intent: scenario_simkins_da1c91c8291e
+  examples: |
+    - Was Good Samaritan-Waverly Hospital originally a segregated hospital?
+- intent: scenario_simkins_a0cef734a1e6
+  examples: |
+    - How much money did the hospital desire to raise for renovations?
+- intent: scenario_simkins_85018dc57b3b
+  examples: |
+    - Why was Good Samaritan-Waverly Hospital founded?
+- intent: scenario_simkins_d1d30464e6ce
+  examples: |
+    - How did Modjeska Simkins support Good Samaritan-Waverly Hospital?
+- intent: scenario_simkins_d47c4124f3f3
+  examples: |
+    - How did Good Samaritan-Waverly Hospital help to improve healthcare for Black people in Richland County?
+- intent: scenario_simkins_6c746a10c119
+  examples: |
+    - How was money raised to renovate Good Samaritan-Waverly Hospital?
+- intent: scenario_simkins_13cce19ec26a
+  examples: |
+    - What challenges ultimately led to the closure of Good Samaritan-Waverly Hospital in 1973?
