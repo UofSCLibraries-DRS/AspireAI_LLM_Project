@@ -967,6 +967,8 @@
         }
       });
 
+      if (sourcesDiv.childElementCount === 0) return;
+
       wrapper.appendChild(sourcesDiv);
       if (sources.some(isTextSource)) {
         wrapper.appendChild(panel);
