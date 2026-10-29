@@ -764,11 +764,10 @@
   <script>
     // Model Configuration - Easy to add/remove models
     const AVAILABLE_MODELS = [
-      { name: 'Llama-3.1-8B-Instruct + RAG', apiValue: 'RAG' },
-      { name: 'Llama-3.1-8B-Instruct, Fine-tuned (M14)', apiValue: 'M14' },
-      { name: 'Llama-3.1-8B-Instruct', apiValue: 'LLAMA' },
-      { name: 'SafeChat', apiValue: 'SC' },
-      { name: 'SafeGenChat', apiValue: 'SGC' },
+      { name: 'Chatbot 1', apiValue: 'SC' },       // SafeChat
+      { name: 'Chatbot 2', apiValue: 'M14' },      // M14
+      { name: 'Chatbot 3', apiValue: 'RAG' },      // M14 + RAG
+      { name: 'Chatbot 4', apiValue: 'SGC' },      // SafeGenChat
     ];
 
     const chatLog = document.getElementById('chatLog');

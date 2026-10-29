@@ -78,6 +78,7 @@ async function runTests() {
       assert(!demo.button.disabled, 'Send was not restored');
     }],
     ['failure stops polling and retains question for one-message retry', async demo => {
+      demo.selector.value = 'M14';
       demo.window.fixture.failed = true;
       demo.input.value = 'Retain my question';
       await demo.window.sendMessage();
@@ -102,6 +103,7 @@ async function runTests() {
       assert(JSON.parse(demo.calls('/generate')[0].body).model === 'SC', 'wrong model');
     }],
     ['model_warming response automatically requeues without duplicate chat', async demo => {
+      demo.selector.value = 'M14';
       demo.window.fixture.ready = true;
       await until(() => demo.document.getElementById('warmupStatus').textContent === 'Model ready', 'not ready');
       demo.window.fixture.responses.push({ status: 503, body: { detail: { code: 'model_warming' } } });
@@ -115,10 +117,10 @@ async function runTests() {
       demo.window.fixture.ready = true;
       demo.selector.value = 'SGC';
       for (const [system, label] of [
-        ['System1', 'SafeGenChat (S1)'],
-        ['System2', 'SafeGenChat (S2)'],
-        [undefined, 'SafeGenChat'],
-        ['unknown', 'SafeGenChat']
+        ['System1', 'Chatbot 4 (S1)'],
+        ['System2', 'Chatbot 4 (S2)'],
+        [undefined, 'Chatbot 4'],
+        ['unknown', 'Chatbot 4']
       ]) {
         demo.window.fixture.responses.push({ status: 200, body: { text: 'Answer', sources: [], system } });
         demo.input.value = 'Which solver?';
@@ -127,16 +129,17 @@ async function runTests() {
         assert(labels[labels.length - 1].textContent === label, `Expected ${label}`);
       }
       const firstLabel = demo.document.querySelector('.message-wrapper.bot .message-info');
-      assert(firstLabel.textContent === 'SafeGenChat (S1)', 'later requests changed an earlier label');
+      assert(firstLabel.textContent === 'Chatbot 4 (S1)', 'later requests changed an earlier label');
 
       demo.selector.value = 'SC';
       demo.window.fixture.responses.push({ status: 200, body: { text: 'Answer', sources: [], system: 'System1' } });
       demo.input.value = 'Use SafeChat';
       await demo.window.sendMessage();
       const labels = demo.document.querySelectorAll('.message-wrapper.bot .message-info');
-      assert(labels[labels.length - 1].textContent === 'SafeChat', 'other chatbot label changed');
+      assert(labels[labels.length - 1].textContent === 'Chatbot 1', 'other chatbot label changed');
     }],
     ['network failure restores input and unlocks the form', async demo => {
+      demo.selector.value = 'M14';
       demo.window.fixture.networkError = true;
       demo.input.value = 'Network retry';
       await demo.window.sendMessage();
